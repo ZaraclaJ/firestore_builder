@@ -1,8 +1,0 @@
-firestore_builder:
-  collections:
-    - users:
-      name: String
-      age: int
-    - messages:
-      content: String
-      date: DateTime

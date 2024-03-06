@@ -1,1 +1,1 @@
-dart run firestore_builder lib/firestore
+dart run firestore_builder

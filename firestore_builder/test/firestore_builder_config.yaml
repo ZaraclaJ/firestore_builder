@@ -1,8 +1,11 @@
 firestore_builder:
+  output: test/output
   collections:
     - users:
-        name: String
-        age: int
+        fields:
+          - name: string
+          - age: number
     - messages:
-        content: String
-        date: DateTime
+        fields:
+          - content: string
+          - date: timestamp

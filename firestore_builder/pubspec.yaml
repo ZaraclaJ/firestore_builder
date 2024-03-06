@@ -8,7 +8,9 @@ environment:
 
 dependencies:
   code_builder: ^4.10.0
+  collection: ^1.18.0
   dart_style: ^2.3.6
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   meta: ^1.11.0
@@ -19,4 +21,4 @@ dev_dependencies:
   test: ^1.25.2
   very_good_analysis: ^5.1.0
 
-flutter: 
+flutter: null

@@ -1,11 +1,11 @@
 name: example
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -22,33 +22,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  
-  
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+firestore_builder:
+  output: test/output
+  collections:
+    - users:
+        fields:
+          - name: string
+          - age: number
+    - messages:
+        fields:
+          - content: string
+          - date: timestamp

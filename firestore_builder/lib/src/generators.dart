@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
+import 'package:firestore_builder/src/models/collection.dart';
 import 'package:yaml/yaml.dart';
 
-const String _defaultConfigPath = 'firestore_builder_config.yaml';
+const String _defaultConfigPath = 'pubspec.yaml';
 
 /// Generate Firestore Builder
 Future<void> generate({
-  required String outputFolderPath,
   required String? configFilePath,
 }) async {
   configFilePath ??= _defaultConfigPath;
@@ -39,14 +39,46 @@ Future<void> _analyzeConfigFile({
 
   final yaml = await file.readAsString();
 
+  YamlMap yamlMap;
   try {
-    final yamlMap = loadYaml(yaml) as YamlMap;
-    Logger.log('yamlMap: $yamlMap');
+    yamlMap = loadYaml(yaml) as YamlMap;
   } catch (e) {
     throw Exception('''
 Error parsing the configuration file: $configFilePath, $e
 ''');
   }
+
+  final firestoreBuilderConfig = yamlMap['firestore_builder'] as YamlMap?;
+  if (firestoreBuilderConfig == null) {
+    throw Exception('''
+The configuration file ($configFilePath) does not contain a firestore_builder section
+''');
+  }
+  final outputPath = firestoreBuilderConfig['output'] as String?;
+
+  if (outputPath == null) {
+    throw Exception('''
+The configuration file ($configFilePath) does not contain an output section
+''');
+  }
+
+  final collections = firestoreBuilderConfig['collections'];
+  if (collections is! YamlList?) {
+    throw Exception('''
+The configuration file ($configFilePath) does not contain a correct collections section: $collections
+''');
+  }
+
+  final collectionsNode = collections?.nodes
+      .whereType<YamlMap>()
+      .map(
+        Collection.fromYaml,
+      )
+      .toList();
+
+  Logger.log('outputPath: $outputPath');
+  Logger.log('collections: $collections');
+  Logger.log('collectionsNode: $collectionsNode');
 }
 
 Future<File> _generateFakeFile({
