@@ -1,0 +1,3 @@
+class FakeClass {
+  String? name;
+}
