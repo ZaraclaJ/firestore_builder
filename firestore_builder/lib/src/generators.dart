@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
+import 'package:yaml/yaml.dart';
 
 const String _defaultConfigPath = 'firestore_builder_config.yaml';
 
@@ -23,9 +24,29 @@ You can also indicate the path of your configuration file:
 ''');
   }
 
-  await _generateFakeFile(
-    outputPath: outputFolderPath,
+  await _analyzeConfigFile(
+    configFilePath: configFilePath,
   );
+}
+
+Future<void> _analyzeConfigFile({
+  required String configFilePath,
+}) async {
+  final file = File(configFilePath);
+  if (!file.path.endsWith('.yaml')) {
+    throw Exception('Unsupported file extension (not .yaml) : ${file.path}');
+  }
+
+  final yaml = await file.readAsString();
+
+  try {
+    final yamlMap = loadYaml(yaml) as YamlMap;
+    Logger.log('yamlMap: $yamlMap');
+  } catch (e) {
+    throw Exception('''
+Error parsing the configuration file: $configFilePath, $e
+''');
+  }
 }
 
 Future<File> _generateFakeFile({
