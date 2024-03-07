@@ -1,5 +1,8 @@
+import 'package:code_builder/code_builder.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
+import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:yaml/yaml.dart';
 
@@ -28,7 +31,7 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
     final isNullable = type.isNullable;
     final typeName = type.withoutQuestionMark;
 
-    final fieldType = FieldType.fromTypeName(typeName);
+    final fieldType = FieldType.fromDartSymbol(typeName);
     if (fieldType == null) {
       throw Exception('Unknown field type: $type');
     }
@@ -43,6 +46,15 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
   final String name;
   final FieldType type;
   final bool isNullable;
+
+  TypeReference get typeReference {
+    return TypeReference(
+      (b) => b
+        ..symbol = type.dartSymbol
+        ..url = type.packageUrl
+        ..isNullable = isNullable,
+    );
+  }
 
   @override
   List<Object> get props => [
@@ -60,20 +72,27 @@ enum FieldType {
   timestamp,
   dateTime;
 
-  static FieldType? fromTypeName(String typeName) {
+  static FieldType? fromDartSymbol(String symbol) {
     return FieldType.values.firstWhereOrNull(
-      (element) => element.typeName == typeName,
+      (element) => element.dartSymbol == symbol,
     );
   }
 
-  String get typeName {
+  String? get packageUrl {
     return switch (this) {
-      FieldType.string => 'String',
-      FieldType.int => 'int',
-      FieldType.double => 'double',
-      FieldType.bool => 'bool',
-      FieldType.timestamp => 'Timestamp',
-      FieldType.dateTime => 'DateTime',
+      FieldType.timestamp => BasicPackages.cloudFirestore,
+      _ => null,
+    };
+  }
+
+  String get dartSymbol {
+    return switch (this) {
+      FieldType.string => BasicSymbols.string,
+      FieldType.int => BasicSymbols.int,
+      FieldType.double => BasicSymbols.double,
+      FieldType.bool => BasicSymbols.bool,
+      FieldType.timestamp => BasicSymbols.timestamp,
+      FieldType.dateTime => BasicSymbols.dateTime,
     };
   }
 }

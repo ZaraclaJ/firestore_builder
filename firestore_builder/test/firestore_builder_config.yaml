@@ -2,11 +2,13 @@ firestore_builder:
   output: test/output
   collections:
     - users:
+        model_name: user
         fields:
           - name: String
           - job: String?
           - age: int
     - messages:
+        model_name: message
         fields:
           - content: String
-          - date: Timestamp
+          - date: DateTime

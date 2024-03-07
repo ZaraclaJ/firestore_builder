@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:firestore_builder/src/easy_gen/parameter_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
+import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
+import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
 const String _defaultConfigPath = 'pubspec.yaml';
@@ -35,6 +39,10 @@ You can also indicate the path of your configuration file:
     final config = await _parseYamlFile(
       file: file,
     );
+
+    await _generateModels(
+      config: config,
+    );
   }
 
   Future<YamlConfig> _parseYamlFile({
@@ -53,6 +61,100 @@ Error parsing the configuration file: ${file.path}, $e
 
     return YamlConfig.fromYaml(
       yamlMap,
+    );
+  }
+
+  Future<void> _generateModels({
+    required YamlConfig config,
+  }) {
+    final modelsPath = config.modelsPath;
+    final collections = config.collections;
+
+    final futures = collections.map(
+      (c) => _generateFile(
+        library: c.modelLibrary,
+        filePath: '$modelsPath/${c.dartFileName}',
+      ),
+    );
+
+    return Future.wait(futures);
+  }
+
+  Future<void> _generateFile({
+    required Library library,
+    required String filePath,
+  }) async {
+    final dartLibrary = library.toDart();
+    final file = File(filePath);
+    await file.create(recursive: true);
+    await file.writeAsString(dartLibrary);
+    Logger.log('✔︎ $filePath generated');
+  }
+}
+
+extension CollectionExtensions on Collection {
+  String get modelClassName => modelName.pascalCase;
+
+  Library get modelLibrary {
+    final modelClass = Class(
+      (classBuilder) {
+        classBuilder
+          ..name = modelClassName
+          ..constructors.add(modelConstructor)
+          ..fields.addAll(
+            fields.map(
+              (collectionField) => collectionField.field,
+            ),
+          );
+      },
+    );
+
+    return Library(
+      (library) {
+        library.body.add(modelClass);
+      },
+    );
+  }
+
+  Constructor get modelConstructor {
+    return Constructor(
+      (constructor) {
+        constructor
+          ..constant = true
+          ..optionalParameters.addAll(
+            fields.map(
+              (collectionField) => collectionField.parameter.inConstructor,
+            ),
+          );
+      },
+    );
+  }
+}
+
+extension CollectionFieldExtensions on CollectionField {
+  Field get field {
+    final collectionField = this;
+    return Field(
+      (fieldBuilder) {
+        fieldBuilder
+          ..modifier = FieldModifier.final$
+          ..type = collectionField.typeReference
+          ..name = collectionField.name;
+      },
+    );
+  }
+
+  Parameter get parameter {
+    final collectionField = this;
+    return Parameter(
+      (parameterBuilder) {
+        parameterBuilder
+          ..type = collectionField.typeReference
+          ..covariant
+          ..name = collectionField.name
+          ..required = true
+          ..named = true;
+      },
     );
   }
 }
