@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:yaml/yaml.dart';
 
 class Collection extends Equatable {
@@ -15,7 +16,8 @@ class Collection extends Equatable {
     final keys = yamlMap.keys.whereType<String>();
     if (keys.length != 1) {
       throw Exception(
-        'Invalid collection definition, there should be only one key: $yamlMap',
+        '''
+Invalid collection definition, there should be only one key: $yamlMap''',
       );
     }
 
@@ -24,7 +26,8 @@ class Collection extends Equatable {
     final collectionMap = yamlMap[name];
     if (collectionMap is! YamlMap) {
       throw Exception(
-        'Invalid collection definition, the value should be a map: $collectionMap',
+        '''
+Invalid collection definition, the value should be a map: $collectionMap''',
       );
     }
 
@@ -60,6 +63,7 @@ class CollectionField extends Equatable {
   const CollectionField({
     required this.name,
     required this.type,
+    required this.isNullable,
   });
 
   factory CollectionField.fromYaml(
@@ -69,14 +73,18 @@ class CollectionField extends Equatable {
     final values = yamlMap.values.whereType<String>();
     if (keys.length != 1 || values.length != 1) {
       throw Exception(
-        'Invalid field definition, there should be only one key and one value: $yamlMap',
+        '''
+Invalid field definition, there should be only one key and one value: $yamlMap''',
       );
     }
 
     final name = keys.first;
     final type = values.first;
 
-    final fieldType = FieldType.fromTypeName(type);
+    final isNullable = type.isNullable;
+    final typeName = type.withoutQuestionMark;
+
+    final fieldType = FieldType.fromTypeName(typeName);
     if (fieldType == null) {
       throw Exception('Unknown field type: $type');
     }
@@ -84,28 +92,29 @@ class CollectionField extends Equatable {
     return CollectionField(
       name: name,
       type: fieldType,
+      isNullable: isNullable,
     );
   }
 
   final String name;
   final FieldType type;
+  final bool isNullable;
 
   @override
   List<Object> get props => [
         name,
         type,
+        isNullable,
       ];
 }
 
 enum FieldType {
   string,
-  number,
-  boolean,
-  map,
-  array,
+  int,
+  double,
+  bool,
   timestamp,
-  geopoint,
-  reference;
+  dateTime;
 
   static FieldType? fromTypeName(String typeName) {
     return FieldType.values.firstWhereOrNull(
@@ -115,14 +124,12 @@ enum FieldType {
 
   String get typeName {
     return switch (this) {
-      FieldType.string => 'string',
-      FieldType.number => 'number',
-      FieldType.boolean => 'boolean',
-      FieldType.map => 'map',
-      FieldType.array => 'array',
-      FieldType.timestamp => 'timestamp',
-      FieldType.geopoint => 'geopoint',
-      FieldType.reference => 'reference',
+      FieldType.string => 'String',
+      FieldType.int => 'int',
+      FieldType.double => 'double',
+      FieldType.bool => 'bool',
+      FieldType.timestamp => 'Timestamp',
+      FieldType.dateTime => 'DateTime',
     };
   }
 }

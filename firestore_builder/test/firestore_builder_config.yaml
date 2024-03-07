@@ -3,9 +3,10 @@ firestore_builder:
   collections:
     - users:
         fields:
-          - name: string
-          - age: number
+          - name: String
+          - job: String?
+          - age: int
     - messages:
         fields:
-          - content: string
-          - date: timestamp
+          - content: String
+          - date: Timestamp
