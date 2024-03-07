@@ -1,10 +1,15 @@
-class Message {
-  const Message({
-    required this.content,
-    required this.date,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String content;
+part 'messages.freezed.dart';
+part 'messages.g.dart';
 
-  final DateTime date;
+@freezed
+class Message with _$Message {
+  const factory Message({
+    required String content,
+    required DateTime date,
+  }) = _Message;
+
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
 }

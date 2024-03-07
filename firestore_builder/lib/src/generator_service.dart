@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
-import 'package:firestore_builder/src/easy_gen/parameter_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/freezed_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
 import 'package:firestore_builder/src/models/collection.dart';
@@ -73,7 +73,7 @@ Error parsing the configuration file: ${file.path}, $e
     final futures = collections.map(
       (c) => _generateFile(
         library: c.modelLibrary,
-        filePath: '$modelsPath/${c.dartFileName}',
+        filePath: '$modelsPath/${c.fileName}.dart',
       ),
     );
 
@@ -113,7 +113,7 @@ extension CollectionExtensions on Collection {
       (library) {
         library.body.add(modelClass);
       },
-    );
+    ).toFreezed(withJson: true, fileName: fileName);
   }
 
   Constructor get modelConstructor {
@@ -123,7 +123,7 @@ extension CollectionExtensions on Collection {
           ..constant = true
           ..optionalParameters.addAll(
             fields.map(
-              (collectionField) => collectionField.parameter.inConstructor,
+              (collectionField) => collectionField.parameter,
             ),
           );
       },

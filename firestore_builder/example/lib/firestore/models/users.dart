@@ -1,13 +1,15 @@
-class User {
-  const User({
-    required this.name,
-    required this.job,
-    required this.age,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String name;
+part 'users.freezed.dart';
+part 'users.g.dart';
 
-  final String? job;
+@freezed
+class User with _$User {
+  const factory User({
+    required String name,
+    required String? job,
+    required int age,
+  }) = _User;
 
-  final int age;
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

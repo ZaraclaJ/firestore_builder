@@ -8,5 +8,5 @@ linter:
 
 analyzer:
   exclude:
-    # - test/output/**
-    # - examples/**
+    - test/output/**
+    - example/**
