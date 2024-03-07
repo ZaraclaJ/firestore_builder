@@ -1,13 +1,13 @@
-import 'package:firestore_builder/src/generators.dart';
+import 'package:firestore_builder/src/generator_service.dart';
 
 void main(List<String> args) {
   switch (args) {
     case [final configFilePath]:
-      generate(
+      GeneratorService().generate(
         configFilePath: configFilePath,
       );
     case []:
-      generate(
+      GeneratorService().generate(
         configFilePath: null,
       );
 
