@@ -18,9 +18,34 @@ abstract class BasicTypes {
   /// 'DateTime'
   static const Reference dateTime = Reference(BasicSymbols.dateTime);
 
+  /// Map<String, Object?>
+  static Reference json = const Reference(BasicSymbols.json);
+
   /// 'Timestamp'
   static const Reference timestamp = Reference(
     BasicSymbols.timestamp,
     BasicPackages.cloudFirestore,
   );
+}
+
+abstract class FirestoreTypes {
+  /// DocumentSnapshot<ref>
+  static TypeReference documentSnapshotOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = BasicSymbols.documentSnapshot
+        ..url = BasicPackages.cloudFirestore
+        ..types.add(ref),
+    );
+  }
+
+  /// SnapshotOptions
+  static TypeReference snapshotOptions({bool isNullable = false}) {
+    return TypeReference(
+      (type) => type
+        ..symbol = BasicSymbols.snapshotOptions
+        ..url = BasicPackages.cloudFirestore
+        ..isNullable = isNullable,
+    );
+  }
 }

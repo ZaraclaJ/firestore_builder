@@ -14,6 +14,15 @@ abstract class BasicSymbols {
   /// 'DateTime'
   static const String dateTime = 'DateTime';
 
+  /// Map<String, Object?>
+  static const String json = 'Map<String, Object?>';
+
   /// 'Timestamp'
   static const String timestamp = 'Timestamp';
+
+  /// 'DocumentSnapshot'
+  static const String documentSnapshot = 'DocumentSnapshot';
+
+  /// 'SnapshotOptions'
+  static const String snapshotOptions = 'SnapshotOptions';
 }

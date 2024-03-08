@@ -22,7 +22,7 @@ extension LibraryExtensions on Library {
           if (spec is Class) {
             var class$ = spec;
 
-            if (class$.constructors.isEmpty) {
+            if (class$.constructors.whereNot((c) => c.factory).isEmpty) {
               class$ = class$.buildClassConstructor();
             }
 

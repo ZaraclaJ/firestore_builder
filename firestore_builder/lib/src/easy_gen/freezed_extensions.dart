@@ -22,27 +22,32 @@ extension FreezedClassExtensions on Class {
           )
           ..mixins.add(Reference(r'_$' + name))
           ..constructors.map(
-            (ctor) => ctor.rebuild(
-              (ctor) {
-                final constructorName = ctor.name;
+            (ctor) {
+              if (ctor.factory) {
+                return ctor;
+              }
+              return ctor.rebuild(
+                (ctor) {
+                  final constructorName = ctor.name;
 
-                return ctor
-                  ..factory = true
-                  ..redirect = Reference(
-                    [
-                      if (constructorName == null) '_',
-                      name.pascalCase,
-                      if (constructorName != null) constructorName.pascalCase,
-                    ].join(),
-                  )
-                  ..optionalParameters.map((p) {
-                    return p.toFreezedParameter(fields: fields);
-                  })
-                  ..requiredParameters.map((p) {
-                    return p.toFreezedParameter(fields: fields);
-                  });
-              },
-            ),
+                  return ctor
+                    ..factory = true
+                    ..redirect = Reference(
+                      [
+                        if (constructorName == null) '_',
+                        name.pascalCase,
+                        if (constructorName != null) constructorName.pascalCase,
+                      ].join(),
+                    )
+                    ..optionalParameters.map((p) {
+                      return p.toFreezedParameter(fields: fields);
+                    })
+                    ..requiredParameters.map((p) {
+                      return p.toFreezedParameter(fields: fields);
+                    });
+                },
+              );
+            },
           )
           ..constructors.sort(_sortByName)
           ..constructors.addAll([

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'messages.freezed.dart';
@@ -19,6 +20,14 @@ class Message with _$Message {
     String firestoreId,
   }) = _Message;
 
+  factory Message.fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return Message.fromJson(data!).copyWith(firestoreId: snapshot.id);
+  }
+
   factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
 
@@ -29,6 +38,11 @@ class Message with _$Message {
   static const String dateFieldKey = 'date';
 
   MessageId get messageId => MessageId(firestoreId);
+
+  Map<String, Object?> toFirestore() {
+    final json = toJson();
+    return json;
+  }
 }
 
 @Freezed(
