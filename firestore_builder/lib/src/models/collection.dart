@@ -75,6 +75,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final List<Collection> subCollections;
 
   String get snakeName => name.snakeCase;
+  String get camelName => name.camelCase;
 
   @override
   List<Object> get props => [

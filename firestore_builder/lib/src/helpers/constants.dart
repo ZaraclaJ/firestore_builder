@@ -1,4 +1,4 @@
-const String defaultConfigPath = 'pubspec.yaml';
+const String pubspecPath = 'pubspec.yaml';
 const String databaseIdName = 'firestoreId';
 const String toFirestoreMethodName = 'toFirestore';
 const String fromFirestoreFactoryName = 'fromFirestore';

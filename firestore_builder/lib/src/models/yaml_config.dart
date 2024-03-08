@@ -11,6 +11,7 @@ const String fieldsKey = 'fields';
 
 class YamlConfig extends Equatable {
   const YamlConfig({
+    required this.projectName,
     required this.outputPath,
     required this.collections,
   });
@@ -18,6 +19,13 @@ class YamlConfig extends Equatable {
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
   ) {
+    final projectName = yamlMap['name'];
+    if (projectName is! String) {
+      throw Exception('''
+Invalid pubspec.yaml, missing or invalid name key
+''');
+    }
+
     final firestoreBuilderConfig = yamlMap[firestoreBuilderKey];
     if (firestoreBuilderConfig is! YamlMap) {
       throw Exception('''
@@ -48,6 +56,7 @@ The configuration file does not contain a correct collections section: $firestor
         [];
 
     return YamlConfig(
+      projectName: projectName,
       outputPath: outputPath,
       collections: collections,
     );
@@ -55,6 +64,7 @@ The configuration file does not contain a correct collections section: $firestor
 
   final String outputPath;
   final List<Collection> collections;
+  final String projectName;
 
   String get modelsPath => '$outputPath/models';
   String get servicesPath => '$outputPath/services';
