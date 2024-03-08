@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["geopoint"],
+  "cSpell.words": [
+    "geopoint",
+    "recase"
+  ],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#4c2b4e",
     "activityBar.background": "#4c2b4e",

@@ -5,18 +5,26 @@ import 'package:firestore_builder/src/extensions.dart/bool_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:meta/meta.dart';
 
+class FreezedConfig {
+  const FreezedConfig({
+    required this.withJson,
+    required this.fileName,
+  });
+
+  final bool withJson;
+  final String fileName;
+}
+
 extension LibraryExtensions on Library {
   @UseResult()
   Library buildLibrary({
-    required bool toFreezed,
-    required bool withJson,
-    required String fileName,
+    FreezedConfig? freezedConfig,
   }) {
     return rebuild(
       (libraryBuilder) => libraryBuilder
         ..directives.addAll([
-          if (toFreezed) Directive.part('$fileName.freezed.dart'),
-          if (toFreezed && withJson) Directive.part('$fileName.g.dart'),
+          if (freezedConfig != null) Directive.part('${freezedConfig.fileName}.freezed.dart'),
+          if (freezedConfig != null && freezedConfig.withJson) Directive.part('${freezedConfig.fileName}.g.dart'),
         ])
         ..body.map((spec) {
           if (spec is Class) {
@@ -26,9 +34,9 @@ extension LibraryExtensions on Library {
               class$ = class$.buildClassConstructor();
             }
 
-            if (toFreezed) {
+            if (freezedConfig != null) {
               class$ = class$.toFreezed(
-                withJson: withJson,
+                withJson: freezedConfig.withJson,
               );
             }
 

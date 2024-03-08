@@ -19,6 +19,11 @@ abstract class BasicSymbols {
 
   /// 'Timestamp'
   static const String timestamp = 'Timestamp';
+}
+
+abstract class FirestoreSymbols {
+  /// 'FirebaseFirestore'
+  static const String firebaseFirestore = 'FirebaseFirestore';
 
   /// 'DocumentSnapshot'
   static const String documentSnapshot = 'DocumentSnapshot';

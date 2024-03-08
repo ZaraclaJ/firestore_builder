@@ -57,6 +57,8 @@ The configuration file does not contain a correct collections section: $firestor
   final List<Collection> collections;
 
   String get modelsPath => '$outputPath/models';
+  String get servicesPath => '$outputPath/services';
+  String get referenceServicePath => '$servicesPath/firebase_reference_service.dart';
 
   @override
   List<Object> get props => [
