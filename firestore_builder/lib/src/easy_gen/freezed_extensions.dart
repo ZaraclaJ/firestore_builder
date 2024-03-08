@@ -4,30 +4,6 @@ import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:meta/meta.dart';
 import 'package:recase/recase.dart';
 
-extension FreezedLibraryExtensions on Library {
-  @UseResult()
-  Library toFreezed({
-    required bool withJson,
-    required String fileName,
-  }) {
-    return rebuild(
-      (libraryBuilder) => libraryBuilder
-        ..directives.addAll([
-          Directive.part('$fileName.freezed.dart'),
-          if (withJson) Directive.part('$fileName.g.dart'),
-        ])
-        ..body.map((spec) {
-          if (spec is Class) {
-            return spec.toFreezed(
-              withJson: withJson,
-            );
-          }
-          return spec;
-        }),
-    );
-  }
-}
-
 extension FreezedClassExtensions on Class {
   @UseResult()
   Class toFreezed({
@@ -60,32 +36,10 @@ extension FreezedClassExtensions on Class {
                     ].join(),
                   )
                   ..optionalParameters.map((p) {
-                    final associatedField = fields.firstWhereOrNull(
-                      (f) => f.name == p.name,
-                    );
-                    final fieldType = associatedField?.type;
-                    final fieldAnnotations = associatedField?.annotations;
-
-                    p = p.rebuild(
-                      (p) => p
-                        ..toThis = false
-                        ..type = fieldType
-                        ..annotations.addAll(fieldAnnotations ?? []),
-                    );
-
-                    final defaultValue = p.defaultTo;
-                    if (defaultValue != null && defaultValue is ToCodeExpression) {
-                      return p.rebuild(
-                        (p) => p
-                          ..defaultTo = null
-                          ..annotations.add(
-                            BasicAnnotations.defaultFreezed(
-                              defaultValue.code,
-                            ),
-                          ),
-                      );
-                    }
-                    return p;
+                    return p.toFreezedParameter(fields: fields);
+                  })
+                  ..requiredParameters.map((p) {
+                    return p.toFreezedParameter(fields: fields);
                   });
               },
             ),
@@ -131,5 +85,39 @@ extension FreezedClassExtensions on Class {
     } else {
       return aName.compareTo(bName);
     }
+  }
+}
+
+extension FreezedParameterExtensions on Parameter {
+  Parameter toFreezedParameter({
+    required List<Field> fields,
+  }) {
+    var result = this;
+    final associatedField = fields.firstWhereOrNull(
+      (f) => f.name == result.name,
+    );
+    final fieldType = associatedField?.type;
+    final fieldAnnotations = associatedField?.annotations;
+
+    result = result.rebuild(
+      (p) => p
+        ..toThis = false
+        ..type = fieldType
+        ..annotations.addAll(fieldAnnotations ?? []),
+    );
+
+    final defaultValue = result.defaultTo;
+    if (defaultValue != null && defaultValue is ToCodeExpression) {
+      return result.rebuild(
+        (p) => p
+          ..defaultTo = null
+          ..annotations.add(
+            BasicAnnotations.defaultFreezed(
+              defaultValue.code,
+            ),
+          ),
+      );
+    }
+    return result;
   }
 }

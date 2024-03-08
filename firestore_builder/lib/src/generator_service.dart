@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
-import 'package:firestore_builder/src/easy_gen/freezed_extensions.dart';
-import 'package:firestore_builder/src/easy_gen/parameter_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
 import 'package:firestore_builder/src/models/collection.dart';
@@ -12,6 +11,7 @@ import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
 const String _defaultConfigPath = 'pubspec.yaml';
+const String _databaseIdName = 'firestoreId';
 
 class GeneratorService {
   factory GeneratorService() => _instance;
@@ -104,7 +104,8 @@ extension CollectionExtensions on Collection {
           _idClass,
         ]);
       },
-    ).toFreezed(
+    ).buildLibrary(
+      toFreezed: true,
       withJson: true,
       fileName: fileName,
     );
@@ -118,24 +119,6 @@ extension CollectionExtensions on Collection {
 
         classBuilder
           ..name = '${modelClassName}Id'
-          ..constructors.add(
-            Constructor(
-              (constructor) {
-                constructor
-                  ..constant = true
-                  ..requiredParameters.add(
-                    Parameter(
-                      (parameter) {
-                        parameter
-                          ..name = fieldName
-                          ..type = fieldType
-                          ..named = true;
-                      },
-                    ),
-                  );
-              },
-            ),
-          )
           ..fields.add(
             Field(
               (field) {
@@ -147,7 +130,7 @@ extension CollectionExtensions on Collection {
             ),
           );
       },
-    );
+    ).buildClassConstructor(optional: false);
   }
 
   Class get _modelClass {
@@ -155,17 +138,30 @@ extension CollectionExtensions on Collection {
       (classBuilder) {
         classBuilder
           ..name = modelClassName
-          ..constructors.add(_modelConstructor)
+          // ..constructors.add(_modelConstructor)
           ..fields.addAll([
+            ...fields.map(
+              (collectionField) => collectionField.staticKeyField(),
+            ),
             ...fields.map(
               (collectionField) => collectionField.field(
                 className: modelClassName,
               ),
             ),
-            ...fields.map(
-              (collectionField) => collectionField.staticKeyField(),
-            ),
+            _idField,
           ]);
+      },
+    );
+  }
+
+  Field get _idField {
+    return Field(
+      (field) {
+        field
+          ..name = _databaseIdName
+          ..type = BasicTypes.string
+          ..assignment = literalString('').code
+          ..modifier = FieldModifier.final$;
       },
     );
   }
@@ -175,43 +171,13 @@ extension CollectionExtensions on Collection {
       (constructor) {
         constructor
           ..constant = true
-          ..optionalParameters.addAll(
-            fields.map(
+          ..optionalParameters.addAll([
+            ...fields.map(
               (collectionField) => collectionField.parameter().toThisParameter,
             ),
-          );
+            _idField.toParameter,
+          ]);
       },
     );
   }
-}
-
-/// Generate Firestore Builder
-Future<File> _generateFakeFile({
-  required String outputPath,
-}) async {
-  final fakeClass = Class((classBuilder) {
-    classBuilder
-      ..name = 'FakeClass'
-      ..fields.add(
-        Field((field) {
-          field
-            ..name = 'name'
-            ..type = refer('String?');
-        }),
-      );
-  });
-
-  final result = Library(
-    (library) {
-      library.body.add(fakeClass);
-    },
-  );
-
-  final dartLibrary = result.toDart();
-  final file = File('$outputPath/fake_file.dart');
-  await file.create(recursive: true);
-  await file.writeAsString(dartLibrary);
-
-  Logger.log('✔︎ Fake file generated');
-  return file;
 }

@@ -10,8 +10,9 @@ part 'users.g.dart';
 class User with _$User {
   const factory User({
     @JsonKey(name: User.nameFieldKey) required String name,
-    @JsonKey(name: User.currentJobFieldKey) required String? currentJob,
     @JsonKey(name: User.ageFieldKey) required int age,
+    @JsonKey(name: User.currentJobFieldKey) String? currentJob,
+    @Default('') String firestoreId,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
