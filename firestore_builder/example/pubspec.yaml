@@ -30,6 +30,7 @@ flutter:
 
 firestore_builder:
   output: lib/firestore
+  clear: False
   collections:
     - users:
         model_name: user

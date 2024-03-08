@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
+import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
@@ -91,9 +92,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   }
 
   String get _modelFileUrl {
-    final projectName = yamlConfigLight.projectName;
-    final modelsPath = yamlConfigLight.modelsPath.withoutPrefix('lib/');
-    return 'package:$projectName/$modelsPath/$snakeName.dart';
+    return modelFilePath.toPackageUrl(config: yamlConfigLight);
   }
 
   Reference get modelReference => Reference(
@@ -112,5 +111,6 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
         modelName,
         fields,
         subCollections,
+        yamlConfigLight,
       ];
 }

@@ -1,25 +1,23 @@
+import 'package:code_builder/code_builder.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
+import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
-
-const String firestoreBuilderKey = 'firestore_builder';
-const String outputKey = 'output';
-const String collectionsKey = 'collections';
-
-const String modelNameKey = 'model_name';
-const String fieldsKey = 'fields';
 
 class YamlConfig extends Equatable {
   const YamlConfig({
     required this.projectName,
     required this.outputPath,
     required this.collections,
+    required this.clear,
   });
 
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
   ) {
-    final projectName = yamlMap['name'];
+    final projectName = yamlMap[projectNameKey];
     if (projectName is! String) {
       throw Exception('''
 Invalid pubspec.yaml, missing or invalid name key
@@ -40,6 +38,13 @@ The configuration file does not contain an output section: $firestoreBuilderConf
 ''');
     }
 
+    final clear = firestoreBuilderConfig[clearKey];
+    if (clear is! bool?) {
+      throw Exception('''
+The configuration file does not contain a correct clear section: $firestoreBuilderConfig
+''');
+    }
+
     final yamlCollections = firestoreBuilderConfig[collectionsKey];
     if (yamlCollections is! YamlList?) {
       throw Exception('''
@@ -51,6 +56,7 @@ The configuration file does not contain a correct collections section: $firestor
       projectName: projectName,
       outputPath: outputPath,
       collections: const [],
+      clear: clear ?? false,
     );
 
     final collections = yamlCollections?.nodes
@@ -64,9 +70,15 @@ The configuration file does not contain a correct collections section: $firestor
             .toList() ??
         [];
 
+    return yamlConfigLight.copyWithCollections(collections);
+  }
+
+  YamlConfig copyWithCollections(List<Collection> collections) {
+    final config = this;
     return YamlConfig(
-      projectName: projectName,
-      outputPath: outputPath,
+      projectName: config.projectName,
+      outputPath: config.outputPath,
+      clear: config.clear,
       collections: collections,
     );
   }
@@ -74,14 +86,35 @@ The configuration file does not contain a correct collections section: $firestor
   final String outputPath;
   final List<Collection> collections;
   final String projectName;
+  final bool clear;
 
   String get modelsPath => '$outputPath/models';
   String get servicesPath => '$outputPath/services';
-  String get referenceServicePath => '$servicesPath/firebase_reference_service.dart';
+
+  String get referenceServiceClassName => firestoreReferenceServiceClassName;
+  String get streamServiceClassName => firestoreStreamServiceClassName;
+
+  String get referenceServicePath => '$servicesPath/${referenceServiceClassName.snakeCase}.dart';
+  String get streamServicePath => '$servicesPath/${streamServiceClassName.snakeCase}.dart';
+
+  String get _referenceServiceUrl => referenceServicePath.toPackageUrl(config: this);
+  String get _streamServiceUrl => streamServicePath.toPackageUrl(config: this);
+
+  Reference get referenceServiceReference => Reference(
+        referenceServiceClassName.pascalCase,
+        _referenceServiceUrl,
+      );
+
+  Reference get streamServiceReference => Reference(
+        streamServiceClassName.pascalCase,
+        _streamServiceUrl,
+      );
 
   @override
   List<Object> get props => [
         outputPath,
         collections,
+        projectName,
+        clear,
       ];
 }

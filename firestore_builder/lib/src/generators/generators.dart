@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:firestore_builder/src/extensions.dart/map_entry_extensions.dart';
+import 'package:firestore_builder/src/generators/clear_files.dart';
 import 'package:firestore_builder/src/generators/generate_models.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
+import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:yaml/yaml.dart';
@@ -30,9 +32,14 @@ You can also indicate the path of your configuration file:
     file: file,
   );
 
+  if (config.clear) {
+    await clearFiles(path: config.outputPath);
+  }
+
   await Future.wait([
     generateModels(config: config),
     generateReferenceService(config: config),
+    generateStreamService(config: config),
   ]);
 }
 

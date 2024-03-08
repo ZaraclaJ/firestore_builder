@@ -1,5 +1,6 @@
 firestore_builder:
   output: test/output
+  clear: True
   collections:
     - users:
         model_name: user

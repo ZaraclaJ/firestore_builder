@@ -40,7 +40,7 @@ Class _referenceServiceClass({
   return Class(
     (c) {
       c
-        ..name = firestoreReferenceServiceName
+        ..name = config.referenceServiceClassName
         ..fields.add(
           Field(
             (f) => f
