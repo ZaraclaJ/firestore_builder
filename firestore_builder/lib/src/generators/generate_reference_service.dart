@@ -52,7 +52,6 @@ Class _referenceServiceClass({
         ..methods.addAll([
           ...config.collections.map(
             (collection) => _collectionReferenceMethod(
-              config: config,
               collection: collection,
             ),
           ),
@@ -62,12 +61,11 @@ Class _referenceServiceClass({
 }
 
 Method _collectionReferenceMethod({
-  required YamlConfig config,
   required Collection collection,
 }) {
   final modelRef = Reference(
     collection.modelName.pascalCase,
-    collection.modelFileUrl(config: config),
+    collection.modelFileUrl,
   );
 
   const valueVarName = 'value';

@@ -47,10 +47,19 @@ The configuration file does not contain a correct collections section: $firestor
 ''');
     }
 
+    final yamlConfigLight = YamlConfig(
+      projectName: projectName,
+      outputPath: outputPath,
+      collections: const [],
+    );
+
     final collections = yamlCollections?.nodes
             .whereType<YamlMap>()
             .map(
-              Collection.fromYaml,
+              (e) => Collection.fromYaml(
+                yamlMap: e,
+                yamlConfigLight: yamlConfigLight,
+              ),
             )
             .toList() ??
         [];

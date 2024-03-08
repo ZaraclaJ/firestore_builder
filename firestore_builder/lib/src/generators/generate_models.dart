@@ -13,13 +13,12 @@ import 'package:recase/recase.dart';
 Future<void> generateModels({
   required YamlConfig config,
 }) {
-  final modelsPath = config.modelsPath;
   final collections = config.collections;
 
   final futures = collections.map(
     (c) => generateLibrary(
       library: c.modelLibrary,
-      filePath: c.modelFilePath(config: config),
+      filePath: c.modelFilePath,
     ),
   );
 

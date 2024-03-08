@@ -11,11 +11,13 @@ class Collection extends Equatable {
     required this.modelName,
     required this.fields,
     required this.subCollections,
+    required this.yamlConfigLight,
   });
 
-  factory Collection.fromYaml(
-    YamlMap yamlMap,
-  ) {
+  factory Collection.fromYaml({
+    required YamlMap yamlMap,
+    required YamlConfig yamlConfigLight,
+  }) {
     final keys = yamlMap.keys.whereType<String>();
     if (keys.length != 1) {
       throw Exception(
@@ -67,6 +69,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
       modelName: modelName,
       fields: fields,
       subCollections: const [],
+      yamlConfigLight: yamlConfigLight,
     );
   }
 
@@ -74,19 +77,20 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final String modelName;
   final List<CollectionField> fields;
   final List<Collection> subCollections;
+  final YamlConfig yamlConfigLight;
 
   String get snakeName => name.snakeCase;
   String get camelName => name.camelCase;
 
   String get modelClassName => modelName.pascalCase;
 
-  String modelFilePath({required YamlConfig config}) {
-    return '${config.modelsPath}/$snakeName.dart';
+  String get modelFilePath {
+    return '${yamlConfigLight.modelsPath}/$snakeName.dart';
   }
 
-  String modelFileUrl({required YamlConfig config}) {
-    final projectName = config.projectName;
-    final modelsPath = config.modelsPath.withoutPrefix('lib/');
+  String get modelFileUrl {
+    final projectName = yamlConfigLight.projectName;
+    final modelsPath = yamlConfigLight.modelsPath.withoutPrefix('lib/');
     return 'package:$projectName/$modelsPath/$snakeName.dart';
   }
 
