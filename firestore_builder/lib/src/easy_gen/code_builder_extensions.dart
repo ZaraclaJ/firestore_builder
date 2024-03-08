@@ -59,24 +59,45 @@ extension ClassExtensions on Class {
           (element) => element.static,
         )
         .map(
-          (e) => e.toParameter.toThisParameter,
+          (e) => e.toParameter,
+        );
+
+    final privateParameters = parameters.where(
+      (p) => p.isPrivate,
+    );
+
+    final constructorParameters = parameters
+        .map(
+          (p) => p.inConstructor,
         )
         .sort();
+
     return rebuild(
       (c) => c
         ..constructors.add(
           Constructor(
             (ctor) => ctor
               ..constant = true
+              ..initializers.addAll(
+                privateParameters.map(
+                  (p) {
+                    return Reference(p.name)
+                        .assign(
+                          Reference(p.publicName),
+                        )
+                        .code;
+                  },
+                ),
+              )
               ..optionalParameters.addAll(
                 [
-                  if (optional) ...parameters,
+                  if (optional) ...constructorParameters,
                 ],
               )
               ..requiredParameters.addAll(
                 [
                   if (!optional)
-                    ...parameters.map(
+                    ...constructorParameters.map(
                       (e) => e.rebuild((p) => p.required = false),
                     ),
                 ],
@@ -98,14 +119,37 @@ extension ClassExtensions on Class {
 }
 
 extension ParameterExtensions on Parameter {
+  String get publicName => name.withoutUnderscore;
+
   @UseResult()
-  Parameter get toThisParameter {
+  Parameter copyWithName(String name) {
+    final parameter = this;
+    return Parameter(
+      (parameterBuilder) {
+        parameterBuilder
+          ..name = name
+          ..type = parameter.type
+          ..required = parameter.required
+          ..named = parameter.named
+          ..defaultTo = parameter.defaultTo;
+      },
+    );
+  }
+
+  @UseResult()
+  Parameter get inConstructor {
+    if (isPrivate) {
+      return copyWithName(publicName);
+    }
+
     return rebuild(
       (parameterBuilder) => parameterBuilder
         ..toThis = true
         ..type = null,
     );
   }
+
+  bool get isPrivate => name.startsWith('_');
 }
 
 extension ParameterListExtensions on Iterable<Parameter> {
