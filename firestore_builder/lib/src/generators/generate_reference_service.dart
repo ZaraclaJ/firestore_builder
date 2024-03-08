@@ -7,7 +7,6 @@ import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
-import 'package:recase/recase.dart';
 
 Future<void> generateReferenceService({
   required YamlConfig config,
@@ -62,8 +61,6 @@ Class _referenceServiceClass({
 }
 
 extension on Collection {
-  String get _collectionReferenceMethodName => '${name.camelCase}Collection';
-
   Method get collectionReferenceMethod {
     final modelRef = modelReference;
 
@@ -74,7 +71,7 @@ extension on Collection {
     return Method(
       (m) {
         m
-          ..name = _collectionReferenceMethodName
+          ..name = collectionReferenceMethodName
           ..returns = FirestoreTypes.collectionReferenceOf(modelRef)
           ..body = const Reference(firestoreInstanceName)
               .method(
@@ -104,7 +101,7 @@ extension on Collection {
     return Method(
       (m) {
         m
-          ..name = '${modelName.camelCase}Reference'
+          ..name = documentReferenceMethodName
           ..returns = FirestoreTypes.documentReferenceOf(modelRef)
           ..requiredParameters.add(
             Parameter(
@@ -113,7 +110,7 @@ extension on Collection {
                 ..type = modelIdReference,
             ),
           )
-          ..body = Reference(_collectionReferenceMethodName)
+          ..body = Reference(collectionReferenceMethodName)
               .call([])
               .method(
                 FirestoreSymbols.docMethod,

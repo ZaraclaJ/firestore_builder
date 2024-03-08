@@ -14,11 +14,23 @@ abstract class BasicSymbols {
   /// 'DateTime'
   static const String dateTime = 'DateTime';
 
+  /// 'Stream'
+  static const String stream = 'Stream';
+
+  /// 'List'
+  static const String list = 'List';
+
   /// Map<String, Object?>
   static const String json = 'Map<String, Object?>';
 
   /// 'Timestamp'
   static const String timestamp = 'Timestamp';
+
+  /// 'map'
+  static const String toListMethod = 'toList';
+
+  /// 'toList'
+  static const String mapMethod = 'map';
 }
 
 abstract class FirestoreSymbols {
@@ -37,11 +49,20 @@ abstract class FirestoreSymbols {
   /// 'SnapshotOptions'
   static const String snapshotOptionsClass = 'SnapshotOptions';
 
+  /// 'docs'
+  static const String docsProperty = 'docs';
+
   /// 'collection'
   static const String collectionMethod = 'collection';
 
   /// 'doc'
   static const String docMethod = 'doc';
+
+  /// 'data'
+  static const String dataMethod = 'data';
+
+  /// 'snapshots'
+  static const String snapshotsMethod = 'snapshots';
 
   /// 'withConverter'
   static const String withConverterMethod = 'withConverter';

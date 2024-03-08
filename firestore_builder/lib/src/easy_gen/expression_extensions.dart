@@ -1,4 +1,9 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
+
+extension ReferenceExtensions on Reference {
+  Reference get nullSafe => Reference('$symbol?', url);
+}
 
 extension ExpressionExtensions on Expression {
   Expression method(
@@ -12,6 +17,25 @@ extension ExpressionExtensions on Expression {
       namedArguments,
       typeArguments,
     );
+  }
+
+  Expression toList() {
+    return method(BasicSymbols.toListMethod);
+  }
+
+  Expression map({
+    required List<String> parameters,
+    required Code body,
+    bool lambda = true,
+  }) {
+    final expression = this;
+    return expression.method(BasicSymbols.mapMethod, [
+      Expressions.lambdaMethod(
+        lambda: lambda,
+        parameters: parameters,
+        body: body,
+      ),
+    ]);
   }
 }
 
@@ -34,4 +58,10 @@ abstract class Expressions {
         ..body = body;
     }).genericClosure;
   }
+}
+
+class NullableReference extends Reference {
+  NullableReference(
+    Reference reference,
+  ) : super('${reference.symbol}?', reference.url);
 }

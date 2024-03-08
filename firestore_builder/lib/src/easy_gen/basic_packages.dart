@@ -4,4 +4,7 @@ abstract class BasicPackages {
 
   /// 'package:freezed_annotation/freezed_annotation.dart'
   static const String freezedAnnotation = 'package:freezed_annotation/freezed_annotation.dart';
+
+  /// 'dart:async'
+  static const String dartAsync = 'dart:async';
 }

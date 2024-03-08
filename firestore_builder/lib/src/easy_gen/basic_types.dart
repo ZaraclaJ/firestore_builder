@@ -18,6 +18,25 @@ abstract class BasicTypes {
   /// 'DateTime'
   static const Reference dateTime = Reference(BasicSymbols.dateTime);
 
+  /// List<ref>
+  static TypeReference listOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = BasicSymbols.list
+        ..types.add(ref),
+    );
+  }
+
+  /// Stream<ref>
+  static TypeReference streamOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = BasicSymbols.stream
+        ..url = BasicPackages.dartAsync
+        ..types.add(ref),
+    );
+  }
+
   /// Map<String, Object?>
   static Reference json = const Reference(BasicSymbols.json);
 

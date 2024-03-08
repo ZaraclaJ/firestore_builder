@@ -82,9 +82,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final YamlConfig yamlConfigLight;
 
   String get snakeName => name.snakeCase;
-  String get camelName => name.camelCase;
+  String get _camelName => name.camelCase;
 
   String get modelClassName => modelName.pascalCase;
+  String get modelCamelName => modelName.camelCase;
   String get modelIdClassName => '${modelClassName}Id';
 
   String get modelFilePath {
@@ -104,6 +105,12 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
         modelIdClassName.pascalCase,
         _modelFileUrl,
       );
+
+  String get collectionReferenceMethodName => '${_camelName}Collection';
+  String get documentReferenceMethodName => '${modelCamelName}Reference';
+
+  String get collectionStreamMethodName => '${_camelName}CollectionStream';
+  String get documentStreamMethodName => '${modelCamelName}Stream';
 
   @override
   List<Object> get props => [
