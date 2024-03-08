@@ -176,3 +176,138 @@ abstract class _Message implements Message {
   _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+MessageId _$MessageIdFromJson(Map<String, dynamic> json) {
+  return _MessageId.fromJson(json);
+}
+
+/// @nodoc
+mixin _$MessageId {
+  String get value => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $MessageIdCopyWith<MessageId> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MessageIdCopyWith<$Res> {
+  factory $MessageIdCopyWith(MessageId value, $Res Function(MessageId) then) =
+      _$MessageIdCopyWithImpl<$Res, MessageId>;
+  @useResult
+  $Res call({String value});
+}
+
+/// @nodoc
+class _$MessageIdCopyWithImpl<$Res, $Val extends MessageId>
+    implements $MessageIdCopyWith<$Res> {
+  _$MessageIdCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? value = null,
+  }) {
+    return _then(_value.copyWith(
+      value: null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MessageIdImplCopyWith<$Res>
+    implements $MessageIdCopyWith<$Res> {
+  factory _$$MessageIdImplCopyWith(
+          _$MessageIdImpl value, $Res Function(_$MessageIdImpl) then) =
+      __$$MessageIdImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String value});
+}
+
+/// @nodoc
+class __$$MessageIdImplCopyWithImpl<$Res>
+    extends _$MessageIdCopyWithImpl<$Res, _$MessageIdImpl>
+    implements _$$MessageIdImplCopyWith<$Res> {
+  __$$MessageIdImplCopyWithImpl(
+      _$MessageIdImpl _value, $Res Function(_$MessageIdImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? value = null,
+  }) {
+    return _then(_$MessageIdImpl(
+      null == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MessageIdImpl implements _MessageId {
+  const _$MessageIdImpl(this.value);
+
+  factory _$MessageIdImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MessageIdImplFromJson(json);
+
+  @override
+  final String value;
+
+  @override
+  String toString() {
+    return 'MessageId(value: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MessageIdImpl &&
+            (identical(other.value, value) || other.value == value));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, value);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MessageIdImplCopyWith<_$MessageIdImpl> get copyWith =>
+      __$$MessageIdImplCopyWithImpl<_$MessageIdImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MessageIdImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _MessageId implements MessageId {
+  const factory _MessageId(final String value) = _$MessageIdImpl;
+
+  factory _MessageId.fromJson(Map<String, dynamic> json) =
+      _$MessageIdImpl.fromJson;
+
+  @override
+  String get value;
+  @override
+  @JsonKey(ignore: true)
+  _$$MessageIdImplCopyWith<_$MessageIdImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

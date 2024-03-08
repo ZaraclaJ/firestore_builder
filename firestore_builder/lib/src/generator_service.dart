@@ -97,23 +97,65 @@ extension CollectionExtensions on Collection {
   String get modelClassName => modelName.pascalCase;
 
   Library get modelLibrary {
-    final idClass = ExtensionType(
-      (extensionType) {
-        extensionType
-          ..representationDeclaration = RepresentationDeclaration(
-            (d) => d
-              ..name = 'value'
-              ..declaredRepresentationType = BasicTypes.string,
-          )
+    return Library(
+      (library) {
+        library.body.addAll([
+          _modelClass,
+          _idClass,
+        ]);
+      },
+    ).toFreezed(
+      withJson: true,
+      fileName: fileName,
+    );
+  }
+
+  Class get _idClass {
+    return Class(
+      (classBuilder) {
+        const fieldName = 'value';
+        const fieldType = BasicTypes.string;
+
+        classBuilder
           ..name = '${modelClassName}Id'
-          ..constant = true;
+          ..constructors.add(
+            Constructor(
+              (constructor) {
+                constructor
+                  ..constant = true
+                  ..requiredParameters.add(
+                    Parameter(
+                      (parameter) {
+                        parameter
+                          ..name = fieldName
+                          ..type = fieldType
+                          ..named = true;
+                      },
+                    ),
+                  );
+              },
+            ),
+          )
+          ..fields.add(
+            Field(
+              (field) {
+                field
+                  ..name = fieldName
+                  ..type = fieldType
+                  ..modifier = FieldModifier.final$;
+              },
+            ),
+          );
       },
     );
-    final modelClass = Class(
+  }
+
+  Class get _modelClass {
+    return Class(
       (classBuilder) {
         classBuilder
           ..name = modelClassName
-          ..constructors.add(modelConstructor)
+          ..constructors.add(_modelConstructor)
           ..fields.addAll([
             ...fields.map(
               (collectionField) => collectionField.field(
@@ -126,21 +168,9 @@ extension CollectionExtensions on Collection {
           ]);
       },
     );
-
-    return Library(
-      (library) {
-        library.body.addAll([
-          idClass,
-          modelClass,
-        ]);
-      },
-    ).toFreezed(
-      withJson: true,
-      fileName: fileName,
-    );
   }
 
-  Constructor get modelConstructor {
+  Constructor get _modelConstructor {
     return Constructor(
       (constructor) {
         constructor

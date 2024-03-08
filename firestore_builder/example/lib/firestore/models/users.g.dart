@@ -18,3 +18,12 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'current_job': instance.currentJob,
       'age': instance.age,
     };
+
+_$UserIdImpl _$$UserIdImplFromJson(Map<String, dynamic> json) => _$UserIdImpl(
+      json['value'] as String,
+    );
+
+Map<String, dynamic> _$$UserIdImplToJson(_$UserIdImpl instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+    };

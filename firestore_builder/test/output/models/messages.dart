@@ -3,8 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'messages.freezed.dart';
 part 'messages.g.dart';
 
-extension type const MessageId(String value) {}
-
 @Freezed(
   toJson: true,
   fromJson: true,
@@ -21,4 +19,15 @@ class Message with _$Message {
   static const String contentFieldKey = 'content';
 
   static const String dateFieldKey = 'date';
+}
+
+@Freezed(
+  toJson: true,
+  fromJson: true,
+)
+class MessageId with _$MessageId {
+  const factory MessageId(String value) = _MessageId;
+
+  factory MessageId.fromJson(Map<String, dynamic> json) =>
+      _$MessageIdFromJson(json);
 }

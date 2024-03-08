@@ -22,3 +22,13 @@ class User with _$User {
 
   static const String ageFieldKey = 'age';
 }
+
+@Freezed(
+  toJson: true,
+  fromJson: true,
+)
+class UserId with _$UserId {
+  const factory UserId(String value) = _UserId;
+
+  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
+}
