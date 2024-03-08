@@ -126,12 +126,13 @@ class __$$MessageImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MessageImpl implements _Message {
+class _$MessageImpl extends _Message {
   const _$MessageImpl(
       {@JsonKey(name: Message.contentFieldKey) required this.content,
       @JsonKey(name: Message.dateFieldKey) required this.date,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      this.firestoreId = ''});
+      this.firestoreId = ''})
+      : super._();
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageImplFromJson(json);
@@ -180,12 +181,13 @@ class _$MessageImpl implements _Message {
   }
 }
 
-abstract class _Message implements Message {
+abstract class _Message extends Message {
   const factory _Message(
       {@JsonKey(name: Message.contentFieldKey) required final String content,
       @JsonKey(name: Message.dateFieldKey) required final DateTime date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final String firestoreId}) = _$MessageImpl;
+  const _Message._() : super._();
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
 

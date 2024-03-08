@@ -22,9 +22,13 @@ class Message with _$Message {
   factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
 
+  const Message._();
+
   static const String contentFieldKey = 'content';
 
   static const String dateFieldKey = 'date';
+
+  MessageId get messageId => MessageId(firestoreId);
 }
 
 @Freezed(

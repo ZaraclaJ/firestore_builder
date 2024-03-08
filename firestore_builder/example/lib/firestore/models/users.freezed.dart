@@ -139,13 +139,14 @@ class __$$UserImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserImpl implements _User {
+class _$UserImpl extends _User {
   const _$UserImpl(
       {@JsonKey(name: User.nameFieldKey) required this.name,
       @JsonKey(name: User.ageFieldKey) required this.age,
       @JsonKey(name: User.currentJobFieldKey) this.currentJob,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      this.firestoreId = ''});
+      this.firestoreId = ''})
+      : super._();
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -200,13 +201,14 @@ class _$UserImpl implements _User {
   }
 }
 
-abstract class _User implements User {
+abstract class _User extends User {
   const factory _User(
       {@JsonKey(name: User.nameFieldKey) required final String name,
       @JsonKey(name: User.ageFieldKey) required final int age,
       @JsonKey(name: User.currentJobFieldKey) final String? currentJob,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final String firestoreId}) = _$UserImpl;
+  const _User._() : super._();
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 

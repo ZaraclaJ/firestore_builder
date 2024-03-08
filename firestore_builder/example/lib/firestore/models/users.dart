@@ -22,11 +22,15 @@ class User with _$User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
+  const User._();
+
   static const String nameFieldKey = 'name';
 
   static const String currentJobFieldKey = 'current_job';
 
   static const String ageFieldKey = 'age';
+
+  UserId get userId => UserId(firestoreId);
 }
 
 @Freezed(

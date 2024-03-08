@@ -112,34 +112,11 @@ extension CollectionExtensions on Collection {
     );
   }
 
-  Class get _idClass {
-    return Class(
-      (classBuilder) {
-        const fieldName = 'value';
-        const fieldType = BasicTypes.string;
-
-        classBuilder
-          ..name = '${modelClassName}Id'
-          ..fields.add(
-            Field(
-              (field) {
-                field
-                  ..name = fieldName
-                  ..type = fieldType
-                  ..modifier = FieldModifier.final$;
-              },
-            ),
-          );
-      },
-    ).buildClassConstructor(optional: false);
-  }
-
   Class get _modelClass {
     return Class(
       (classBuilder) {
         classBuilder
           ..name = modelClassName
-          // ..constructors.add(_modelConstructor)
           ..fields.addAll([
             ...fields.map(
               (collectionField) => collectionField.staticKeyField(),
@@ -150,6 +127,9 @@ extension CollectionExtensions on Collection {
               ),
             ),
             _idField,
+          ])
+          ..methods.addAll([
+            _idGetter,
           ]);
       },
     );
@@ -173,18 +153,41 @@ extension CollectionExtensions on Collection {
     );
   }
 
-  Constructor get _modelConstructor {
-    return Constructor(
-      (constructor) {
-        constructor
-          ..constant = true
-          ..optionalParameters.addAll([
-            ...fields.map(
-              (collectionField) => collectionField.parameter().toThisParameter,
-            ),
-            _idField.toParameter,
-          ]);
+  Method get _idGetter {
+    final idClassRef = Reference(_idClass.name);
+    return Method(
+      (method) {
+        method
+          ..name = '${modelClassName.camelCase}Id'
+          ..type = MethodType.getter
+          ..returns = idClassRef
+          ..lambda = true
+          ..body = idClassRef.call([
+            Reference(_idField.name),
+          ]).code;
       },
     );
+  }
+
+  Class get _idClass {
+    return Class(
+      (classBuilder) {
+        const fieldName = 'value';
+        const fieldType = BasicTypes.string;
+
+        classBuilder
+          ..name = '${modelClassName}Id'
+          ..fields.add(
+            Field(
+              (field) {
+                field
+                  ..name = fieldName
+                  ..type = fieldType
+                  ..modifier = FieldModifier.final$;
+              },
+            ),
+          );
+      },
+    ).buildClassConstructor(optional: false);
   }
 }
