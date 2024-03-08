@@ -1,5 +1,6 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
+import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
@@ -18,7 +19,7 @@ Future<void> generateModels({
   final futures = collections.map(
     (c) => generateLibrary(
       library: c.modelLibrary,
-      filePath: '$modelsPath/${c.snakeName}.dart',
+      filePath: c.modelFilePath(config: config),
     ),
   );
 
@@ -26,8 +27,6 @@ Future<void> generateModels({
 }
 
 extension CollectionExtensions on Collection {
-  String get modelClassName => modelName.pascalCase;
-
   Library get modelLibrary {
     return Library(
       (library) {
@@ -53,6 +52,7 @@ extension CollectionExtensions on Collection {
             _fromFirestoreFactory,
           )
           ..fields.addAll([
+            _staticCollectionKeyField,
             ...fields.map(
               (collectionField) => collectionField.staticKeyField(),
             ),
@@ -67,6 +67,19 @@ extension CollectionExtensions on Collection {
             _idGetter,
             _toFirestoreMethod,
           ]);
+      },
+    );
+  }
+
+  Field get _staticCollectionKeyField {
+    return Field(
+      (field) {
+        field
+          ..static = true
+          ..modifier = FieldModifier.constant
+          ..type = BasicTypes.string
+          ..name = collectionKeyName
+          ..assignment = literalString(name).code;
       },
     );
   }
@@ -112,7 +125,7 @@ extension CollectionExtensions on Collection {
       (ctor) {
         ctor
           ..factory = true
-          ..name = fromFirestoreFactoryName
+          ..name = FirestoreSymbols.fromFirestoreParam
           ..requiredParameters.addAll([
             Parameter(
               (p) {
@@ -141,10 +154,10 @@ extension CollectionExtensions on Collection {
                 .statement,
             Reference(modelClassName)
                 .method(
-                  FreezedMethods.fromJson,
+                  FreezedSymbols.fromJsonMethod,
                   [const Reference(dataVarName).nullChecked],
                 )
-                .method(FreezedMethods.copyWith, [], {
+                .method(FreezedSymbols.copyWithMethod, [], {
                   _idField.name: const Reference(snapshotVarName).property('id'),
                 })
                 .returned
@@ -160,12 +173,12 @@ extension CollectionExtensions on Collection {
     return Method(
       (method) {
         method
-          ..name = toFirestoreMethodName
+          ..name = FirestoreSymbols.toFirestoreParam
           ..returns = BasicTypes.json
           ..body = Block.of([
             declareFinal(jsonVarName)
                 .assign(
-                  const Reference('toJson').call([]),
+                  const Reference(FreezedSymbols.toJsonMethod).call([]),
                 )
                 .statement,
             const Reference(jsonVarName).returned.statement,

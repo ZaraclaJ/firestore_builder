@@ -33,6 +33,8 @@ class User with _$User {
 
   const User._();
 
+  static const String collectionKey = 'users';
+
   static const String nameFieldKey = 'name';
 
   static const String currentJobFieldKey = 'current_job';

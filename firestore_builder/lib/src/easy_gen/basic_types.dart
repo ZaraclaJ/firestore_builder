@@ -31,15 +31,35 @@ abstract class BasicTypes {
 abstract class FirestoreTypes {
   /// FirebaseFirestore
   static Reference firebaseFirestore = const Reference(
-    FirestoreSymbols.firebaseFirestore,
+    FirestoreSymbols.firebaseFirestoreClass,
     BasicPackages.cloudFirestore,
   );
+
+  /// CollectionReference<ref>
+  static TypeReference collectionReferenceOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = FirestoreSymbols.collectionReferenceClass
+        ..url = BasicPackages.cloudFirestore
+        ..types.add(ref),
+    );
+  }
+
+  /// DocumentReference<ref>
+  static TypeReference documentReferenceOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = FirestoreSymbols.documentReferenceClass
+        ..url = BasicPackages.cloudFirestore
+        ..types.add(ref),
+    );
+  }
 
   /// DocumentSnapshot<ref>
   static TypeReference documentSnapshotOf(Reference ref) {
     return TypeReference(
       (type) => type
-        ..symbol = FirestoreSymbols.documentSnapshot
+        ..symbol = FirestoreSymbols.documentSnapshotClass
         ..url = BasicPackages.cloudFirestore
         ..types.add(ref),
     );
@@ -49,7 +69,7 @@ abstract class FirestoreTypes {
   static TypeReference snapshotOptions({bool isNullable = false}) {
     return TypeReference(
       (type) => type
-        ..symbol = FirestoreSymbols.snapshotOptions
+        ..symbol = FirestoreSymbols.snapshotOptionsClass
         ..url = BasicPackages.cloudFirestore
         ..isNullable = isNullable,
     );

@@ -33,6 +33,8 @@ class Message with _$Message {
 
   const Message._();
 
+  static const String collectionKey = 'messages';
+
   static const String contentFieldKey = 'content';
 
   static const String dateFieldKey = 'date';

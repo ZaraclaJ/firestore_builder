@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_builder/test/output/models/messages.dart';
-import 'package:firestore_builder/test/output/models/users.dart';
+import 'package:example/firestore/models/messages.dart';
+import 'package:example/firestore/models/users.dart';
 
 class FirestoreReferenceService {
   const FirestoreReferenceService({required FirebaseFirestore firestore})
