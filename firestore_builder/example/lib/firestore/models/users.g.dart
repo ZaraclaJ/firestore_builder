@@ -10,7 +10,6 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       name: json['name'] as String,
       age: json['age'] as int,
       currentJob: json['current_job'] as String?,
-      firestoreId: json['firestoreId'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
@@ -18,7 +17,6 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'name': instance.name,
       'age': instance.age,
       'current_job': instance.currentJob,
-      'firestoreId': instance.firestoreId,
     };
 
 _$UserIdImpl _$$UserIdImplFromJson(Map<String, dynamic> json) => _$UserIdImpl(

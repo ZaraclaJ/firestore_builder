@@ -26,6 +26,7 @@ mixin _$User {
   int get age => throw _privateConstructorUsedError;
   @JsonKey(name: User.currentJobFieldKey)
   String? get currentJob => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get firestoreId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $UserCopyWith<$Res> {
       {@JsonKey(name: User.nameFieldKey) String name,
       @JsonKey(name: User.ageFieldKey) int age,
       @JsonKey(name: User.currentJobFieldKey) String? currentJob,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       String firestoreId});
 }
 
@@ -95,6 +97,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       {@JsonKey(name: User.nameFieldKey) String name,
       @JsonKey(name: User.ageFieldKey) int age,
       @JsonKey(name: User.currentJobFieldKey) String? currentJob,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       String firestoreId});
 }
 
@@ -141,6 +144,7 @@ class _$UserImpl implements _User {
       {@JsonKey(name: User.nameFieldKey) required this.name,
       @JsonKey(name: User.ageFieldKey) required this.age,
       @JsonKey(name: User.currentJobFieldKey) this.currentJob,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       this.firestoreId = ''});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -156,7 +160,7 @@ class _$UserImpl implements _User {
   @JsonKey(name: User.currentJobFieldKey)
   final String? currentJob;
   @override
-  @JsonKey()
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String firestoreId;
 
   @override
@@ -201,6 +205,7 @@ abstract class _User implements User {
       {@JsonKey(name: User.nameFieldKey) required final String name,
       @JsonKey(name: User.ageFieldKey) required final int age,
       @JsonKey(name: User.currentJobFieldKey) final String? currentJob,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       final String firestoreId}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -215,6 +220,7 @@ abstract class _User implements User {
   @JsonKey(name: User.currentJobFieldKey)
   String? get currentJob;
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get firestoreId;
   @override
   @JsonKey(ignore: true)

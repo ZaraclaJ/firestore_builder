@@ -3,11 +3,18 @@ import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 
 abstract class BasicAnnotations {
   /// @JsonKey
-  static Expression jsonKey({Expression? name}) => const Reference(
+  static Expression jsonKey({
+    Expression? name,
+    bool? includeFromJson,
+    bool? includeToJson,
+  }) =>
+      const Reference(
         'JsonKey',
         BasicPackages.freezedAnnotation,
       ).call([], {
         if (name != null) 'name': name,
+        if (includeFromJson != null) 'includeFromJson': literalBool(includeFromJson),
+        if (includeToJson != null) 'includeToJson': literalBool(includeToJson),
       });
 
   /// @Freezed

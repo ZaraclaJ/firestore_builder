@@ -12,7 +12,12 @@ class User with _$User {
     @JsonKey(name: User.nameFieldKey) required String name,
     @JsonKey(name: User.ageFieldKey) required int age,
     @JsonKey(name: User.currentJobFieldKey) String? currentJob,
-    @Default('') String firestoreId,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default('')
+    String firestoreId,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

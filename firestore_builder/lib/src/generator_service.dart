@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
@@ -161,7 +162,13 @@ extension CollectionExtensions on Collection {
           ..name = _databaseIdName
           ..type = BasicTypes.string
           ..assignment = literalString('').code
-          ..modifier = FieldModifier.final$;
+          ..modifier = FieldModifier.final$
+          ..annotations.add(
+            BasicAnnotations.jsonKey(
+              includeFromJson: false,
+              includeToJson: false,
+            ),
+          );
       },
     );
   }
