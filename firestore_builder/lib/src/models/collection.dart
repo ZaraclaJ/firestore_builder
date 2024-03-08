@@ -1,3 +1,4 @@
+import 'package:code_builder/code_builder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
@@ -83,16 +84,27 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get camelName => name.camelCase;
 
   String get modelClassName => modelName.pascalCase;
+  String get modelIdClassName => '${modelClassName}Id';
 
   String get modelFilePath {
     return '${yamlConfigLight.modelsPath}/$snakeName.dart';
   }
 
-  String get modelFileUrl {
+  String get _modelFileUrl {
     final projectName = yamlConfigLight.projectName;
     final modelsPath = yamlConfigLight.modelsPath.withoutPrefix('lib/');
     return 'package:$projectName/$modelsPath/$snakeName.dart';
   }
+
+  Reference get modelReference => Reference(
+        modelName.pascalCase,
+        _modelFileUrl,
+      );
+
+  Reference get modelIdReference => Reference(
+        modelIdClassName.pascalCase,
+        _modelFileUrl,
+      );
 
   @override
   List<Object> get props => [

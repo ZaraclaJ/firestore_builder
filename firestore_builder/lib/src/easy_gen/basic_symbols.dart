@@ -40,6 +40,9 @@ abstract class FirestoreSymbols {
   /// 'collection'
   static const String collectionMethod = 'collection';
 
+  /// 'doc'
+  static const String docMethod = 'doc';
+
   /// 'withConverter'
   static const String withConverterMethod = 'withConverter';
 

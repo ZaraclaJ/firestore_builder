@@ -50,50 +50,78 @@ Class _referenceServiceClass({
           ),
         )
         ..methods.addAll([
-          ...config.collections.map(
-            (collection) => _collectionReferenceMethod(
-              collection: collection,
-            ),
+          ...config.collections.expand(
+            (c) => [
+              c.collectionReferenceMethod,
+              c.documentReferenceMethod,
+            ],
           ),
         ]);
     },
   );
 }
 
-Method _collectionReferenceMethod({
-  required Collection collection,
-}) {
-  final modelRef = Reference(
-    collection.modelName.pascalCase,
-    collection.modelFileUrl,
-  );
+extension on Collection {
+  String get _collectionReferenceMethodName => '${name.camelCase}Collection';
 
-  const valueVarName = 'value';
-  const fromFirestore = FirestoreSymbols.fromFirestoreParam;
-  const toFirestore = FirestoreSymbols.toFirestoreParam;
+  Method get collectionReferenceMethod {
+    final modelRef = modelReference;
 
-  return Method(
-    (m) {
-      m
-        ..name = '${collection.name.camelCase}Collection'
-        ..returns = FirestoreTypes.collectionReferenceOf(modelRef)
-        ..body = const Reference(firestoreInstanceName)
-            .method(
-              FirestoreSymbols.collectionMethod,
-              [modelRef.property(collectionKeyName)],
-            )
-            .method(FirestoreSymbols.withConverterMethod, [], {
-              fromFirestore: modelRef.property(
-                fromFirestore,
-              ),
-              toFirestore: Expressions.lambdaMethod(
-                parameters: [valueVarName, '_'],
-                body: const Reference(valueVarName).method(toFirestore).returned.statement,
-                lambda: false,
-              ),
-            })
-            .returned
-            .statement;
-    },
-  );
+    const valueVarName = 'value';
+    const fromFirestore = FirestoreSymbols.fromFirestoreParam;
+    const toFirestore = FirestoreSymbols.toFirestoreParam;
+
+    return Method(
+      (m) {
+        m
+          ..name = _collectionReferenceMethodName
+          ..returns = FirestoreTypes.collectionReferenceOf(modelRef)
+          ..body = const Reference(firestoreInstanceName)
+              .method(
+                FirestoreSymbols.collectionMethod,
+                [modelRef.property(collectionKeyName)],
+              )
+              .method(FirestoreSymbols.withConverterMethod, [], {
+                fromFirestore: modelRef.property(
+                  fromFirestore,
+                ),
+                toFirestore: Expressions.lambdaMethod(
+                  parameters: [valueVarName, '_'],
+                  body: const Reference(valueVarName).method(toFirestore).returned.statement,
+                  lambda: false,
+                ),
+              })
+              .returned
+              .statement;
+      },
+    );
+  }
+
+  Method get documentReferenceMethod {
+    final modelRef = modelReference;
+    const idVarName = 'id';
+
+    return Method(
+      (m) {
+        m
+          ..name = '${modelName.camelCase}Reference'
+          ..returns = FirestoreTypes.documentReferenceOf(modelRef)
+          ..requiredParameters.add(
+            Parameter(
+              (p) => p
+                ..name = idVarName
+                ..type = modelIdReference,
+            ),
+          )
+          ..body = Reference(_collectionReferenceMethodName)
+              .call([])
+              .method(
+                FirestoreSymbols.docMethod,
+                [const Reference(idVarName).property('value')],
+              )
+              .returned
+              .statement;
+      },
+    );
+  }
 }

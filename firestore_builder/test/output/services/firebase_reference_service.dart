@@ -20,6 +20,10 @@ class FirestoreReferenceService {
         );
   }
 
+  DocumentReference<User> userReference(UserId id) {
+    return usersCollection().doc(id.value);
+  }
+
   CollectionReference<Message> messagesCollection() {
     return _firestore.collection(Message.collectionKey).withConverter(
           fromFirestore: Message.fromFirestore,
@@ -30,5 +34,9 @@ class FirestoreReferenceService {
             return value.toFirestore();
           },
         );
+  }
+
+  DocumentReference<Message> messageReference(MessageId id) {
+    return messagesCollection().doc(id.value);
   }
 }

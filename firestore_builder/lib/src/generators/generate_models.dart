@@ -106,7 +106,7 @@ extension CollectionExtensions on Collection {
     return Method(
       (method) {
         method
-          ..name = '${modelClassName.camelCase}Id'
+          ..name = modelIdClassName.camelCase
           ..type = MethodType.getter
           ..returns = idClassRef
           ..lambda = true
@@ -193,7 +193,7 @@ extension CollectionExtensions on Collection {
         const fieldType = BasicTypes.string;
 
         classBuilder
-          ..name = '${modelClassName}Id'
+          ..name = modelIdClassName
           ..fields.add(
             Field(
               (field) {
