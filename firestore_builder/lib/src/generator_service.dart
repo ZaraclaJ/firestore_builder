@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/freezed_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/parameter_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
@@ -96,6 +97,18 @@ extension CollectionExtensions on Collection {
   String get modelClassName => modelName.pascalCase;
 
   Library get modelLibrary {
+    final idClass = ExtensionType(
+      (extensionType) {
+        extensionType
+          ..representationDeclaration = RepresentationDeclaration(
+            (d) => d
+              ..name = 'value'
+              ..declaredRepresentationType = BasicTypes.string,
+          )
+          ..name = '${modelClassName}Id'
+          ..constant = true;
+      },
+    );
     final modelClass = Class(
       (classBuilder) {
         classBuilder
@@ -116,7 +129,10 @@ extension CollectionExtensions on Collection {
 
     return Library(
       (library) {
-        library.body.add(modelClass);
+        library.body.addAll([
+          idClass,
+          modelClass,
+        ]);
       },
     ).toFreezed(
       withJson: true,

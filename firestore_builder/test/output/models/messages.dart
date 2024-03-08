@@ -3,6 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'messages.freezed.dart';
 part 'messages.g.dart';
 
+extension type const MessageId(String value) {}
+
 @Freezed(
   toJson: true,
   fromJson: true,
