@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/freezed_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/parameter_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/dart_formatter_extensions.dart';
 import 'package:firestore_builder/src/helpers/logger.dart';
 import 'package:firestore_builder/src/models/collection.dart';
-import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
@@ -101,11 +101,16 @@ extension CollectionExtensions on Collection {
         classBuilder
           ..name = modelClassName
           ..constructors.add(modelConstructor)
-          ..fields.addAll(
-            fields.map(
-              (collectionField) => collectionField.field,
+          ..fields.addAll([
+            ...fields.map(
+              (collectionField) => collectionField.field(
+                className: modelClassName,
+              ),
             ),
-          );
+            ...fields.map(
+              (collectionField) => collectionField.staticKeyField(),
+            ),
+          ]);
       },
     );
 
@@ -113,7 +118,10 @@ extension CollectionExtensions on Collection {
       (library) {
         library.body.add(modelClass);
       },
-    ).toFreezed(withJson: true, fileName: fileName);
+    ).toFreezed(
+      withJson: true,
+      fileName: fileName,
+    );
   }
 
   Constructor get modelConstructor {
@@ -123,37 +131,9 @@ extension CollectionExtensions on Collection {
           ..constant = true
           ..optionalParameters.addAll(
             fields.map(
-              (collectionField) => collectionField.parameter,
+              (collectionField) => collectionField.parameter().toThisParameter,
             ),
           );
-      },
-    );
-  }
-}
-
-extension CollectionFieldExtensions on CollectionField {
-  Field get field {
-    final collectionField = this;
-    return Field(
-      (fieldBuilder) {
-        fieldBuilder
-          ..modifier = FieldModifier.final$
-          ..type = collectionField.typeReference
-          ..name = collectionField.name;
-      },
-    );
-  }
-
-  Parameter get parameter {
-    final collectionField = this;
-    return Parameter(
-      (parameterBuilder) {
-        parameterBuilder
-          ..type = collectionField.typeReference
-          ..covariant
-          ..name = collectionField.name
-          ..required = true
-          ..named = true;
       },
     );
   }

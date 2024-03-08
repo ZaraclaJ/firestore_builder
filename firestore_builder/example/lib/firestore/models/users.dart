@@ -3,13 +3,22 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'users.freezed.dart';
 part 'users.g.dart';
 
-@freezed
+@Freezed(
+  toJson: true,
+  fromJson: true,
+)
 class User with _$User {
   const factory User({
-    required String name,
-    required String? job,
-    required int age,
+    @JsonKey(name: User.nameFieldKey) required String name,
+    @JsonKey(name: User.currentJobFieldKey) required String? currentJob,
+    @JsonKey(name: User.ageFieldKey) required int age,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  static const String nameFieldKey = 'name';
+
+  static const String currentJobFieldKey = 'current_job';
+
+  static const String ageFieldKey = 'age';
 }

@@ -1,4 +1,4 @@
-class BasicSymbols {
+abstract class BasicSymbols {
   /// 'String'
   static const String string = 'String';
 
@@ -11,9 +11,9 @@ class BasicSymbols {
   /// 'bool'
   static const String bool = 'bool';
 
-  /// 'Timestamp'
-  static const String timestamp = 'Timestamp';
-
   /// 'DateTime'
   static const String dateTime = 'DateTime';
+
+  /// 'Timestamp'
+  static const String timestamp = 'Timestamp';
 }

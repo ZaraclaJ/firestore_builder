@@ -20,7 +20,9 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Message {
+  @JsonKey(name: Message.contentFieldKey)
   String get content => throw _privateConstructorUsedError;
+  @JsonKey(name: Message.dateFieldKey)
   DateTime get date => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -33,7 +35,9 @@ abstract class $MessageCopyWith<$Res> {
   factory $MessageCopyWith(Message value, $Res Function(Message) then) =
       _$MessageCopyWithImpl<$Res, Message>;
   @useResult
-  $Res call({String content, DateTime date});
+  $Res call(
+      {@JsonKey(name: Message.contentFieldKey) String content,
+      @JsonKey(name: Message.dateFieldKey) DateTime date});
 }
 
 /// @nodoc
@@ -72,7 +76,9 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
       __$$MessageImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String content, DateTime date});
+  $Res call(
+      {@JsonKey(name: Message.contentFieldKey) String content,
+      @JsonKey(name: Message.dateFieldKey) DateTime date});
 }
 
 /// @nodoc
@@ -105,14 +111,18 @@ class __$$MessageImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MessageImpl implements _Message {
-  const _$MessageImpl({required this.content, required this.date});
+  const _$MessageImpl(
+      {@JsonKey(name: Message.contentFieldKey) required this.content,
+      @JsonKey(name: Message.dateFieldKey) required this.date});
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageImplFromJson(json);
 
   @override
+  @JsonKey(name: Message.contentFieldKey)
   final String content;
   @override
+  @JsonKey(name: Message.dateFieldKey)
   final DateTime date;
 
   @override
@@ -149,14 +159,17 @@ class _$MessageImpl implements _Message {
 
 abstract class _Message implements Message {
   const factory _Message(
-      {required final String content,
+      {@JsonKey(name: Message.contentFieldKey) required final String content,
+      @JsonKey(name: Message.dateFieldKey)
       required final DateTime date}) = _$MessageImpl;
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
 
   @override
+  @JsonKey(name: Message.contentFieldKey)
   String get content;
   @override
+  @JsonKey(name: Message.dateFieldKey)
   DateTime get date;
   @override
   @JsonKey(ignore: true)

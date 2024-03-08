@@ -20,8 +20,11 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
+  @JsonKey(name: User.nameFieldKey)
   String get name => throw _privateConstructorUsedError;
-  String? get job => throw _privateConstructorUsedError;
+  @JsonKey(name: User.currentJobFieldKey)
+  String? get currentJob => throw _privateConstructorUsedError;
+  @JsonKey(name: User.ageFieldKey)
   int get age => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +37,10 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String name, String? job, int age});
+  $Res call(
+      {@JsonKey(name: User.nameFieldKey) String name,
+      @JsonKey(name: User.currentJobFieldKey) String? currentJob,
+      @JsonKey(name: User.ageFieldKey) int age});
 }
 
 /// @nodoc
@@ -51,7 +57,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? name = null,
-    Object? job = freezed,
+    Object? currentJob = freezed,
     Object? age = null,
   }) {
     return _then(_value.copyWith(
@@ -59,9 +65,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      job: freezed == job
-          ? _value.job
-          : job // ignore: cast_nullable_to_non_nullable
+      currentJob: freezed == currentJob
+          ? _value.currentJob
+          : currentJob // ignore: cast_nullable_to_non_nullable
               as String?,
       age: null == age
           ? _value.age
@@ -78,7 +84,10 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$UserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String? job, int age});
+  $Res call(
+      {@JsonKey(name: User.nameFieldKey) String name,
+      @JsonKey(name: User.currentJobFieldKey) String? currentJob,
+      @JsonKey(name: User.ageFieldKey) int age});
 }
 
 /// @nodoc
@@ -92,7 +101,7 @@ class __$$UserImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = null,
-    Object? job = freezed,
+    Object? currentJob = freezed,
     Object? age = null,
   }) {
     return _then(_$UserImpl(
@@ -100,9 +109,9 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      job: freezed == job
-          ? _value.job
-          : job // ignore: cast_nullable_to_non_nullable
+      currentJob: freezed == currentJob
+          ? _value.currentJob
+          : currentJob // ignore: cast_nullable_to_non_nullable
               as String?,
       age: null == age
           ? _value.age
@@ -115,21 +124,27 @@ class __$$UserImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$UserImpl implements _User {
-  const _$UserImpl({required this.name, required this.job, required this.age});
+  const _$UserImpl(
+      {@JsonKey(name: User.nameFieldKey) required this.name,
+      @JsonKey(name: User.currentJobFieldKey) required this.currentJob,
+      @JsonKey(name: User.ageFieldKey) required this.age});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
 
   @override
+  @JsonKey(name: User.nameFieldKey)
   final String name;
   @override
-  final String? job;
+  @JsonKey(name: User.currentJobFieldKey)
+  final String? currentJob;
   @override
+  @JsonKey(name: User.ageFieldKey)
   final int age;
 
   @override
   String toString() {
-    return 'User(name: $name, job: $job, age: $age)';
+    return 'User(name: $name, currentJob: $currentJob, age: $age)';
   }
 
   @override
@@ -138,13 +153,14 @@ class _$UserImpl implements _User {
         (other.runtimeType == runtimeType &&
             other is _$UserImpl &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.job, job) || other.job == job) &&
+            (identical(other.currentJob, currentJob) ||
+                other.currentJob == currentJob) &&
             (identical(other.age, age) || other.age == age));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, job, age);
+  int get hashCode => Object.hash(runtimeType, name, currentJob, age);
 
   @JsonKey(ignore: true)
   @override
@@ -162,17 +178,20 @@ class _$UserImpl implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String name,
-      required final String? job,
-      required final int age}) = _$UserImpl;
+      {@JsonKey(name: User.nameFieldKey) required final String name,
+      @JsonKey(name: User.currentJobFieldKey) required final String? currentJob,
+      @JsonKey(name: User.ageFieldKey) required final int age}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
   @override
+  @JsonKey(name: User.nameFieldKey)
   String get name;
   @override
-  String? get job;
+  @JsonKey(name: User.currentJobFieldKey)
+  String? get currentJob;
   @override
+  @JsonKey(name: User.ageFieldKey)
   int get age;
   @override
   @JsonKey(ignore: true)

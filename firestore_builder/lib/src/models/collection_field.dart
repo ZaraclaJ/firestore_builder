@@ -1,9 +1,12 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
+import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
+import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
 class CollectionField extends Equatable {
@@ -47,12 +50,61 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
   final FieldType type;
   final bool isNullable;
 
-  TypeReference get typeReference {
+  TypeReference get _typeReference {
     return TypeReference(
       (b) => b
         ..symbol = type.dartSymbol
         ..url = type.packageUrl
         ..isNullable = isNullable,
+    );
+  }
+
+  String get fieldName => name.camelCase;
+
+  String get _keyVarName => '${fieldName}FieldKey';
+
+  Field staticKeyField() {
+    return Field(
+      (fieldBuilder) {
+        fieldBuilder
+          ..static = true
+          ..modifier = FieldModifier.constant
+          ..type = BasicTypes.string
+          ..name = _keyVarName
+          ..assignment = literalString(name).code;
+      },
+    );
+  }
+
+  Field field({
+    required String className,
+  }) {
+    return Field(
+      (fieldBuilder) {
+        fieldBuilder
+          ..modifier = FieldModifier.final$
+          ..type = _typeReference
+          ..name = fieldName
+          ..annotations.add(
+            BasicAnnotations.jsonKey(
+              name: Reference(className).property(_keyVarName),
+            ),
+          );
+      },
+    );
+  }
+
+  Parameter parameter() {
+    final collectionField = this;
+    return Parameter(
+      (parameterBuilder) {
+        parameterBuilder
+          ..type = collectionField._typeReference
+          ..covariant
+          ..name = collectionField.fieldName
+          ..required = true
+          ..named = true;
+      },
     );
   }
 

@@ -34,7 +34,7 @@ firestore_builder:
         model_name: user
         fields:
           - name: String
-          - job: String?
+          - current_job: String?
           - age: int
     - messages:
         model_name: message

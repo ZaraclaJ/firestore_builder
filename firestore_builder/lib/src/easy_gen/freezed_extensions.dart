@@ -1,4 +1,5 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:meta/meta.dart';
 import 'package:recase/recase.dart';
@@ -34,19 +35,44 @@ extension FreezedClassExtensions on Class {
   }) {
     return rebuild(
       (c) {
+        final fields = c.fields.build().asList();
         return c
           ..sealed = constructors.every((c) => c.name != null)
-          ..annotations.add(BasicAnnotations.freezed)
+          ..annotations.add(
+            BasicAnnotations.freezed(
+              toJson: withJson,
+              fromJson: withJson,
+            ),
+          )
           ..mixins.add(Reference(r'_$' + name))
-          ..fields.clear()
           ..constructors.map(
             (ctor) => ctor.rebuild(
-              (ConstructorBuilder ctor) {
+              (ctor) {
                 final constructorName = ctor.name;
 
                 return ctor
                   ..factory = true
+                  ..redirect = Reference(
+                    [
+                      if (constructorName == null) '_',
+                      name.pascalCase,
+                      if (constructorName != null) constructorName.pascalCase,
+                    ].join(),
+                  )
                   ..optionalParameters.map((p) {
+                    final associatedField = fields.firstWhereOrNull(
+                      (f) => f.name == p.name,
+                    );
+                    final fieldType = associatedField?.type;
+                    final fieldAnnotations = associatedField?.annotations;
+
+                    p = p.rebuild(
+                      (p) => p
+                        ..toThis = false
+                        ..type = fieldType
+                        ..annotations.addAll(fieldAnnotations ?? []),
+                    );
+
                     final defaultValue = p.defaultTo;
                     if (defaultValue != null && defaultValue is ToCodeExpression) {
                       return p.rebuild(
@@ -60,14 +86,7 @@ extension FreezedClassExtensions on Class {
                       );
                     }
                     return p;
-                  })
-                  ..redirect = Reference(
-                    [
-                      if (constructorName == null) '_',
-                      name.pascalCase,
-                      if (constructorName != null) constructorName.pascalCase,
-                    ].join(),
-                  );
+                  });
               },
             ),
           )
@@ -96,7 +115,8 @@ extension FreezedClassExtensions on Class {
                   ..constant = true
                   ..name = '_',
               ),
-          ]);
+          ])
+          ..fields.removeWhere((f) => !f.static);
       },
     );
   }
