@@ -24,13 +24,56 @@ Library _referenceServiceLibrary({
 }) {
   return Library(
     (library) {
-      library.body.add(
-        _referenceServiceClass(
-          config: config,
-        ),
-      );
+      library.body.addAll([
+        _firestoreProvider(config: config),
+        _referenceServiceProvider(config: config),
+        _referenceServiceClass(config: config),
+      ]);
     },
   ).buildLibrary();
+}
+
+Field _firestoreProvider({
+  required YamlConfig config,
+}) {
+  return Field(
+    (f) => f
+      ..name = firestoreProviderName
+      ..modifier = FieldModifier.final$
+      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
+        typeArguments: [
+          FirestoreTypes.firebaseFirestore,
+        ],
+        parameters: ['ref'],
+        body: FirestoreTypes.firebaseFirestore.property('instance').returned.statement,
+      ).code,
+  );
+}
+
+Field _referenceServiceProvider({
+  required YamlConfig config,
+}) {
+  const refVarName = 'ref';
+  final referenceServiceReference = config.referenceServiceReference;
+
+  return Field(
+    (f) => f
+      ..name = config.referenceServiceProviderName
+      ..modifier = FieldModifier.final$
+      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
+        typeArguments: [
+          referenceServiceReference,
+        ],
+        parameters: [refVarName],
+        body: referenceServiceReference
+            .call([], {
+              _firestoreInstanceField.toParameter.publicName:
+                  const Reference(refVarName).watch(const Reference(firestoreProviderName)),
+            })
+            .returned
+            .statement,
+      ).code,
+  );
 }
 
 Class _referenceServiceClass({
@@ -40,14 +83,7 @@ Class _referenceServiceClass({
     (c) {
       c
         ..name = config.referenceServiceClassName
-        ..fields.add(
-          Field(
-            (f) => f
-              ..name = firestoreInstanceName
-              ..modifier = FieldModifier.final$
-              ..type = FirestoreTypes.firebaseFirestore,
-          ),
-        )
+        ..fields.add(_firestoreInstanceField)
         ..methods.addAll([
           ...config.collections.expand(
             (c) => [
@@ -57,6 +93,15 @@ Class _referenceServiceClass({
           ),
         ]);
     },
+  );
+}
+
+Field get _firestoreInstanceField {
+  return Field(
+    (f) => f
+      ..name = firestoreInstanceName
+      ..modifier = FieldModifier.final$
+      ..type = FirestoreTypes.firebaseFirestore,
   );
 }
 

@@ -47,6 +47,42 @@ extension RiverpodExpressionExtensions on Expression {
     return property(RiverpodSymbols.autoDispose);
   }
 
+  Expression autoDisposeMethod({
+    required List<String> parameters,
+    required Code body,
+    required List<Reference> typeArguments,
+  }) {
+    return method(
+      RiverpodSymbols.autoDispose,
+      positionalArguments: [
+        Expressions.lambdaMethod(
+          lambda: false,
+          parameters: parameters,
+          body: body,
+        ),
+      ],
+      typeArguments: typeArguments,
+    );
+  }
+
+  Expression familyMethod({
+    required List<String> parameters,
+    required Code body,
+    required List<Reference> typeArguments,
+  }) {
+    return method(
+      RiverpodSymbols.family,
+      positionalArguments: [
+        Expressions.lambdaMethod(
+          lambda: false,
+          parameters: parameters,
+          body: body,
+        ),
+      ],
+      typeArguments: typeArguments,
+    );
+  }
+
   Expression watch(Expression provider) {
     return method(RiverpodSymbols.watchMethod, positionalArguments: [provider]);
   }

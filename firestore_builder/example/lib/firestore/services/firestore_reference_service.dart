@@ -1,6 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/firestore/models/message.dart';
 import 'package:example/firestore/models/user.dart';
+import 'package:example/firestore/services/firestore_reference_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final firestoreProvider = Provider.autoDispose<FirebaseFirestore>((ref) {
+  return FirebaseFirestore.instance;
+});
+final firestoreReferenceServiceProvider =
+    Provider.autoDispose<FirestoreReferenceService>((ref) {
+  return FirestoreReferenceService(firestore: ref.watch(firestoreProvider));
+});
 
 class FirestoreReferenceService {
   const FirestoreReferenceService({required FirebaseFirestore firestore})

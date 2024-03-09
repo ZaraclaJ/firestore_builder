@@ -1,5 +1,4 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
@@ -41,31 +40,25 @@ extension on Collection {
         f
           ..name = streamProviderName
           ..modifier = FieldModifier.final$
-          ..assignment = RiverpodTypes.streamProvider.autoDispose.method(
-            RiverpodSymbols.family,
+          ..assignment = RiverpodTypes.streamProvider.autoDispose.familyMethod(
             typeArguments: [
               modelReference.nullSafe,
               modelIdReference,
             ],
-            positionalArguments: [
-              Expressions.lambdaMethod(
-                lambda: false,
-                parameters: [refVarName, idVarName],
-                body: Block.of([
-                  declareFinal(serviceVarName)
-                      .assign(
-                        const Reference(refVarName).watch(
-                          Reference(yamlConfigLight.streamServiceProviderName),
-                        ),
-                      )
-                      .statement,
-                  const Reference(serviceVarName)
-                      .method(documentStreamMethodName, positionalArguments: [const Reference(idVarName)])
-                      .returned
-                      .statement,
-                ]),
-              ),
-            ],
+            parameters: [refVarName, idVarName],
+            body: Block.of([
+              declareFinal(serviceVarName)
+                  .assign(
+                    const Reference(refVarName).watch(
+                      Reference(yamlConfigLight.streamServiceProviderName),
+                    ),
+                  )
+                  .statement,
+              const Reference(serviceVarName)
+                  .method(documentStreamMethodName, positionalArguments: [const Reference(idVarName)])
+                  .returned
+                  .statement,
+            ]),
           ).code;
       },
     );
