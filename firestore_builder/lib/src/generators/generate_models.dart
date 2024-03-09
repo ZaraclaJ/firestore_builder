@@ -12,7 +12,7 @@ import 'package:recase/recase.dart';
 
 Future<void> generateModels({
   required YamlConfig config,
-}) {
+}) async {
   final collections = config.collections;
 
   final futures = collections.map(
@@ -22,7 +22,7 @@ Future<void> generateModels({
     ),
   );
 
-  return Future.wait(futures);
+  await Future.wait(futures);
 }
 
 extension CollectionExtensions on Collection {
@@ -36,7 +36,7 @@ extension CollectionExtensions on Collection {
       },
     ).buildLibrary(
       freezedConfig: FreezedConfig(
-        fileName: snakeName,
+        fileName: modelFileName,
         withJson: true,
       ),
     );
@@ -154,11 +154,14 @@ extension CollectionExtensions on Collection {
             Reference(modelClassName)
                 .method(
                   FreezedSymbols.fromJsonMethod,
-                  [const Reference(dataVarName).nullChecked],
+                  positionalArguments: [const Reference(dataVarName).nullChecked],
                 )
-                .method(FreezedSymbols.copyWithMethod, [], {
-                  _idField.name: const Reference(snapshotVarName).property('id'),
-                })
+                .method(
+                  FreezedSymbols.copyWithMethod,
+                  namedArguments: {
+                    _idField.name: const Reference(snapshotVarName).property('id'),
+                  },
+                )
                 .returned
                 .statement,
           ]);

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:firestore_builder/test/output/models/messages.dart';
-import 'package:firestore_builder/test/output/models/users.dart';
+import 'package:firestore_builder/test/output/models/message.dart';
+import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:firestore_builder/test/output/services/firestore_reference_service.dart';
 
 class FirestoreStreamService {

@@ -109,7 +109,10 @@ extension on Collection {
           ..returns = BasicTypes.streamOf(modelRef.nullSafe)
           ..requiredParameters.add(_idParameter)
           ..body = const Reference(referenceServiceInstanceName)
-              .method(documentReferenceMethodName, [Reference(_idParameter.name)])
+              .method(
+                documentReferenceMethodName,
+                positionalArguments: [Reference(_idParameter.name)],
+              )
               .method(FirestoreSymbols.snapshotsMethod)
               .map(
                 parameters: [eventVarName],

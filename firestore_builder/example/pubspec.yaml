@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.4.10
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
 
@@ -30,7 +31,7 @@ flutter:
 
 firestore_builder:
   output: lib/firestore
-  clear: False
+  clear: false
   collections:
     - users:
         model_name: user

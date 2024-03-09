@@ -94,3 +94,21 @@ abstract class FirestoreTypes {
     );
   }
 }
+
+abstract class RiverpodTypes {
+  /// StreamProvider
+  static Reference streamProvider = const Reference(
+    RiverpodSymbols.streamProviderClass,
+    BasicPackages.flutterRiverpod,
+  );
+
+  /// family<refA, refB>
+  static TypeReference familyOf(Reference refA, Reference refB) {
+    return TypeReference(
+      (type) => type
+        ..symbol = RiverpodSymbols.family
+        ..url = BasicPackages.cloudFirestore
+        ..types.addAll([refA, refB]),
+    );
+  }
+}

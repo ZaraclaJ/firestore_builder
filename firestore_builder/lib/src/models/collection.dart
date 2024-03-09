@@ -81,16 +81,20 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final List<Collection> subCollections;
   final YamlConfig yamlConfigLight;
 
-  String get snakeName => name.snakeCase;
   String get _camelName => name.camelCase;
 
-  String get modelClassName => modelName.pascalCase;
-  String get modelCamelName => modelName.camelCase;
-  String get modelIdClassName => '${modelClassName}Id';
+  String get _modelCamelName => modelName.camelCase;
+  String get _modelSnakeName => modelName.snakeCase;
 
-  String get modelFilePath {
-    return '${yamlConfigLight.modelsPath}/$snakeName.dart';
-  }
+  String get modelClassName => modelName.pascalCase;
+  String get modelIdClassName => '${modelClassName}Id';
+  String get streamProviderName => '${modelClassName}StreamProvider'.camelCase;
+
+  String get modelFileName => _modelSnakeName;
+  String get stateFileName => '${_modelSnakeName}_states';
+
+  String get modelFilePath => '${yamlConfigLight.modelsPath}/$modelFileName.dart';
+  String get stateFilePath => '${yamlConfigLight.statesPath}/$stateFileName.dart';
 
   String get _modelFileUrl {
     return modelFilePath.toPackageUrl(config: yamlConfigLight);
@@ -107,10 +111,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
       );
 
   String get collectionReferenceMethodName => '${_camelName}Collection';
-  String get documentReferenceMethodName => '${modelCamelName}Reference';
+  String get documentReferenceMethodName => '${_modelCamelName}Reference';
 
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
-  String get documentStreamMethodName => '${modelCamelName}Stream';
+  String get documentStreamMethodName => '${_modelCamelName}Stream';
 
   @override
   List<Object> get props => [

@@ -84,3 +84,20 @@ abstract class FreezedSymbols {
   /// 'copyWith'
   static const String copyWithMethod = 'copyWith';
 }
+
+abstract class RiverpodSymbols {
+  /// 'Provider'
+  static const String providerClass = 'Provider';
+
+  /// 'StreamProvider'
+  static const String streamProviderClass = 'StreamProvider';
+
+  /// 'autoDispose'
+  static const String autoDispose = 'autoDispose';
+
+  /// 'family'
+  static const String family = 'family';
+
+  /// 'watch'
+  static const String watchMethod = 'watch';
+}

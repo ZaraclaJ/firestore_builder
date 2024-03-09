@@ -90,9 +90,13 @@ The configuration file does not contain a correct collections section: $firestor
 
   String get modelsPath => '$outputPath/models';
   String get servicesPath => '$outputPath/services';
+  String get statesPath => '$outputPath/states';
 
   String get referenceServiceClassName => firestoreReferenceServiceClassName;
   String get streamServiceClassName => firestoreStreamServiceClassName;
+
+  String get referenceServiceProviderName => '${referenceServiceClassName}Provider'.camelCase;
+  String get streamServiceProviderName => '${streamServiceClassName}Provider'.camelCase;
 
   String get referenceServicePath => '$servicesPath/${referenceServiceClassName.snakeCase}.dart';
   String get streamServicePath => '$servicesPath/${streamServiceClassName.snakeCase}.dart';

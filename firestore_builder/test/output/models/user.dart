@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'users.freezed.dart';
-part 'users.g.dart';
+part 'user.freezed.dart';
+part 'user.g.dart';
 
 @Freezed(
   toJson: true,

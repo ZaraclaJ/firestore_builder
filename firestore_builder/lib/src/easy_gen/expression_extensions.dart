@@ -7,11 +7,11 @@ extension ReferenceExtensions on Reference {
 
 extension ExpressionExtensions on Expression {
   Expression method(
-    String name, [
+    String name, {
     Iterable<Expression> positionalArguments = const [],
     Map<String, Expression> namedArguments = const {},
     List<Reference> typeArguments = const [],
-  ]) {
+  }) {
     return property(name).call(
       positionalArguments,
       namedArguments,
@@ -29,13 +29,26 @@ extension ExpressionExtensions on Expression {
     bool lambda = true,
   }) {
     final expression = this;
-    return expression.method(BasicSymbols.mapMethod, [
-      Expressions.lambdaMethod(
-        lambda: lambda,
-        parameters: parameters,
-        body: body,
-      ),
-    ]);
+    return expression.method(
+      BasicSymbols.mapMethod,
+      positionalArguments: [
+        Expressions.lambdaMethod(
+          lambda: lambda,
+          parameters: parameters,
+          body: body,
+        ),
+      ],
+    );
+  }
+}
+
+extension RiverpodExpressionExtensions on Expression {
+  Expression get autoDispose {
+    return property(RiverpodSymbols.autoDispose);
+  }
+
+  Expression watch(Expression provider) {
+    return method(RiverpodSymbols.watchMethod, positionalArguments: [provider]);
   }
 }
 

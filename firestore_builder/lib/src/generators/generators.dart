@@ -4,6 +4,7 @@ import 'package:firestore_builder/src/extensions.dart/map_entry_extensions.dart'
 import 'package:firestore_builder/src/generators/clear_files.dart';
 import 'package:firestore_builder/src/generators/generate_models.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
+import 'package:firestore_builder/src/generators/generate_states.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -40,6 +41,7 @@ You can also indicate the path of your configuration file:
     generateModels(config: config),
     generateReferenceService(config: config),
     generateStreamService(config: config),
+    generateStates(config: config),
   ]);
 }
 

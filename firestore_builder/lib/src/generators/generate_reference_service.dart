@@ -76,18 +76,21 @@ extension on Collection {
           ..body = const Reference(firestoreInstanceName)
               .method(
                 FirestoreSymbols.collectionMethod,
-                [modelRef.property(collectionKeyName)],
+                positionalArguments: [modelRef.property(collectionKeyName)],
               )
-              .method(FirestoreSymbols.withConverterMethod, [], {
-                fromFirestore: modelRef.property(
-                  fromFirestore,
-                ),
-                toFirestore: Expressions.lambdaMethod(
-                  parameters: [valueVarName, '_'],
-                  body: const Reference(valueVarName).method(toFirestore).returned.statement,
-                  lambda: false,
-                ),
-              })
+              .method(
+                FirestoreSymbols.withConverterMethod,
+                namedArguments: {
+                  fromFirestore: modelRef.property(
+                    fromFirestore,
+                  ),
+                  toFirestore: Expressions.lambdaMethod(
+                    parameters: [valueVarName, '_'],
+                    body: const Reference(valueVarName).method(toFirestore).returned.statement,
+                    lambda: false,
+                  ),
+                },
+              )
               .returned
               .statement;
       },
@@ -114,7 +117,7 @@ extension on Collection {
               .call([])
               .method(
                 FirestoreSymbols.docMethod,
-                [const Reference(idVarName).property('value')],
+                positionalArguments: [const Reference(idVarName).property('value')],
               )
               .returned
               .statement;
