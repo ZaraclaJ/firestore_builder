@@ -38,7 +38,7 @@ Field _firestoreProvider({
 }) {
   return Field(
     (f) => f
-      ..name = firestoreProviderName
+      ..name = config.firestoreProviderName
       ..modifier = FieldModifier.final$
       ..assignment = RiverpodTypes.provider.autoDisposeMethod(
         typeArguments: [
@@ -54,7 +54,7 @@ Field _referenceServiceProvider({
   required YamlConfig config,
 }) {
   const refVarName = 'ref';
-  final referenceServiceReference = config.referenceServiceReference;
+  final referenceServiceReference = config.referenceServiceReference.withoutUrl;
 
   return Field(
     (f) => f
@@ -68,7 +68,7 @@ Field _referenceServiceProvider({
         body: referenceServiceReference
             .call([], {
               _firestoreInstanceField.toParameter.publicName:
-                  const Reference(refVarName).watch(const Reference(firestoreProviderName)),
+                  const Reference(refVarName).watch(config.firestoreProviderReference.withoutUrl),
             })
             .returned
             .statement,

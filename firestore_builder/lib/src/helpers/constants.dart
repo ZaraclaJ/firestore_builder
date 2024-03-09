@@ -2,14 +2,8 @@ const String pubspecPath = 'pubspec.yaml';
 
 const String databaseIdName = 'firestoreId';
 
-const String firestoreReferenceServiceClassName = 'FirestoreReferenceService';
-const String firestoreStreamServiceClassName = 'FirestoreStreamService';
-
 const String firestoreInstanceName = '_firestore';
 const String referenceServiceInstanceName = '_referenceService';
-
-const String firestoreProviderName = 'firestoreProvider';
-const String referenceServiceProviderName = 'firestoreReferenceServiceProvider';
 
 const String collectionKeyName = 'collectionKey';
 

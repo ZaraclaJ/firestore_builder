@@ -92,25 +92,35 @@ The configuration file does not contain a correct collections section: $firestor
   String get servicesPath => '$outputPath/services';
   String get statesPath => '$outputPath/states';
 
-  String get referenceServiceClassName => firestoreReferenceServiceClassName;
-  String get streamServiceClassName => firestoreStreamServiceClassName;
+  String get firestoreProviderName => 'firestoreProvider';
+  Reference get firestoreProviderReference => Reference(
+        firestoreProviderName,
+        _referenceServiceUrl,
+      );
 
+  String get referenceServiceClassName => 'FirestoreReferenceService';
   String get referenceServiceProviderName => '${referenceServiceClassName}Provider'.camelCase;
-  String get streamServiceProviderName => '${streamServiceClassName}Provider'.camelCase;
-
   String get referenceServicePath => '$servicesPath/${referenceServiceClassName.snakeCase}.dart';
-  String get streamServicePath => '$servicesPath/${streamServiceClassName.snakeCase}.dart';
-
   String get _referenceServiceUrl => referenceServicePath.toPackageUrl(config: this);
-  String get _streamServiceUrl => streamServicePath.toPackageUrl(config: this);
-
   Reference get referenceServiceReference => Reference(
         referenceServiceClassName.pascalCase,
         _referenceServiceUrl,
       );
+  Reference get referenceServiceProviderReference => Reference(
+        referenceServiceProviderName,
+        _referenceServiceUrl,
+      );
 
+  String get streamServiceClassName => 'FirestoreStreamService';
+  String get streamServiceProviderName => '${streamServiceClassName}Provider'.camelCase;
+  String get streamServicePath => '$servicesPath/${streamServiceClassName.snakeCase}.dart';
+  String get _streamServiceUrl => streamServicePath.toPackageUrl(config: this);
   Reference get streamServiceReference => Reference(
         streamServiceClassName.pascalCase,
+        _streamServiceUrl,
+      );
+  Reference get streamServiceProviderReference => Reference(
+        streamServiceProviderName,
         _streamServiceUrl,
       );
 

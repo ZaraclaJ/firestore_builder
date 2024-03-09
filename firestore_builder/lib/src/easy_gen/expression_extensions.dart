@@ -3,6 +3,7 @@ import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 
 extension ReferenceExtensions on Reference {
   Reference get nullSafe => Reference('$symbol?', url);
+  Reference get withoutUrl => Reference(symbol);
 }
 
 extension ExpressionExtensions on Expression {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
-import 'package:firestore_builder/test/output/services/firestore_reference_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final firestoreProvider = Provider.autoDispose<FirebaseFirestore>((ref) {

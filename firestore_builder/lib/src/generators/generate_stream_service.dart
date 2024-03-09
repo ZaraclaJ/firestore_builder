@@ -24,13 +24,40 @@ Library _streamServiceLibrary({
 }) {
   return Library(
     (library) {
-      library.body.add(
+      library.body.addAll([
+        _streamServiceProvider(config: config),
         _streamServiceClass(
           config: config,
         ),
-      );
+      ]);
     },
   ).buildLibrary();
+}
+
+Field _streamServiceProvider({
+  required YamlConfig config,
+}) {
+  const refVarName = 'ref';
+  final streamServiceReference = config.streamServiceReference.withoutUrl;
+
+  return Field(
+    (f) => f
+      ..name = config.streamServiceProviderName
+      ..modifier = FieldModifier.final$
+      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
+        typeArguments: [
+          streamServiceReference,
+        ],
+        parameters: [refVarName],
+        body: streamServiceReference
+            .call([], {
+              _firestoreInstanceField(config: config).toParameter.publicName:
+                  const Reference(refVarName).watch(config.referenceServiceProviderReference.withoutUrl),
+            })
+            .returned
+            .statement,
+      ).code,
+  );
 }
 
 Class _streamServiceClass({
@@ -41,12 +68,7 @@ Class _streamServiceClass({
       c
         ..name = config.streamServiceClassName
         ..fields.add(
-          Field(
-            (f) => f
-              ..name = referenceServiceInstanceName
-              ..modifier = FieldModifier.final$
-              ..type = config.referenceServiceReference,
-          ),
+          _firestoreInstanceField(config: config),
         )
         ..methods.addAll([
           ...config.collections.expand(
@@ -57,6 +79,17 @@ Class _streamServiceClass({
           ),
         ]);
     },
+  );
+}
+
+Field _firestoreInstanceField({
+  required YamlConfig config,
+}) {
+  return Field(
+    (f) => f
+      ..name = referenceServiceInstanceName
+      ..modifier = FieldModifier.final$
+      ..type = config.referenceServiceReference,
   );
 }
 

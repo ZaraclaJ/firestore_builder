@@ -1,4 +1,5 @@
 import 'package:firestore_builder/test/output/models/message.dart';
+import 'package:firestore_builder/test/output/services/firestore_stream_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messageStreamProvider =
