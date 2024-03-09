@@ -88,7 +88,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   String get modelClassName => modelName.pascalCase;
   String get modelIdClassName => '${modelClassName}Id';
-  String get streamProviderName => '${modelClassName}StreamProvider'.camelCase;
+  String get modelProviderName => '${modelClassName}Provider'.camelCase;
+  String get modelStreamProviderName => '${modelClassName}StreamProvider'.camelCase;
+  String get collectionProviderName => '${modelClassName}CollectionProvider'.camelCase;
+  String get collectionStreamProviderName => '${modelClassName}CollectionStreamProvider'.camelCase;
 
   String get modelFileName => _modelSnakeName;
   String get stateFileName => '${_modelSnakeName}_states';

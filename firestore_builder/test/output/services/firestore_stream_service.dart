@@ -25,7 +25,7 @@ class FirestoreStreamService {
         .map((event) => event.data());
   }
 
-  Stream<List<User?>> usersCollectionStream() {
+  Stream<List<User>> usersCollectionStream() {
     return _referenceService
         .usersCollection()
         .snapshots()
@@ -39,7 +39,7 @@ class FirestoreStreamService {
         .map((event) => event.data());
   }
 
-  Stream<List<Message?>> messagesCollectionStream() {
+  Stream<List<Message>> messagesCollectionStream() {
     return _referenceService
         .messagesCollection()
         .snapshots()

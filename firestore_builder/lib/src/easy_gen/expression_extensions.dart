@@ -2,7 +2,17 @@ import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 
 extension ReferenceExtensions on Reference {
-  Reference get nullSafe => Reference('$symbol?', url);
+  Reference get nullSafe {
+    final ref = this;
+    if (ref is TypeReference) {
+      return ref.rebuild((e) {
+        return e.isNullable = true;
+      });
+    }
+
+    return Reference('$symbol?', url);
+  }
+
   Reference get withoutUrl => Reference(symbol);
 }
 

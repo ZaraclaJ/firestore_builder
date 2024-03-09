@@ -110,7 +110,7 @@ extension on Collection {
       (m) {
         m
           ..name = collectionStreamMethodName
-          ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef.nullSafe))
+          ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
           ..body = const Reference(referenceServiceInstanceName)
               .method(collectionReferenceMethodName)
               .method(FirestoreSymbols.snapshotsMethod)
