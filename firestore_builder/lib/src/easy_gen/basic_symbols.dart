@@ -1,4 +1,7 @@
 abstract class BasicSymbols {
+  /// 'void'
+  static const String void$ = 'void';
+
   /// 'String'
   static const String string = 'String';
 
@@ -63,6 +66,9 @@ abstract class FirestoreSymbols {
 
   /// 'add'
   static const String addMethod = 'add';
+
+  /// 'delete'
+  static const String deleteMethod = 'delete';
 
   /// 'doc'
   static const String docMethod = 'doc';

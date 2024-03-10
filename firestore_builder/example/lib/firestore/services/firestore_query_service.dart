@@ -21,9 +21,17 @@ class FirestoreQueryService {
     return result.id;
   }
 
+  Future<void> deleteUser(UserId userId) async {
+    await _firestoreReferenceService.userReference(userId).delete();
+  }
+
   Future<String> addMessage(Message message) async {
     final result =
         await _firestoreReferenceService.messagesCollection().add(message);
     return result.id;
+  }
+
+  Future<void> deleteMessage(MessageId messageId) async {
+    await _firestoreReferenceService.messageReference(messageId).delete();
   }
 }

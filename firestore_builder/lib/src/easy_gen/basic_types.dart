@@ -3,6 +3,9 @@ import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 
 abstract class BasicTypes {
+  /// 'void'
+  static const Reference void$ = Reference(BasicSymbols.void$);
+
   /// 'String'
   static const Reference string = Reference(BasicSymbols.string);
 

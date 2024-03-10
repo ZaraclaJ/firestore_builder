@@ -160,6 +160,10 @@ class UserList extends ConsumerWidget {
       return const CircularProgressIndicator();
     }
 
+    if (userList.isEmpty) {
+      return const Text('No users in database. Add some users.');
+    }
+
     return ListView.separated(
       itemCount: userList.length,
       separatorBuilder: (context, index) => const Divider(),
@@ -168,6 +172,15 @@ class UserList extends ConsumerWidget {
         return ListTile(
           title: Text(user.name),
           subtitle: Text(user.age.toString()),
+          trailing: IconButton(
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              ref.read(firestoreQueryServiceProvider).deleteUser(user.userId);
+            },
+          ),
         );
       },
     );

@@ -74,6 +74,7 @@ Class _queryServiceClass({
           ...config.collections.expand(
             (c) => [
               c.addDocumentMethod,
+              c.deleteDocumentMethod,
             ],
           ),
         ]);
@@ -117,6 +118,36 @@ extension on Collection {
                 .statement,
             const Reference(resultVarName).property(FirestoreSymbols.idProperty).returned.statement,
           ]);
+      },
+    );
+  }
+
+  Method get deleteDocumentMethod {
+    final modelIdRef = modelIdReference;
+    final modelIdVarName = modelIdRef.symbol!.camelCase;
+
+    return Method(
+      (m) {
+        m
+          ..name = deleteDocumentMethodName
+          ..modifier = MethodModifier.async
+          ..returns = BasicTypes.futureOf(BasicTypes.void$)
+          ..requiredParameters.add(
+            Parameter(
+              (p) => p
+                ..name = modelIdVarName
+                ..type = modelIdRef,
+            ),
+          )
+          ..body = _referenceServiceInstanceReference.awaited
+              .method(
+                documentReferenceMethodName,
+                positionalArguments: [Reference(modelIdVarName)],
+              )
+              .method(
+                FirestoreSymbols.deleteMethod,
+              )
+              .statement;
       },
     );
   }

@@ -120,6 +120,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
   String get documentStreamMethodName => '${_modelCamelName}Stream';
   String get addDocumentMethodName => 'add$_modelPascalName';
+  String get deleteDocumentMethodName => 'delete$_modelPascalName';
 
   @override
   List<Object> get props => [
