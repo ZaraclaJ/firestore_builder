@@ -1,3 +1,5 @@
+import 'package:recase/recase.dart';
+
 const String _nullableSuffix = '?';
 const String _underscorePrefix = '_';
 
@@ -13,6 +15,9 @@ extension StringExtensions on String {
   String get withoutQuestionMark => withoutSuffix(_nullableSuffix);
 
   String get withoutUnderscore => withoutPrefix(_underscorePrefix);
+
+  String get publicName => camelCase.withoutUnderscore;
+  String get privateName => '$_underscorePrefix$camelCase';
 
   String toPackageUrl({required String projectName}) {
     final filePath = withoutPrefix('lib/');

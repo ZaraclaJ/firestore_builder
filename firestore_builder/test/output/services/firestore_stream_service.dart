@@ -8,39 +8,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final firestoreStreamServiceProvider =
     Provider.autoDispose<FirestoreStreamService>((ref) {
   return FirestoreStreamService(
-      referenceService: ref.watch(firestoreReferenceServiceProvider));
+      firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider));
 });
 
 class FirestoreStreamService {
   const FirestoreStreamService(
-      {required FirestoreReferenceService referenceService})
-      : _referenceService = referenceService;
+      {required FirestoreReferenceService firestoreReferenceService})
+      : _firestoreReferenceService = firestoreReferenceService;
 
-  final FirestoreReferenceService _referenceService;
+  final FirestoreReferenceService _firestoreReferenceService;
 
   Stream<User?> userStream(UserId id) {
-    return _referenceService
+    return _firestoreReferenceService
         .userReference(id)
         .snapshots()
         .map((event) => event.data());
   }
 
   Stream<List<User>> usersCollectionStream() {
-    return _referenceService
+    return _firestoreReferenceService
         .usersCollection()
         .snapshots()
         .map((event) => event.docs.map((snapshot) => snapshot.data()).toList());
   }
 
   Stream<Message?> messageStream(MessageId id) {
-    return _referenceService
+    return _firestoreReferenceService
         .messageReference(id)
         .snapshots()
         .map((event) => event.data());
   }
 
   Stream<List<Message>> messagesCollectionStream() {
-    return _referenceService
+    return _firestoreReferenceService
         .messagesCollection()
         .snapshots()
         .map((event) => event.docs.map((snapshot) => snapshot.data()).toList());

@@ -53,7 +53,7 @@ extension on Collection {
               declareFinal(serviceVarName)
                   .assign(
                     const Reference(refVarName).watch(
-                      yamlConfigLight.streamServiceClass.providerReference,
+                      configLight.streamServiceClass.providerReference,
                     ),
                   )
                   .statement,
@@ -114,7 +114,7 @@ extension on Collection {
               declareFinal(serviceVarName)
                   .assign(
                     const Reference(refVarName).watch(
-                      yamlConfigLight.streamServiceClass.providerReference,
+                      configLight.streamServiceClass.providerReference,
                     ),
                   )
                   .statement,

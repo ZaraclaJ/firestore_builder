@@ -4,9 +4,9 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
-import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
+import 'package:recase/recase.dart';
 
 Future<void> generateQueryService({
   required YamlConfig config,
@@ -15,7 +15,7 @@ Future<void> generateQueryService({
     library: _queryServiceLibrary(
       config: config,
     ),
-    filePath: config.streamServiceClass.path,
+    filePath: config.queryServiceClass.path,
   );
 }
 
@@ -26,7 +26,7 @@ Library _queryServiceLibrary({
     (library) {
       library.body.addAll([
         _queryServiceProvider(config: config),
-        _streamServiceClass(
+        _queryServiceClass(
           config: config,
         ),
       ]);
@@ -38,21 +38,21 @@ Field _queryServiceProvider({
   required YamlConfig config,
 }) {
   const refVarName = 'ref';
-  final streamServiceReference = config.streamServiceClass.reference.withoutUrl;
+  final queryServiceReference = config.queryServiceClass.reference.withoutUrl;
 
   return Field(
     (f) => f
-      ..name = config.streamServiceClass.providerName
+      ..name = config.queryServiceClass.providerName
       ..modifier = FieldModifier.final$
       ..assignment = RiverpodTypes.provider.autoDisposeMethod(
         typeArguments: [
-          streamServiceReference,
+          queryServiceReference,
         ],
         parameters: [refVarName],
-        body: streamServiceReference
+        body: queryServiceReference
             .call([], {
-              _firestoreInstanceField(config: config).toParameter.publicName:
-                  const Reference(refVarName).watch(config.referenceServiceClass.providerReference.withoutUrl),
+              config.referenceServiceClass.field.toParameter.publicName:
+                  const Reference(refVarName).watch(config.referenceServiceClass.providerReference),
             })
             .returned
             .statement,
@@ -60,21 +60,20 @@ Field _queryServiceProvider({
   );
 }
 
-Class _streamServiceClass({
+Class _queryServiceClass({
   required YamlConfig config,
 }) {
   return Class(
     (c) {
       c
-        ..name = config.streamServiceClass.className
+        ..name = config.queryServiceClass.className
         ..fields.add(
-          _firestoreInstanceField(config: config),
+          config.referenceServiceClass.field,
         )
         ..methods.addAll([
           ...config.collections.expand(
             (c) => [
-              c.documentStreamMethod,
-              c.collectionStreamMethod,
+              c.addDocumentMethod,
             ],
           ),
         ]);
@@ -82,77 +81,42 @@ Class _streamServiceClass({
   );
 }
 
-Field _firestoreInstanceField({
-  required YamlConfig config,
-}) {
-  return Field(
-    (f) => f
-      ..name = referenceServiceInstanceName
-      ..modifier = FieldModifier.final$
-      ..type = config.referenceServiceClass.reference,
-  );
-}
-
 extension on Collection {
-  Parameter get _idParameter => Parameter(
-        (p) => p
-          ..name = 'id'
-          ..type = modelIdReference,
-      );
+  Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
 
-  Method get collectionStreamMethod {
+  Method get addDocumentMethod {
     final modelRef = modelReference;
-
-    const eventVarName = 'event';
-    const snapshotVarName = 'snapshot';
+    final modelVarName = modelRef.symbol!.camelCase;
+    const resultVarName = 'result';
 
     return Method(
       (m) {
         m
-          ..name = collectionStreamMethodName
-          ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
-          ..body = const Reference(referenceServiceInstanceName)
-              .method(collectionReferenceMethodName)
-              .method(FirestoreSymbols.snapshotsMethod)
-              .map(
-                parameters: [eventVarName],
-                body: const Reference(eventVarName)
-                    .property(FirestoreSymbols.docsProperty)
-                    .map(
-                      parameters: [snapshotVarName],
-                      body: const Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
-                    )
-                    .toList()
-                    .code,
-              )
-              .returned
-              .statement;
-      },
-    );
-  }
-
-  Method get documentStreamMethod {
-    final modelRef = modelReference;
-    const eventVarName = 'event';
-
-    return Method(
-      (m) {
-        m
-          ..name = documentStreamMethodName
-          ..returns = BasicTypes.streamOf(modelRef.nullSafe)
-          ..requiredParameters.add(_idParameter)
-          ..body = const Reference(referenceServiceInstanceName)
-              .method(
-                documentReferenceMethodName,
-                positionalArguments: [Reference(_idParameter.name)],
-              )
-              .method(FirestoreSymbols.snapshotsMethod)
-              .map(
-                parameters: [eventVarName],
-                body: const Reference(eventVarName).method(FirestoreSymbols.dataMethod).code,
-              )
-              .returned
-              .statement;
+          ..name = addDocumentMethodName
+          ..modifier = MethodModifier.async
+          ..returns = BasicTypes.futureOf(BasicTypes.string)
+          ..requiredParameters.add(
+            Parameter(
+              (p) => p
+                ..name = modelVarName
+                ..type = modelRef,
+            ),
+          )
+          ..body = Block.of([
+            declareFinal(resultVarName)
+                .assign(
+                  _referenceServiceInstanceReference.awaited
+                      .method(
+                    collectionReferenceMethodName,
+                  )
+                      .method(
+                    FirestoreSymbols.addMethod,
+                    positionalArguments: [Reference(modelVarName)],
+                  ),
+                )
+                .statement,
+            const Reference(resultVarName).property(FirestoreSymbols.idProperty).returned.statement,
+          ]);
       },
     );
   }

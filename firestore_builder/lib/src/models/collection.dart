@@ -13,12 +13,12 @@ class Collection extends Equatable {
     required this.modelName,
     required this.fields,
     required this.subCollections,
-    required this.yamlConfigLight,
+    required this.configLight,
   });
 
   factory Collection.fromYaml({
     required YamlMap yamlMap,
-    required YamlConfig yamlConfigLight,
+    required YamlConfig configLight,
   }) {
     final keys = yamlMap.keys.whereType<String>();
     if (keys.length != 1) {
@@ -71,7 +71,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
       modelName: modelName,
       fields: fields,
       subCollections: const [],
-      yamlConfigLight: yamlConfigLight,
+      configLight: configLight,
     );
   }
 
@@ -79,11 +79,12 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final String modelName;
   final List<CollectionField> fields;
   final List<Collection> subCollections;
-  final YamlConfig yamlConfigLight;
+  final YamlConfig configLight;
 
   String get _camelName => name.camelCase;
 
   String get _modelCamelName => modelName.camelCase;
+  String get _modelPascalName => modelName.pascalCase;
   String get _modelSnakeName => modelName.snakeCase;
 
   String get modelClassName => modelName.pascalCase;
@@ -96,11 +97,11 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get modelFileName => _modelSnakeName;
   String get stateFileName => '${_modelSnakeName}_states';
 
-  String get modelFilePath => '${yamlConfigLight.modelsPath}/$modelFileName.dart';
-  String get stateFilePath => '${yamlConfigLight.statesPath}/$stateFileName.dart';
+  String get modelFilePath => '${configLight.modelsPath}/$modelFileName.dart';
+  String get stateFilePath => '${configLight.statesPath}/$stateFileName.dart';
 
   String get _modelFileUrl {
-    return modelFilePath.toPackageUrl(projectName: yamlConfigLight.projectName);
+    return modelFilePath.toPackageUrl(projectName: configLight.projectName);
   }
 
   Reference get modelReference => Reference(
@@ -118,6 +119,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
   String get documentStreamMethodName => '${_modelCamelName}Stream';
+  String get addDocumentMethodName => 'add$_modelPascalName';
 
   @override
   List<Object> get props => [
@@ -125,6 +127,6 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
         modelName,
         fields,
         subCollections,
-        yamlConfigLight,
+        configLight,
       ];
 }

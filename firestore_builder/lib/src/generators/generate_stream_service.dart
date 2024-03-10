@@ -4,7 +4,6 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
-import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
@@ -51,7 +50,7 @@ Field _streamServiceProvider({
         parameters: [refVarName],
         body: streamServiceReference
             .call([], {
-              _firestoreInstanceField(config: config).toParameter.publicName:
+              config.referenceServiceClass.field.toParameter.publicName:
                   const Reference(refVarName).watch(config.referenceServiceClass.providerReference.withoutUrl),
             })
             .returned
@@ -68,7 +67,7 @@ Class _streamServiceClass({
       c
         ..name = config.streamServiceClass.className
         ..fields.add(
-          _firestoreInstanceField(config: config),
+          config.referenceServiceClass.field,
         )
         ..methods.addAll([
           ...config.collections.expand(
@@ -82,23 +81,14 @@ Class _streamServiceClass({
   );
 }
 
-Field _firestoreInstanceField({
-  required YamlConfig config,
-}) {
-  return Field(
-    (f) => f
-      ..name = referenceServiceInstanceName
-      ..modifier = FieldModifier.final$
-      ..type = config.referenceServiceClass.reference,
-  );
-}
-
 extension on Collection {
   Parameter get _idParameter => Parameter(
         (p) => p
           ..name = 'id'
           ..type = modelIdReference,
       );
+
+  Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
 
   Method get collectionStreamMethod {
     final modelRef = modelReference;
@@ -111,7 +101,7 @@ extension on Collection {
         m
           ..name = collectionStreamMethodName
           ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
-          ..body = const Reference(referenceServiceInstanceName)
+          ..body = _referenceServiceInstanceReference
               .method(collectionReferenceMethodName)
               .method(FirestoreSymbols.snapshotsMethod)
               .map(
@@ -141,7 +131,7 @@ extension on Collection {
           ..name = documentStreamMethodName
           ..returns = BasicTypes.streamOf(modelRef.nullSafe)
           ..requiredParameters.add(_idParameter)
-          ..body = const Reference(referenceServiceInstanceName)
+          ..body = _referenceServiceInstanceReference
               .method(
                 documentReferenceMethodName,
                 positionalArguments: [Reference(_idParameter.name)],

@@ -3,7 +3,6 @@ const String pubspecPath = 'pubspec.yaml';
 const String databaseIdName = 'firestoreId';
 
 const String firestoreInstanceName = '_firestore';
-const String referenceServiceInstanceName = '_referenceService';
 
 const String collectionKeyName = 'collectionKey';
 

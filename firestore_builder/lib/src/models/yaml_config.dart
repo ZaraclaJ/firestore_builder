@@ -64,7 +64,7 @@ The configuration file does not contain a correct collections section: $firestor
             .map(
               (e) => Collection.fromYaml(
                 yamlMap: e,
-                yamlConfigLight: yamlConfigLight,
+                configLight: yamlConfigLight,
               ),
             )
             .toList() ??
@@ -149,6 +149,18 @@ class ServiceClass {
       );
   Reference get providerReference => Reference(
         providerName,
+        url,
+      );
+
+  Field get field => Field(
+        (f) => f
+          ..name = className.privateName
+          ..modifier = FieldModifier.final$
+          ..type = reference,
+      );
+
+  Reference get fieldReference => Reference(
+        field.name,
         url,
       );
 }

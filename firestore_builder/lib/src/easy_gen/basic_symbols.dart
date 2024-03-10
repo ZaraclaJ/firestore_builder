@@ -14,6 +14,9 @@ abstract class BasicSymbols {
   /// 'DateTime'
   static const String dateTime = 'DateTime';
 
+  /// 'Future'
+  static const String future = 'Future';
+
   /// 'Stream'
   static const String stream = 'Stream';
 
@@ -52,8 +55,14 @@ abstract class FirestoreSymbols {
   /// 'docs'
   static const String docsProperty = 'docs';
 
+  /// 'id'
+  static const String idProperty = 'id';
+
   /// 'collection'
   static const String collectionMethod = 'collection';
+
+  /// 'add'
+  static const String addMethod = 'add';
 
   /// 'doc'
   static const String docMethod = 'doc';

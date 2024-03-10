@@ -119,7 +119,7 @@ extension ClassExtensions on Class {
 }
 
 extension ParameterExtensions on Parameter {
-  String get publicName => name.withoutUnderscore;
+  String get publicName => name.publicName;
 
   @UseResult()
   Parameter copyWithName(String name) {

@@ -27,6 +27,15 @@ abstract class BasicTypes {
     );
   }
 
+  /// Future<ref>
+  static TypeReference futureOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = BasicSymbols.future
+        ..types.add(ref),
+    );
+  }
+
   /// Stream<ref>
   static TypeReference streamOf(Reference ref) {
     return TypeReference(
