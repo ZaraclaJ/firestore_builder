@@ -121,6 +121,14 @@ extension ClassExtensions on Class {
 extension ParameterExtensions on Parameter {
   String get publicName => name.publicName;
 
+  Parameter get toRequired {
+    return rebuild(
+      (p) => p
+        ..required = true
+        ..named = true,
+    );
+  }
+
   @UseResult()
   Parameter copyWithName(String name) {
     final parameter = this;

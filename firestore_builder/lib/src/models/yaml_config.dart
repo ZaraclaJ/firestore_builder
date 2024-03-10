@@ -116,6 +116,10 @@ The configuration file does not contain a correct collections section: $firestor
         projectName: projectName,
       );
 
+  String get updatedValueClassName => 'UpdatedValue';
+  String get updatedValueFieldName => 'value';
+  Reference get updatedValueFieldReference => const Reference('T');
+
   @override
   List<Object> get props => [
         outputPath,

@@ -37,6 +37,9 @@ abstract class BasicSymbols {
 
   /// 'toList'
   static const String mapMethod = 'map';
+
+  /// 'isEmpty'
+  static const String isEmptyGetter = 'isEmpty';
 }
 
 abstract class FirestoreSymbols {
@@ -66,6 +69,12 @@ abstract class FirestoreSymbols {
 
   /// 'add'
   static const String addMethod = 'add';
+
+  /// 'get'
+  static const String getMethod = 'get';
+
+  /// 'update'
+  static const String updateMethod = 'update';
 
   /// 'delete'
   static const String deleteMethod = 'delete';

@@ -34,6 +34,10 @@ extension ExpressionExtensions on Expression {
     return method(BasicSymbols.toListMethod);
   }
 
+  Expression get isEmpty {
+    return property(BasicSymbols.isEmptyGetter);
+  }
+
   Expression map({
     required List<String> parameters,
     required Code body,
