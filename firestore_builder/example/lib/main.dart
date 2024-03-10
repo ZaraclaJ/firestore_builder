@@ -1,6 +1,18 @@
 import 'package:example/firebase_options.dart';
+import 'package:example/firestore/models/user.dart';
+import 'package:example/firestore/services/firestore_query_service.dart';
+import 'package:example/firestore/states/user_states.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final nameProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
+
+final ageProvider = StateProvider.autoDispose<int>(
+  (ref) => 18,
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,59 +27,149 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ProviderScope(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String _name = '';
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(32),
-              child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'User name',
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _name = value;
-                    });
-                  }),
+              padding: EdgeInsets.all(16),
+              child: NameInput(),
             ),
-            ElevatedButton(
-              onPressed: _name.isEmpty ? null : () {},
-              child: const Text('Add'),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: AgeInput(),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: AddUserButton(),
+            ),
+            Expanded(
+              child: UserList(),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class NameInput extends ConsumerWidget {
+  const NameInput({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return TextField(
+        decoration: const InputDecoration(
+          labelText: 'User name',
+        ),
+        onChanged: (value) {
+          ref.read(nameProvider.notifier).state = value;
+        });
+  }
+}
+
+class AgeInput extends ConsumerWidget {
+  const AgeInput({
+    this.min = 18,
+    this.max = 50,
+    super.key,
+  });
+
+  final int min;
+  final int max;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final age = ref.watch(ageProvider);
+    return Row(
+      children: [
+        const Text('Age:'),
+        Text(age.toString()),
+        Expanded(
+          child: Slider(
+            value: age.toDouble(),
+            min: min.toDouble(),
+            max: max.toDouble(),
+            divisions: 100,
+            label: age.toString(),
+            onChanged: (value) {
+              ref.read(ageProvider.notifier).state = value.toInt();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AddUserButton extends ConsumerWidget {
+  const AddUserButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: ref.watch(nameProvider.select((value) => value.isEmpty))
+          ? null
+          : () {
+              final name = ref.read(nameProvider);
+              final age = ref.read(ageProvider);
+              final user = User(
+                name: name,
+                age: age,
+              );
+              ref.read(firestoreQueryServiceProvider).addUser(user);
+              ref.invalidate(firestoreQueryServiceProvider);
+            },
+      child: const Text('Add'),
+    );
+  }
+}
+
+class UserList extends ConsumerWidget {
+  const UserList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userList = ref.watch(userCollectionProvider);
+    if (userList == null) {
+      return const CircularProgressIndicator();
+    }
+
+    return ListView.separated(
+      itemCount: userList.length,
+      separatorBuilder: (context, index) => const Divider(),
+      itemBuilder: (context, index) {
+        final user = userList[index];
+        return ListTile(
+          title: Text(user.name),
+          subtitle: Text(user.age.toString()),
+        );
+      },
     );
   }
 }
