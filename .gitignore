@@ -1,0 +1,6 @@
+firestore_builder/example/android/app/google-services.json
+firestore_builder/example/ios/Runner/GoogleService-Info.plist
+firestore_builder/example/ios/firebase_app_id_file.json
+firestore_builder/example/lib/firebase_options.dart
+firestore_builder/example/macos/Runner/GoogleService-Info.plist
+firestore_builder/example/macos/firebase_app_id_file.json
