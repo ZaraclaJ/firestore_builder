@@ -8,24 +8,24 @@ import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
-Future<void> generateStreamService({
+Future<void> generateQueryService({
   required YamlConfig config,
 }) async {
   await generateLibrary(
-    library: _streamServiceLibrary(
+    library: _queryServiceLibrary(
       config: config,
     ),
     filePath: config.streamServiceClass.path,
   );
 }
 
-Library _streamServiceLibrary({
+Library _queryServiceLibrary({
   required YamlConfig config,
 }) {
   return Library(
     (library) {
       library.body.addAll([
-        _streamServiceProvider(config: config),
+        _queryServiceProvider(config: config),
         _streamServiceClass(
           config: config,
         ),
@@ -34,7 +34,7 @@ Library _streamServiceLibrary({
   ).buildLibrary();
 }
 
-Field _streamServiceProvider({
+Field _queryServiceProvider({
   required YamlConfig config,
 }) {
   const refVarName = 'ref';

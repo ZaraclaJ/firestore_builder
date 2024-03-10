@@ -95,33 +95,25 @@ The configuration file does not contain a correct collections section: $firestor
   String get firestoreProviderName => 'firestoreProvider';
   Reference get firestoreProviderReference => Reference(
         firestoreProviderName,
-        _referenceServiceUrl,
+        referenceServiceClass.url,
       );
 
-  String get referenceServiceClassName => 'FirestoreReferenceService';
-  String get referenceServiceProviderName => '${referenceServiceClassName}Provider'.camelCase;
-  String get referenceServicePath => '$servicesPath/${referenceServiceClassName.snakeCase}.dart';
-  String get _referenceServiceUrl => referenceServicePath.toPackageUrl(config: this);
-  Reference get referenceServiceReference => Reference(
-        referenceServiceClassName.pascalCase,
-        _referenceServiceUrl,
-      );
-  Reference get referenceServiceProviderReference => Reference(
-        referenceServiceProviderName,
-        _referenceServiceUrl,
+  ServiceClass get referenceServiceClass => ServiceClass(
+        className: 'FirestoreReferenceService',
+        folderPath: servicesPath,
+        projectName: projectName,
       );
 
-  String get streamServiceClassName => 'FirestoreStreamService';
-  String get streamServiceProviderName => '${streamServiceClassName}Provider'.camelCase;
-  String get streamServicePath => '$servicesPath/${streamServiceClassName.snakeCase}.dart';
-  String get _streamServiceUrl => streamServicePath.toPackageUrl(config: this);
-  Reference get streamServiceReference => Reference(
-        streamServiceClassName.pascalCase,
-        _streamServiceUrl,
+  ServiceClass get streamServiceClass => ServiceClass(
+        className: 'FirestoreStreamService',
+        folderPath: servicesPath,
+        projectName: projectName,
       );
-  Reference get streamServiceProviderReference => Reference(
-        streamServiceProviderName,
-        _streamServiceUrl,
+
+  ServiceClass get queryServiceClass => ServiceClass(
+        className: 'FirestoreQueryService',
+        folderPath: servicesPath,
+        projectName: projectName,
       );
 
   @override
@@ -131,4 +123,32 @@ The configuration file does not contain a correct collections section: $firestor
         projectName,
         clear,
       ];
+}
+
+class ServiceClass {
+  const ServiceClass({
+    required String className,
+    required String folderPath,
+    required String projectName,
+  })  : _projectName = projectName,
+        _folderPath = folderPath,
+        _className = className;
+
+  final String _className;
+  final String _folderPath;
+  final String _projectName;
+
+  String get className => _className;
+  String get providerName => '${_className}Provider'.camelCase;
+  String get path => '$_folderPath/${className.snakeCase}.dart';
+  String get url => path.toPackageUrl(projectName: _projectName);
+
+  Reference get reference => Reference(
+        className.pascalCase,
+        url,
+      );
+  Reference get providerReference => Reference(
+        providerName,
+        url,
+      );
 }

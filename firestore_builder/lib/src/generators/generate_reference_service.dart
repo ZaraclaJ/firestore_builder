@@ -15,7 +15,7 @@ Future<void> generateReferenceService({
     library: _referenceServiceLibrary(
       config: config,
     ),
-    filePath: config.referenceServicePath,
+    filePath: config.referenceServiceClass.path,
   );
 }
 
@@ -54,11 +54,11 @@ Field _referenceServiceProvider({
   required YamlConfig config,
 }) {
   const refVarName = 'ref';
-  final referenceServiceReference = config.referenceServiceReference.withoutUrl;
+  final referenceServiceReference = config.referenceServiceClass.reference.withoutUrl;
 
   return Field(
     (f) => f
-      ..name = config.referenceServiceProviderName
+      ..name = config.referenceServiceClass.providerName
       ..modifier = FieldModifier.final$
       ..assignment = RiverpodTypes.provider.autoDisposeMethod(
         typeArguments: [
@@ -82,7 +82,7 @@ Class _referenceServiceClass({
   return Class(
     (c) {
       c
-        ..name = config.referenceServiceClassName
+        ..name = config.referenceServiceClass.className
         ..fields.add(_firestoreInstanceField)
         ..methods.addAll([
           ...config.collections.expand(

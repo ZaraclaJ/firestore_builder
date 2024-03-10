@@ -100,7 +100,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get stateFilePath => '${yamlConfigLight.statesPath}/$stateFileName.dart';
 
   String get _modelFileUrl {
-    return modelFilePath.toPackageUrl(config: yamlConfigLight);
+    return modelFilePath.toPackageUrl(projectName: yamlConfigLight.projectName);
   }
 
   Reference get modelReference => Reference(
