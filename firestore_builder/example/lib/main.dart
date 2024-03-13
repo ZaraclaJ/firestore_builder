@@ -41,7 +41,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends ConsumerWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    required this.title,
+    super.key,
+  });
 
   final String title;
 
@@ -84,12 +87,13 @@ class NameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return TextField(
-        decoration: const InputDecoration(
-          labelText: 'User name',
-        ),
-        onChanged: (value) {
-          ref.read(nameProvider.notifier).state = value;
-        });
+      decoration: const InputDecoration(
+        labelText: 'User name',
+      ),
+      onChanged: (value) {
+        ref.read(nameProvider.notifier).state = value;
+      },
+    );
   }
 }
 

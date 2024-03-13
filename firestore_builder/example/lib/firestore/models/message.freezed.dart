@@ -25,7 +25,7 @@ mixin _$Message {
   @JsonKey(name: Message.dateFieldKey)
   DateTime get date => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get firestoreId => throw _privateConstructorUsedError;
+  MessageId get messageId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +41,9 @@ abstract class $MessageCopyWith<$Res> {
       {@JsonKey(name: Message.contentFieldKey) String content,
       @JsonKey(name: Message.dateFieldKey) DateTime date,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      String firestoreId});
+      MessageId messageId});
+
+  $MessageIdCopyWith<$Res> get messageId;
 }
 
 /// @nodoc
@@ -59,7 +61,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   $Res call({
     Object? content = null,
     Object? date = null,
-    Object? firestoreId = null,
+    Object? messageId = null,
   }) {
     return _then(_value.copyWith(
       content: null == content
@@ -70,11 +72,19 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      firestoreId: null == firestoreId
-          ? _value.firestoreId
-          : firestoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      messageId: null == messageId
+          ? _value.messageId
+          : messageId // ignore: cast_nullable_to_non_nullable
+              as MessageId,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MessageIdCopyWith<$Res> get messageId {
+    return $MessageIdCopyWith<$Res>(_value.messageId, (value) {
+      return _then(_value.copyWith(messageId: value) as $Val);
+    });
   }
 }
 
@@ -89,7 +99,10 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
       {@JsonKey(name: Message.contentFieldKey) String content,
       @JsonKey(name: Message.dateFieldKey) DateTime date,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      String firestoreId});
+      MessageId messageId});
+
+  @override
+  $MessageIdCopyWith<$Res> get messageId;
 }
 
 /// @nodoc
@@ -105,7 +118,7 @@ class __$$MessageImplCopyWithImpl<$Res>
   $Res call({
     Object? content = null,
     Object? date = null,
-    Object? firestoreId = null,
+    Object? messageId = null,
   }) {
     return _then(_$MessageImpl(
       content: null == content
@@ -116,10 +129,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      firestoreId: null == firestoreId
-          ? _value.firestoreId
-          : firestoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      messageId: null == messageId
+          ? _value.messageId
+          : messageId // ignore: cast_nullable_to_non_nullable
+              as MessageId,
     ));
   }
 }
@@ -131,7 +144,7 @@ class _$MessageImpl extends _Message {
       {@JsonKey(name: Message.contentFieldKey) required this.content,
       @JsonKey(name: Message.dateFieldKey) required this.date,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      this.firestoreId = ''})
+      this.messageId = const MessageId('')})
       : super._();
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
@@ -145,11 +158,11 @@ class _$MessageImpl extends _Message {
   final DateTime date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final String firestoreId;
+  final MessageId messageId;
 
   @override
   String toString() {
-    return 'Message(content: $content, date: $date, firestoreId: $firestoreId)';
+    return 'Message(content: $content, date: $date, messageId: $messageId)';
   }
 
   @override
@@ -159,13 +172,13 @@ class _$MessageImpl extends _Message {
             other is _$MessageImpl &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.firestoreId, firestoreId) ||
-                other.firestoreId == firestoreId));
+            (identical(other.messageId, messageId) ||
+                other.messageId == messageId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, content, date, firestoreId);
+  int get hashCode => Object.hash(runtimeType, content, date, messageId);
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +199,7 @@ abstract class _Message extends Message {
       {@JsonKey(name: Message.contentFieldKey) required final String content,
       @JsonKey(name: Message.dateFieldKey) required final DateTime date,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final String firestoreId}) = _$MessageImpl;
+      final MessageId messageId}) = _$MessageImpl;
   const _Message._() : super._();
 
   factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
@@ -199,7 +212,7 @@ abstract class _Message extends Message {
   DateTime get date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get firestoreId;
+  MessageId get messageId;
   @override
   @JsonKey(ignore: true)
   _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>

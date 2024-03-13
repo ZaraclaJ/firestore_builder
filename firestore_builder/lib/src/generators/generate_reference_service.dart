@@ -4,6 +4,7 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
+import 'package:firestore_builder/src/generators/generate_models.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -110,6 +111,7 @@ extension on Collection {
     final modelRef = modelReference;
 
     const valueVarName = 'value';
+    const snapshotVarName = 'snapshot';
     const fromFirestore = FirestoreSymbols.fromFirestoreParam;
     const toFirestore = FirestoreSymbols.toFirestoreParam;
 
@@ -126,8 +128,16 @@ extension on Collection {
               .method(
                 FirestoreSymbols.withConverterMethod,
                 namedArguments: {
-                  fromFirestore: modelRef.property(
-                    fromFirestore,
+                  fromFirestore: Expressions.lambdaMethod(
+                    parameters: [snapshotVarName, '_'],
+                    body: modelRef
+                        .method(
+                          fromFirestoreFactory.name!,
+                          positionalArguments: [const Reference(snapshotVarName)],
+                        )
+                        .returned
+                        .statement,
+                    lambda: false,
                   ),
                   toFirestore: Expressions.lambdaMethod(
                     parameters: [valueVarName, '_'],

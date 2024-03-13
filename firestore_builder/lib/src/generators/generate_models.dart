@@ -8,7 +8,6 @@ import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
-import 'package:recase/recase.dart';
 
 Future<void> generateModels({
   required YamlConfig config,
@@ -25,7 +24,7 @@ Future<void> generateModels({
   await Future.wait(futures);
 }
 
-extension CollectionExtensions on Collection {
+extension ModelCollectionExtensions on Collection {
   Library get modelLibrary {
     return Library(
       (library) {
@@ -48,7 +47,7 @@ extension CollectionExtensions on Collection {
         classBuilder
           ..name = modelClassName
           ..constructors.add(
-            _fromFirestoreFactory,
+            fromFirestoreFactory,
           )
           ..fields.addAll([
             _staticCollectionKeyField,
@@ -63,7 +62,6 @@ extension CollectionExtensions on Collection {
             _idField,
           ])
           ..methods.addAll([
-            _idGetter,
             _toFirestoreMethod,
           ]);
       },
@@ -87,9 +85,9 @@ extension CollectionExtensions on Collection {
     return Field(
       (field) {
         field
-          ..name = databaseIdName
-          ..type = BasicTypes.string
-          ..assignment = literalString('').code
+          ..name = modelIdFieldName
+          ..type = modelIdReference.withoutUrl
+          ..assignment = modelIdReference.withoutUrl.call([literalString('')]).code
           ..modifier = FieldModifier.final$
           ..annotations.add(
             BasicAnnotations.jsonKey(
@@ -101,23 +99,7 @@ extension CollectionExtensions on Collection {
     );
   }
 
-  Method get _idGetter {
-    final idClassRef = Reference(_idClass.name);
-    return Method(
-      (method) {
-        method
-          ..name = modelIdClassName.camelCase
-          ..type = MethodType.getter
-          ..returns = idClassRef
-          ..lambda = true
-          ..body = idClassRef.call([
-            Reference(_idField.name),
-          ]).code;
-      },
-    );
-  }
-
-  Constructor get _fromFirestoreFactory {
+  Constructor get fromFirestoreFactory {
     const snapshotVarName = 'snapshot';
     const dataVarName = 'data';
     return Constructor(
@@ -132,15 +114,6 @@ extension CollectionExtensions on Collection {
                   ..name = snapshotVarName
                   ..type = FirestoreTypes.documentSnapshotOf(
                     BasicTypes.json,
-                  );
-              },
-            ),
-            Parameter(
-              (p) {
-                p
-                  ..name = 'options'
-                  ..type = FirestoreTypes.snapshotOptions(
-                    isNullable: true,
                   );
               },
             ),
@@ -159,7 +132,7 @@ extension CollectionExtensions on Collection {
                 .method(
                   FreezedSymbols.copyWithMethod,
                   namedArguments: {
-                    _idField.name: const Reference(snapshotVarName).property('id'),
+                    _idField.name: _idField.type!.call([const Reference(snapshotVarName).property('id')]),
                   },
                 )
                 .returned

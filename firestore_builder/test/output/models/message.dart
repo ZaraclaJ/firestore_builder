@@ -16,19 +16,20 @@ class Message with _$Message {
       includeFromJson: false,
       includeToJson: false,
     )
-    @Default('')
-    String firestoreId,
+    @Default(MessageId(''))
+    MessageId messageId,
   }) = _Message;
 
   factory Message.fromFirestore(
     DocumentSnapshot<Map<String, Object?>> snapshot,
-    SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Message.fromJson(data!).copyWith(firestoreId: snapshot.id);
+    return Message.fromJson(data!).copyWith(messageId: MessageId(snapshot.id));
   }
 
-  factory Message.fromJson(Map<String, dynamic> json) =>
+  factory Message.fromJson(
+    Map<String, dynamic> json,
+  ) =>
       _$MessageFromJson(json);
 
   const Message._();
@@ -38,8 +39,6 @@ class Message with _$Message {
   static const String contentFieldKey = 'content';
 
   static const String dateFieldKey = 'date';
-
-  MessageId get messageId => MessageId(firestoreId);
 
   Map<String, Object?> toFirestore() {
     final json = toJson();
@@ -52,8 +51,12 @@ class Message with _$Message {
   fromJson: true,
 )
 class MessageId with _$MessageId {
-  const factory MessageId(String value) = _MessageId;
+  const factory MessageId(
+    String value,
+  ) = _MessageId;
 
-  factory MessageId.fromJson(Map<String, dynamic> json) =>
+  factory MessageId.fromJson(
+    Map<String, dynamic> json,
+  ) =>
       _$MessageIdFromJson(json);
 }

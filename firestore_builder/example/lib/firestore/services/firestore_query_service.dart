@@ -4,15 +4,18 @@ import 'package:example/firestore/services/firestore_reference_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final firestoreQueryServiceProvider =
-    Provider.autoDispose<FirestoreQueryService>((ref) {
-  return FirestoreQueryService(
-      firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider));
-});
+    Provider.autoDispose<FirestoreQueryService>(
+  (ref) {
+    return FirestoreQueryService(
+      firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider),
+    );
+  },
+);
 
 class FirestoreQueryService {
-  const FirestoreQueryService(
-      {required FirestoreReferenceService firestoreReferenceService})
-      : _firestoreReferenceService = firestoreReferenceService;
+  const FirestoreQueryService({
+    required FirestoreReferenceService firestoreReferenceService,
+  }) : _firestoreReferenceService = firestoreReferenceService;
 
   final FirestoreReferenceService _firestoreReferenceService;
 
@@ -80,7 +83,9 @@ class FirestoreQueryService {
 }
 
 class UpdatedValue<T> {
-  const UpdatedValue(this.value);
+  const UpdatedValue(
+    this.value,
+  );
 
   final T value;
 }

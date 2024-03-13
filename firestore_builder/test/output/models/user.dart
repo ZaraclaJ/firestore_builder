@@ -17,19 +17,21 @@ class User with _$User {
       includeFromJson: false,
       includeToJson: false,
     )
-    @Default('')
-    String firestoreId,
+    @Default(UserId(''))
+    UserId userId,
   }) = _User;
 
   factory User.fromFirestore(
     DocumentSnapshot<Map<String, Object?>> snapshot,
-    SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return User.fromJson(data!).copyWith(firestoreId: snapshot.id);
+    return User.fromJson(data!).copyWith(userId: UserId(snapshot.id));
   }
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$UserFromJson(json);
 
   const User._();
 
@@ -40,8 +42,6 @@ class User with _$User {
   static const String currentJobFieldKey = 'current_job';
 
   static const String ageFieldKey = 'age';
-
-  UserId get userId => UserId(firestoreId);
 
   Map<String, Object?> toFirestore() {
     final json = toJson();
@@ -54,7 +54,12 @@ class User with _$User {
   fromJson: true,
 )
 class UserId with _$UserId {
-  const factory UserId(String value) = _UserId;
+  const factory UserId(
+    String value,
+  ) = _UserId;
 
-  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
+  factory UserId.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$UserIdFromJson(json);
 }

@@ -27,7 +27,7 @@ mixin _$User {
   @JsonKey(name: User.currentJobFieldKey)
   String? get currentJob => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get firestoreId => throw _privateConstructorUsedError;
+  UserId get userId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,8 +43,9 @@ abstract class $UserCopyWith<$Res> {
       {@JsonKey(name: User.nameFieldKey) String name,
       @JsonKey(name: User.ageFieldKey) int age,
       @JsonKey(name: User.currentJobFieldKey) String? currentJob,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      String firestoreId});
+      @JsonKey(includeFromJson: false, includeToJson: false) UserId userId});
+
+  $UserIdCopyWith<$Res> get userId;
 }
 
 /// @nodoc
@@ -63,7 +64,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? name = null,
     Object? age = null,
     Object? currentJob = freezed,
-    Object? firestoreId = null,
+    Object? userId = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -78,11 +79,19 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.currentJob
           : currentJob // ignore: cast_nullable_to_non_nullable
               as String?,
-      firestoreId: null == firestoreId
-          ? _value.firestoreId
-          : firestoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as UserId,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserIdCopyWith<$Res> get userId {
+    return $UserIdCopyWith<$Res>(_value.userId, (value) {
+      return _then(_value.copyWith(userId: value) as $Val);
+    });
   }
 }
 
@@ -97,8 +106,10 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       {@JsonKey(name: User.nameFieldKey) String name,
       @JsonKey(name: User.ageFieldKey) int age,
       @JsonKey(name: User.currentJobFieldKey) String? currentJob,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      String firestoreId});
+      @JsonKey(includeFromJson: false, includeToJson: false) UserId userId});
+
+  @override
+  $UserIdCopyWith<$Res> get userId;
 }
 
 /// @nodoc
@@ -114,7 +125,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? name = null,
     Object? age = null,
     Object? currentJob = freezed,
-    Object? firestoreId = null,
+    Object? userId = null,
   }) {
     return _then(_$UserImpl(
       name: null == name
@@ -129,10 +140,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.currentJob
           : currentJob // ignore: cast_nullable_to_non_nullable
               as String?,
-      firestoreId: null == firestoreId
-          ? _value.firestoreId
-          : firestoreId // ignore: cast_nullable_to_non_nullable
-              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as UserId,
     ));
   }
 }
@@ -145,7 +156,7 @@ class _$UserImpl extends _User {
       @JsonKey(name: User.ageFieldKey) required this.age,
       @JsonKey(name: User.currentJobFieldKey) this.currentJob,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      this.firestoreId = ''})
+      this.userId = const UserId('')})
       : super._();
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -162,11 +173,11 @@ class _$UserImpl extends _User {
   final String? currentJob;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final String firestoreId;
+  final UserId userId;
 
   @override
   String toString() {
-    return 'User(name: $name, age: $age, currentJob: $currentJob, firestoreId: $firestoreId)';
+    return 'User(name: $name, age: $age, currentJob: $currentJob, userId: $userId)';
   }
 
   @override
@@ -178,14 +189,12 @@ class _$UserImpl extends _User {
             (identical(other.age, age) || other.age == age) &&
             (identical(other.currentJob, currentJob) ||
                 other.currentJob == currentJob) &&
-            (identical(other.firestoreId, firestoreId) ||
-                other.firestoreId == firestoreId));
+            (identical(other.userId, userId) || other.userId == userId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, age, currentJob, firestoreId);
+  int get hashCode => Object.hash(runtimeType, name, age, currentJob, userId);
 
   @JsonKey(ignore: true)
   @override
@@ -207,7 +216,7 @@ abstract class _User extends User {
       @JsonKey(name: User.ageFieldKey) required final int age,
       @JsonKey(name: User.currentJobFieldKey) final String? currentJob,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final String firestoreId}) = _$UserImpl;
+      final UserId userId}) = _$UserImpl;
   const _User._() : super._();
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -223,7 +232,7 @@ abstract class _User extends User {
   String? get currentJob;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String get firestoreId;
+  UserId get userId;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>
