@@ -165,17 +165,14 @@ extension ModelCollectionExtensions on Collection {
   Class get _idClass {
     return Class(
       (classBuilder) {
-        const fieldName = 'value';
-        const fieldType = BasicTypes.string;
-
         classBuilder
           ..name = modelIdClassName
           ..fields.add(
             Field(
               (field) {
                 field
-                  ..name = fieldName
-                  ..type = fieldType
+                  ..name = modelIdValueFieldName
+                  ..type = BasicTypes.string
                   ..modifier = FieldModifier.final$;
               },
             ),

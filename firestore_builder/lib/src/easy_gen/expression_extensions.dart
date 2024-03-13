@@ -38,6 +38,10 @@ extension ExpressionExtensions on Expression {
     return property(BasicSymbols.isEmptyGetter);
   }
 
+  Expression get isNotEmpty {
+    return property(BasicSymbols.isNotEmptyGetter);
+  }
+
   Expression map({
     required List<String> parameters,
     required Code body,

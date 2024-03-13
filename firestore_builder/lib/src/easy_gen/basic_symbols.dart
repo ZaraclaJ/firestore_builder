@@ -40,6 +40,9 @@ abstract class BasicSymbols {
 
   /// 'isEmpty'
   static const String isEmptyGetter = 'isEmpty';
+
+  /// 'isEmpty'
+  static const String isNotEmptyGetter = 'isNotEmpty';
 }
 
 abstract class FirestoreSymbols {
@@ -67,11 +70,14 @@ abstract class FirestoreSymbols {
   /// 'collection'
   static const String collectionMethod = 'collection';
 
+  /// 'get'
+  static const String getMethod = 'get';
+
   /// 'add'
   static const String addMethod = 'add';
 
-  /// 'get'
-  static const String getMethod = 'get';
+  /// 'add'
+  static const String setMethod = 'set';
 
   /// 'update'
   static const String updateMethod = 'update';

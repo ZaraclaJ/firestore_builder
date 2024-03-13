@@ -73,8 +73,9 @@ Class _queryServiceClass({
         ..methods.addAll([
           ...config.collections.expand(
             (c) => [
-              c.addDocumentMethod,
               c.getDocumentMethod,
+              c.addDocumentMethod,
+              c.setDocumentMethod,
               c.updateDocumentMethod,
               c.deleteDocumentMethod,
             ],
@@ -128,6 +129,34 @@ extension on Collection {
           ..type = modelIdReference,
       );
 
+  Method get getDocumentMethod {
+    final modelIdParam = this.modelIdParam;
+    const resultVarName = 'result';
+
+    return Method(
+      (m) {
+        m
+          ..name = getDocumentMethodName
+          ..modifier = MethodModifier.async
+          ..returns = BasicTypes.futureOf(modelReference.nullSafe)
+          ..requiredParameters.add(modelIdParam)
+          ..body = Block.of([
+            declareFinal(resultVarName)
+                .assign(
+                  _referenceServiceInstanceReference.awaited.method(
+                    documentReferenceMethodName,
+                    positionalArguments: [Reference(modelIdParam.name)],
+                  ).method(
+                    FirestoreSymbols.getMethod,
+                  ),
+                )
+                .statement,
+            const Reference(resultVarName).method(FirestoreSymbols.dataMethod).returned.statement,
+          ]);
+      },
+    );
+  }
+
   Method get addDocumentMethod {
     final modelRef = modelReference;
     final modelVarName = modelRef.symbol!.camelCase;
@@ -165,29 +194,39 @@ extension on Collection {
     );
   }
 
-  Method get getDocumentMethod {
-    final modelIdParam = this.modelIdParam;
-    const resultVarName = 'result';
+  Method get setDocumentMethod {
+    final modelRef = modelReference;
+    final modelVarName = modelRef.symbol!.camelCase;
+    final idVarName = modelIdReference.symbol!.camelCase;
 
     return Method(
       (m) {
         m
-          ..name = getDocumentMethodName
+          ..name = setDocumentMethodName
           ..modifier = MethodModifier.async
-          ..returns = BasicTypes.futureOf(modelReference.nullSafe)
-          ..requiredParameters.add(modelIdParam)
+          ..returns = BasicTypes.futureOf(BasicTypes.void$)
+          ..requiredParameters.add(
+            Parameter(
+              (p) => p
+                ..name = modelVarName
+                ..type = modelRef,
+            ),
+          )
           ..body = Block.of([
-            declareFinal(resultVarName)
-                .assign(
-                  _referenceServiceInstanceReference.awaited.method(
-                    documentReferenceMethodName,
-                    positionalArguments: [Reference(modelIdParam.name)],
-                  ).method(
-                    FirestoreSymbols.getMethod,
-                  ),
-                )
-                .statement,
-            const Reference(resultVarName).method(FirestoreSymbols.dataMethod).returned.statement,
+            declareFinal(idVarName).assign(Reference(modelVarName).property(modelIdFieldName)).statement,
+            const Reference('assert').call(
+              [
+                Reference(idVarName).property(modelIdValueFieldName).isNotEmpty,
+                literalString('$modelVarName must have a $idVarName: \$$modelVarName'),
+              ],
+            ).statement,
+            _referenceServiceInstanceReference.awaited.method(
+              documentReferenceMethodName,
+              positionalArguments: [Reference(idVarName)],
+            ).method(
+              FirestoreSymbols.setMethod,
+              positionalArguments: [Reference(modelVarName)],
+            ).statement,
           ]);
       },
     );

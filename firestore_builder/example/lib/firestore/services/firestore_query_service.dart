@@ -19,14 +19,23 @@ class FirestoreQueryService {
 
   final FirestoreReferenceService _firestoreReferenceService;
 
+  Future<User?> getUser(UserId userId) async {
+    final result = await _firestoreReferenceService.userReference(userId).get();
+    return result.data();
+  }
+
   Future<String> addUser(User user) async {
     final result = await _firestoreReferenceService.usersCollection().add(user);
     return result.id;
   }
 
-  Future<User?> getUser(UserId userId) async {
-    final result = await _firestoreReferenceService.userReference(userId).get();
-    return result.data();
+  Future<void> setUser(User user) async {
+    final userId = user.userId;
+    assert(
+      userId.value.isNotEmpty,
+      'user must have a userId: $user',
+    );
+    await _firestoreReferenceService.userReference(userId).set(user);
   }
 
   Future<void> updateUser({
@@ -50,16 +59,25 @@ class FirestoreQueryService {
     await _firestoreReferenceService.userReference(userId).delete();
   }
 
+  Future<Message?> getMessage(MessageId messageId) async {
+    final result =
+        await _firestoreReferenceService.messageReference(messageId).get();
+    return result.data();
+  }
+
   Future<String> addMessage(Message message) async {
     final result =
         await _firestoreReferenceService.messagesCollection().add(message);
     return result.id;
   }
 
-  Future<Message?> getMessage(MessageId messageId) async {
-    final result =
-        await _firestoreReferenceService.messageReference(messageId).get();
-    return result.data();
+  Future<void> setMessage(Message message) async {
+    final messageId = message.messageId;
+    assert(
+      messageId.value.isNotEmpty,
+      'message must have a messageId: $message',
+    );
+    await _firestoreReferenceService.messageReference(messageId).set(message);
   }
 
   Future<void> updateMessage({

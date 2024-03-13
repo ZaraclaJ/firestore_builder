@@ -90,6 +90,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get modelClassName => modelName.pascalCase;
   String get modelIdClassName => '${modelClassName}Id';
   String get modelIdFieldName => modelIdClassName.camelCase;
+  String get modelIdValueFieldName => 'value';
   String get modelProviderName => '${modelClassName}Provider'.camelCase;
   String get modelStreamProviderName => '${modelClassName}StreamProvider'.camelCase;
   String get collectionProviderName => '${modelClassName}CollectionProvider'.camelCase;
@@ -120,9 +121,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
   String get documentStreamMethodName => '${_modelCamelName}Stream';
-  String get addDocumentMethodName => 'add$_modelPascalName';
-  String get deleteDocumentMethodName => 'delete$_modelPascalName';
   String get getDocumentMethodName => 'get$_modelPascalName';
+  String get addDocumentMethodName => 'add$_modelPascalName';
+  String get setDocumentMethodName => 'set$_modelPascalName';
+  String get deleteDocumentMethodName => 'delete$_modelPascalName';
   String get updateDocumentMethodName => 'update$_modelPascalName';
 
   @override
