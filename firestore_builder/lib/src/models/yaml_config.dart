@@ -45,32 +45,19 @@ The configuration file does not contain a correct clear section: $firestoreBuild
 ''');
     }
 
-    final yamlCollections = firestoreBuilderConfig[collectionsKey];
-    if (yamlCollections is! YamlList?) {
-      throw Exception('''
-The configuration file does not contain a correct collections section: $firestoreBuilderConfig
-''');
-    }
-
-    final yamlConfigLight = YamlConfig(
+    final configLight = YamlConfig(
       projectName: projectName,
       outputPath: outputPath,
       collections: const [],
       clear: clear ?? false,
     );
 
-    final collections = yamlCollections?.nodes
-            .whereType<YamlMap>()
-            .map(
-              (e) => Collection.fromYaml(
-                yamlMap: e,
-                configLight: yamlConfigLight,
-              ),
-            )
-            .toList() ??
-        [];
+    final collections = firestoreBuilderConfig.collections(
+      configLight: configLight,
+      currentPath: [],
+    );
 
-    return yamlConfigLight.copyWithCollections(collections);
+    return configLight.copyWithCollections(collections);
   }
 
   YamlConfig copyWithCollections(List<Collection> collections) {
@@ -127,6 +114,34 @@ The configuration file does not contain a correct collections section: $firestor
         projectName,
         clear,
       ];
+}
+
+extension YamlMapExtensions on YamlMap {
+  List<Collection> collections({
+    required YamlConfig configLight,
+    required List<Collection> currentPath,
+  }) {
+    final yamlMap = this;
+    final yamlCollections = yamlMap[collectionsKey] ?? yamlMap[subCollectionsKey];
+    if (yamlCollections is! YamlList?) {
+      throw Exception('''
+The configuration file does not contain a correct collections section: $yamlMap
+''');
+    }
+
+    final collections = yamlCollections?.nodes.whereType<YamlMap>().map(
+          (y) {
+            return Collection.fromYaml(
+              yamlMap: y,
+              configLight: configLight,
+              currentPath: currentPath,
+            );
+          },
+        ).toList() ??
+        [];
+
+    return collections;
+  }
 }
 
 class ServiceClass {

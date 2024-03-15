@@ -15,29 +15,30 @@ class Collection extends Equatable {
     required this.modelName,
     required this.fields,
     required this.subCollections,
+    required this.collectionPath,
     required this.configLight,
   });
 
   factory Collection.fromYaml({
     required YamlMap yamlMap,
     required YamlConfig configLight,
+    required List<Collection> currentPath,
   }) {
-    final keys = yamlMap.keys.whereType<String>();
-    if (keys.length != 1) {
-      throw Exception(
-        '''
-Invalid collection definition, there should be only one key: $yamlMap
-''',
-      );
-    }
-
-    final name = keys.first;
-
-    final collectionMap = yamlMap[name];
+    final collectionMap = yamlMap[collectionKey];
     if (collectionMap is! YamlMap) {
       throw Exception(
         '''
 Invalid collection definition, missing or invalid collection map: $yamlMap
+''',
+      );
+    }
+
+    final name = collectionMap[collectionNameKey];
+    if (name is! String) {
+      throw Exception(
+        '''
+Invalid collection definition, missing or invalid collection_name key: $collectionMap
+
 ''',
       );
     }
@@ -68,19 +69,31 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
             .toList() ??
         const [];
 
-    return Collection(
+    final collection = Collection(
       name: name,
       modelName: modelName,
       fields: fields,
       subCollections: const [],
+      collectionPath: currentPath,
       configLight: configLight,
     );
+
+    final subCollections = yamlMap.collections(
+      configLight: configLight,
+      currentPath: [
+        ...currentPath,
+        collection,
+      ],
+    );
+
+    return collection._copyWithSubCollections(subCollections);
   }
 
   final String name;
   final String modelName;
   final List<CollectionField> fields;
   final List<Collection> subCollections;
+  final List<Collection> collectionPath;
   final YamlConfig configLight;
 
   String get _camelName => name.camelCase;
@@ -141,6 +154,18 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
           ..name = FirestoreSymbols.whereMethod
           ..type = FirestoreTypes.whereFunctionOf(modelReference),
       );
+
+  Collection _copyWithSubCollections(List<Collection> subCollections) {
+    final collection = this;
+    return Collection(
+      name: collection.name,
+      modelName: collection.modelName,
+      fields: collection.fields,
+      configLight: collection.configLight,
+      collectionPath: collection.collectionPath,
+      subCollections: subCollections,
+    );
+  }
 
   @override
   List<Object> get props => [

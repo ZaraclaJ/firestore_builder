@@ -1,17 +1,13 @@
 import 'package:example/firebase_options.dart';
-import 'package:example/firestore/models/user.dart';
+import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
-import 'package:example/firestore/states/user_states.dart';
+import 'package:example/firestore/states/team_states.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final nameProvider = StateProvider.autoDispose<String>(
   (ref) => '',
-);
-
-final ageProvider = StateProvider.autoDispose<int>(
-  (ref) => 18,
 );
 
 void main() async {
@@ -64,15 +60,11 @@ class MyHomePage extends ConsumerWidget {
               child: NameInput(),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
-              child: AgeInput(),
-            ),
-            Padding(
               padding: EdgeInsets.all(8),
-              child: AddUserButton(),
+              child: AddTeamButton(),
             ),
             Expanded(
-              child: UserList(),
+              child: TeamList(),
             ),
           ],
         ),
@@ -88,7 +80,7 @@ class NameInput extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return TextField(
       decoration: const InputDecoration(
-        labelText: 'User name',
+        labelText: 'Team name',
       ),
       onChanged: (value) {
         ref.read(nameProvider.notifier).state = value;
@@ -97,42 +89,8 @@ class NameInput extends ConsumerWidget {
   }
 }
 
-class AgeInput extends ConsumerWidget {
-  const AgeInput({
-    this.min = 18,
-    this.max = 50,
-    super.key,
-  });
-
-  final int min;
-  final int max;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final age = ref.watch(ageProvider);
-    return Row(
-      children: [
-        const Text('Age:'),
-        Text(age.toString()),
-        Expanded(
-          child: Slider(
-            value: age.toDouble(),
-            min: min.toDouble(),
-            max: max.toDouble(),
-            divisions: 100,
-            label: age.toString(),
-            onChanged: (value) {
-              ref.read(ageProvider.notifier).state = value.toInt();
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class AddUserButton extends ConsumerWidget {
-  const AddUserButton({super.key});
+class AddTeamButton extends ConsumerWidget {
+  const AddTeamButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -141,48 +99,48 @@ class AddUserButton extends ConsumerWidget {
           ? null
           : () {
               final name = ref.read(nameProvider);
-              final age = ref.read(ageProvider);
-              final user = User(
+              final team = Team(
                 name: name,
-                age: age,
+                userCount: 0,
+                createdAt: DateTime.now(),
               );
-              ref.read(firestoreQueryServiceProvider).addUser(user);
-              ref.invalidate(firestoreQueryServiceProvider);
+              ref.read(firestoreQueryServiceProvider).addTeam(team);
+              ref.invalidate(nameProvider);
             },
       child: const Text('Add'),
     );
   }
 }
 
-class UserList extends ConsumerWidget {
-  const UserList({super.key});
+class TeamList extends ConsumerWidget {
+  const TeamList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userList = ref.watch(userCollectionProvider);
-    if (userList == null) {
+    final teamList = ref.watch(teamCollectionProvider);
+    if (teamList == null) {
       return const CircularProgressIndicator();
     }
 
-    if (userList.isEmpty) {
-      return const Text('No users in database. Add some users.');
+    if (teamList.isEmpty) {
+      return const Text('No team in database. Add some teams.');
     }
 
     return ListView.separated(
-      itemCount: userList.length,
+      itemCount: teamList.length,
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
-        final user = userList[index];
+        final team = teamList[index];
         return ListTile(
-          title: Text(user.name),
-          subtitle: Text(user.age.toString()),
+          title: Text(team.name),
+          subtitle: Text(team.description ?? 'No description'),
           trailing: IconButton(
             icon: const Icon(
               Icons.delete,
               color: Colors.red,
             ),
             onPressed: () {
-              ref.read(firestoreQueryServiceProvider).deleteUser(user.userId);
+              ref.read(firestoreQueryServiceProvider).deleteTeam(team.teamId);
             },
           ),
         );

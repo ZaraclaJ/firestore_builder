@@ -2,14 +2,32 @@ firestore_builder:
   output: test/output
   clear: True
   collections:
-    - users:
-        model_name: user
+    - collection:
+        collection_name: teams
+        model_name: team
         fields:
           - name: String
-          - current_job: String?
-          - age: int
-    - messages:
-        model_name: message
+          - description: String?
+          - user_count: int
+          - created_at: DateTime
+      sub_collections:
+        - collection:
+            collection_name: users
+            model_name: user
+            fields:
+              - name: String
+              - current_job: String?
+              - age: int
+        - collection:
+            collection_name: messages
+            model_name: message
+            fields:
+              - content: String
+              - date: DateTime
+    - collection:
+        collection_name: tasks
+        model_name: task
         fields:
-          - content: String
-          - date: DateTime
+          - name: String
+          - description: String?
+          - done: bool
