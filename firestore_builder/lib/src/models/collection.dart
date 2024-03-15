@@ -124,6 +124,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get documentStreamMethodName => '${_modelCamelName}Stream';
 
   String get getCollectionMethodName => 'get${_pascalName}Collection';
+  String get getCollectionWhereMethodName => 'get${_pascalName}CollectionWhere';
   String get getDocumentMethodName => 'get$_modelPascalName';
   String get addDocumentMethodName => 'add$_modelPascalName';
   String get setDocumentMethodName => 'set$_modelPascalName';

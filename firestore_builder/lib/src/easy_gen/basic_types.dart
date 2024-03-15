@@ -67,6 +67,16 @@ abstract class FirestoreTypes {
   );
 
   /// CollectionReference<ref>
+  static TypeReference queryOf(Reference ref) {
+    return TypeReference(
+      (type) => type
+        ..symbol = FirestoreSymbols.queryClass
+        ..url = BasicPackages.cloudFirestore
+        ..types.add(ref),
+    );
+  }
+
+  /// CollectionReference<ref>
   static TypeReference collectionReferenceOf(Reference ref) {
     return TypeReference(
       (type) => type

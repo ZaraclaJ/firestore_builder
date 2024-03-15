@@ -74,6 +74,7 @@ Class _queryServiceClass({
           ...config.collections.expand(
             (c) => [
               c.getCollectionMethod,
+              c.getCollectionWhereMethod,
               c.getDocumentMethod,
               c.addDocumentMethod,
               c.setDocumentMethod,
@@ -180,18 +181,81 @@ extension on Collection {
                       ),
                 )
                 .statement,
-            const Reference(resultVarName)
-                .property(FirestoreSymbols.docsProperty)
-                .map(
-                  parameters: [snapshotVarName],
-                  body: const Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
-                )
-                .toList()
-                .returned
-                .statement,
+            _returnDocsResult(
+              resultVarName: resultVarName,
+              snapshotVarName: snapshotVarName,
+            ),
           ]);
       },
     );
+  }
+
+  Method get getCollectionWhereMethod {
+    const collectionVarName = 'collection';
+    const resultVarName = 'result';
+    const snapshotVarName = 'snapshot';
+    const whereParameterName = FirestoreSymbols.whereMethod;
+
+    return Method(
+      (m) {
+        m
+          ..name = getCollectionWhereMethodName
+          ..modifier = MethodModifier.async
+          ..returns = BasicTypes.futureOf(BasicTypes.listOf(modelReference))
+          ..optionalParameters.add(
+            Parameter(
+              (p) => p
+                ..named = true
+                ..required = true
+                ..name = whereParameterName
+                ..type = FunctionType((f) {
+                  f
+                    ..returnType = FirestoreTypes.queryOf(modelReference)
+                    ..requiredParameters.add(
+                      FirestoreTypes.collectionReferenceOf(modelReference),
+                    );
+                }),
+            ),
+          )
+          ..body = Block.of([
+            declareFinal(collectionVarName)
+                .assign(
+                  _referenceServiceInstanceReference.method(
+                    collectionReferenceMethodName,
+                  ),
+                )
+                .statement,
+            declareFinal(resultVarName)
+                .assign(
+                  const Reference(whereParameterName).awaited.call(
+                    [const Reference(collectionVarName)],
+                  ).method(
+                    FirestoreSymbols.getMethod,
+                  ),
+                )
+                .statement,
+            _returnDocsResult(
+              resultVarName: resultVarName,
+              snapshotVarName: snapshotVarName,
+            ),
+          ]);
+      },
+    );
+  }
+
+  Code _returnDocsResult({
+    required String resultVarName,
+    required String snapshotVarName,
+  }) {
+    return Reference(resultVarName)
+        .property(FirestoreSymbols.docsProperty)
+        .map(
+          parameters: [snapshotVarName],
+          body: Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
+        )
+        .toList()
+        .returned
+        .statement;
   }
 
   Method get addDocumentMethod {

@@ -46,6 +46,9 @@ abstract class BasicSymbols {
 }
 
 abstract class FirestoreSymbols {
+  /// 'Query'
+  static const String queryClass = 'Query';
+
   /// 'FirebaseFirestore'
   static const String firebaseFirestoreClass = 'FirebaseFirestore';
 
@@ -84,6 +87,9 @@ abstract class FirestoreSymbols {
 
   /// 'delete'
   static const String deleteMethod = 'delete';
+
+  /// 'delete'
+  static const String whereMethod = 'where';
 
   /// 'doc'
   static const String docMethod = 'doc';

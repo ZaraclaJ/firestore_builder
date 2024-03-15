@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:firestore_builder/test/output/services/firestore_reference_service.dart';
@@ -21,6 +22,13 @@ class FirestoreQueryService {
 
   Future<List<User>> getUsersCollection() async {
     final result = await _firestoreReferenceService.usersCollection().get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
+  }
+
+  Future<List<User>> getUsersCollectionWhere(
+      {required Query<User> Function(CollectionReference<User>) where}) async {
+    final collection = _firestoreReferenceService.usersCollection();
+    final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
@@ -66,6 +74,14 @@ class FirestoreQueryService {
 
   Future<List<Message>> getMessagesCollection() async {
     final result = await _firestoreReferenceService.messagesCollection().get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
+  }
+
+  Future<List<Message>> getMessagesCollectionWhere(
+      {required Query<Message> Function(CollectionReference<Message>)
+          where}) async {
+    final collection = _firestoreReferenceService.messagesCollection();
+    final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
