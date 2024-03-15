@@ -1,5 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
+import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
@@ -121,6 +123,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get documentReferenceMethodName => '${_modelCamelName}Reference';
 
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
+  String get collectionWhereStreamMethodName => '${_camelName}CollectionWhereStream';
   String get documentStreamMethodName => '${_modelCamelName}Stream';
 
   String get getCollectionMethodName => 'get${_pascalName}Collection';
@@ -130,6 +133,14 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   String get setDocumentMethodName => 'set$_modelPascalName';
   String get deleteDocumentMethodName => 'delete$_modelPascalName';
   String get updateDocumentMethodName => 'update$_modelPascalName';
+
+  Parameter get whereFunctionParameter => Parameter(
+        (p) => p
+          ..named = true
+          ..required = true
+          ..name = FirestoreSymbols.whereMethod
+          ..type = FirestoreTypes.whereFunctionOf(modelReference),
+      );
 
   @override
   List<Object> get props => [

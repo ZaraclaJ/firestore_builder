@@ -72,8 +72,9 @@ Class _streamServiceClass({
         ..methods.addAll([
           ...config.collections.expand(
             (c) => [
-              c.documentStreamMethod,
               c.collectionStreamMethod,
+              c.collectionWhereStreamMethod,
+              c.documentStreamMethod,
             ],
           ),
         ]);
@@ -101,22 +102,43 @@ extension on Collection {
         m
           ..name = collectionStreamMethodName
           ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
-          ..body = _referenceServiceInstanceReference
-              .method(collectionReferenceMethodName)
-              .method(FirestoreSymbols.snapshotsMethod)
-              .map(
-                parameters: [eventVarName],
-                body: const Reference(eventVarName)
-                    .property(FirestoreSymbols.docsProperty)
-                    .map(
-                      parameters: [snapshotVarName],
-                      body: const Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
-                    )
-                    .toList()
-                    .code,
-              )
-              .returned
-              .statement;
+          ..body = _referenceServiceInstanceReference.method(collectionReferenceMethodName).returnSnapshotsMapDocs(
+                eventVarName: eventVarName,
+                snapshotVarName: snapshotVarName,
+              );
+      },
+    );
+  }
+
+  Method get collectionWhereStreamMethod {
+    final modelRef = modelReference;
+
+    const collectionVarName = 'collection';
+    const eventVarName = 'event';
+    const snapshotVarName = 'snapshot';
+    final whereFunctionParameter = this.whereFunctionParameter;
+
+    return Method(
+      (m) {
+        m
+          ..name = collectionWhereStreamMethodName
+          ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
+          ..optionalParameters.add(whereFunctionParameter)
+          ..body = Block.of([
+            declareFinal(collectionVarName)
+                .assign(
+                  _referenceServiceInstanceReference.method(
+                    collectionReferenceMethodName,
+                  ),
+                )
+                .statement,
+            Reference(whereFunctionParameter.name).call(
+              [const Reference(collectionVarName)],
+            ).returnSnapshotsMapDocs(
+              eventVarName: eventVarName,
+              snapshotVarName: snapshotVarName,
+            ),
+          ]);
       },
     );
   }
@@ -145,5 +167,27 @@ extension on Collection {
               .statement;
       },
     );
+  }
+}
+
+extension on Expression {
+  Code returnSnapshotsMapDocs({
+    required String eventVarName,
+    required String snapshotVarName,
+  }) {
+    return method(FirestoreSymbols.snapshotsMethod)
+        .map(
+          parameters: [eventVarName],
+          body: Reference(eventVarName)
+              .property(FirestoreSymbols.docsProperty)
+              .map(
+                parameters: [snapshotVarName],
+                body: Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
+              )
+              .toList()
+              .code,
+        )
+        .returned
+        .statement;
   }
 }

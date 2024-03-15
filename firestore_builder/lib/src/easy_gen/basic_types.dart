@@ -115,6 +115,17 @@ abstract class FirestoreTypes {
         ..isNullable = isNullable,
     );
   }
+
+  /// Query<model> Function(CollectionReference<model>)
+  static Reference whereFunctionOf(Reference model) {
+    return FunctionType((f) {
+      f
+        ..returnType = FirestoreTypes.queryOf(model)
+        ..requiredParameters.add(
+          FirestoreTypes.collectionReferenceOf(model),
+        );
+    });
+  }
 }
 
 abstract class RiverpodTypes {

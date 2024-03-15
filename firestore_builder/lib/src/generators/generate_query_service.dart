@@ -194,7 +194,7 @@ extension on Collection {
     const collectionVarName = 'collection';
     const resultVarName = 'result';
     const snapshotVarName = 'snapshot';
-    const whereParameterName = FirestoreSymbols.whereMethod;
+    final whereFunctionParameter = this.whereFunctionParameter;
 
     return Method(
       (m) {
@@ -202,21 +202,7 @@ extension on Collection {
           ..name = getCollectionWhereMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.listOf(modelReference))
-          ..optionalParameters.add(
-            Parameter(
-              (p) => p
-                ..named = true
-                ..required = true
-                ..name = whereParameterName
-                ..type = FunctionType((f) {
-                  f
-                    ..returnType = FirestoreTypes.queryOf(modelReference)
-                    ..requiredParameters.add(
-                      FirestoreTypes.collectionReferenceOf(modelReference),
-                    );
-                }),
-            ),
-          )
+          ..optionalParameters.add(whereFunctionParameter)
           ..body = Block.of([
             declareFinal(collectionVarName)
                 .assign(
@@ -227,7 +213,7 @@ extension on Collection {
                 .statement,
             declareFinal(resultVarName)
                 .assign(
-                  const Reference(whereParameterName).awaited.call(
+                  Reference(whereFunctionParameter.name).awaited.call(
                     [const Reference(collectionVarName)],
                   ).method(
                     FirestoreSymbols.getMethod,
