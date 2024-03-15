@@ -82,6 +82,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final YamlConfig configLight;
 
   String get _camelName => name.camelCase;
+  String get _pascalName => name.pascalCase;
 
   String get _modelCamelName => modelName.camelCase;
   String get _modelPascalName => modelName.pascalCase;
@@ -121,6 +122,8 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   String get collectionStreamMethodName => '${_camelName}CollectionStream';
   String get documentStreamMethodName => '${_modelCamelName}Stream';
+
+  String get getCollectionMethodName => 'get${_pascalName}Collection';
   String get getDocumentMethodName => 'get$_modelPascalName';
   String get addDocumentMethodName => 'add$_modelPascalName';
   String get setDocumentMethodName => 'set$_modelPascalName';

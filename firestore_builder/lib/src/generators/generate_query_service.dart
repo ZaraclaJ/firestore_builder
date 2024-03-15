@@ -73,6 +73,7 @@ Class _queryServiceClass({
         ..methods.addAll([
           ...config.collections.expand(
             (c) => [
+              c.getCollectionMethod,
               c.getDocumentMethod,
               c.addDocumentMethod,
               c.setDocumentMethod,
@@ -152,6 +153,42 @@ extension on Collection {
                 )
                 .statement,
             const Reference(resultVarName).method(FirestoreSymbols.dataMethod).returned.statement,
+          ]);
+      },
+    );
+  }
+
+  Method get getCollectionMethod {
+    const resultVarName = 'result';
+    const snapshotVarName = 'snapshot';
+
+    return Method(
+      (m) {
+        m
+          ..name = getCollectionMethodName
+          ..modifier = MethodModifier.async
+          ..returns = BasicTypes.futureOf(BasicTypes.listOf(modelReference))
+          ..body = Block.of([
+            declareFinal(resultVarName)
+                .assign(
+                  _referenceServiceInstanceReference.awaited
+                      .method(
+                        collectionReferenceMethodName,
+                      )
+                      .method(
+                        FirestoreSymbols.getMethod,
+                      ),
+                )
+                .statement,
+            const Reference(resultVarName)
+                .property(FirestoreSymbols.docsProperty)
+                .map(
+                  parameters: [snapshotVarName],
+                  body: const Reference(snapshotVarName).method(FirestoreSymbols.dataMethod).code,
+                )
+                .toList()
+                .returned
+                .statement,
           ]);
       },
     );

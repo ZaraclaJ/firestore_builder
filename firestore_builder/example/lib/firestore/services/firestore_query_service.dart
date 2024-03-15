@@ -19,6 +19,11 @@ class FirestoreQueryService {
 
   final FirestoreReferenceService _firestoreReferenceService;
 
+  Future<List<User>> getUsersCollection(UserId userId) async {
+    final result = await _firestoreReferenceService.usersCollection().get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
+  }
+
   Future<User?> getUser(UserId userId) async {
     final result = await _firestoreReferenceService.userReference(userId).get();
     return result.data();
@@ -57,6 +62,11 @@ class FirestoreQueryService {
 
   Future<void> deleteUser(UserId userId) async {
     await _firestoreReferenceService.userReference(userId).delete();
+  }
+
+  Future<List<Message>> getMessagesCollection(MessageId messageId) async {
+    final result = await _firestoreReferenceService.messagesCollection().get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
   Future<Message?> getMessage(MessageId messageId) async {
