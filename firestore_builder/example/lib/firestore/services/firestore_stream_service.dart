@@ -38,48 +38,81 @@ class FirestoreStreamService {
         );
   }
 
-  Stream<Team?> teamStream(TeamId id) {
-    return _firestoreReferenceService.teamReference(id).snapshots().map(
+  Stream<Team?> teamStream({required TeamId teamId}) {
+    return _firestoreReferenceService
+        .teamReference(teamId: teamId)
+        .snapshots()
+        .map(
           (event) => event.data(),
         );
   }
 
-  Stream<List<User>> usersCollectionStream() {
-    return _firestoreReferenceService.usersCollection().snapshots().map(
+  Stream<List<User>> usersCollectionStream({required TeamId teamId}) {
+    return _firestoreReferenceService
+        .usersCollection(teamId: teamId)
+        .snapshots()
+        .map(
           (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
         );
   }
 
-  Stream<List<User>> usersCollectionWhereStream(
-      {required Query<User> Function(CollectionReference<User>) where}) {
-    final collection = _firestoreReferenceService.usersCollection();
+  Stream<List<User>> usersCollectionWhereStream({
+    required TeamId teamId,
+    required Query<User> Function(CollectionReference<User>) where,
+  }) {
+    final collection =
+        _firestoreReferenceService.usersCollection(teamId: teamId);
     return where(collection).snapshots().map(
           (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
         );
   }
 
-  Stream<User?> userStream(UserId id) {
-    return _firestoreReferenceService.userReference(id).snapshots().map(
+  Stream<User?> userStream({
+    required UserId userId,
+    required TeamId teamId,
+  }) {
+    return _firestoreReferenceService
+        .userReference(
+          userId: userId,
+          teamId: teamId,
+        )
+        .snapshots()
+        .map(
           (event) => event.data(),
         );
   }
 
-  Stream<List<Message>> messagesCollectionStream() {
-    return _firestoreReferenceService.messagesCollection().snapshots().map(
+  Stream<List<Message>> messagesCollectionStream({required TeamId teamId}) {
+    return _firestoreReferenceService
+        .messagesCollection(teamId: teamId)
+        .snapshots()
+        .map(
           (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
         );
   }
 
-  Stream<List<Message>> messagesCollectionWhereStream(
-      {required Query<Message> Function(CollectionReference<Message>) where}) {
-    final collection = _firestoreReferenceService.messagesCollection();
+  Stream<List<Message>> messagesCollectionWhereStream({
+    required TeamId teamId,
+    required Query<Message> Function(CollectionReference<Message>) where,
+  }) {
+    final collection =
+        _firestoreReferenceService.messagesCollection(teamId: teamId);
     return where(collection).snapshots().map(
           (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
         );
   }
 
-  Stream<Message?> messageStream(MessageId id) {
-    return _firestoreReferenceService.messageReference(id).snapshots().map(
+  Stream<Message?> messageStream({
+    required MessageId messageId,
+    required TeamId teamId,
+  }) {
+    return _firestoreReferenceService
+        .messageReference(
+          messageId: messageId,
+          teamId: teamId,
+        )
+        .snapshots()
+        .map(
           (event) => event.data(),
         );
   }
@@ -98,8 +131,11 @@ class FirestoreStreamService {
         );
   }
 
-  Stream<Task?> taskStream(TaskId id) {
-    return _firestoreReferenceService.taskReference(id).snapshots().map(
+  Stream<Task?> taskStream({required TaskId taskId}) {
+    return _firestoreReferenceService
+        .taskReference(taskId: taskId)
+        .snapshots()
+        .map(
           (event) => event.data(),
         );
   }

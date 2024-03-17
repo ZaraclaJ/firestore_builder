@@ -4,6 +4,7 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
+import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
@@ -91,21 +92,35 @@ extension on Collection {
 
   Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
 
+  String get _collectionReferenceMethodName => collectionReferenceMethod.name!;
+  List<Parameter> get _collectionReferenceMethodParameters => collectionReferenceMethod.optionalParameters.asList();
+
+  String get _documentReferenceMethodName => documentReferenceMethod.name!;
+  List<Parameter> get _documentReferenceMethodParameters => documentReferenceMethod.optionalParameters.asList();
+
   Method get collectionStreamMethod {
     final modelRef = modelReference;
 
     const eventVarName = 'event';
     const snapshotVarName = 'snapshot';
 
+    final parameters = _collectionReferenceMethodParameters;
+
     return Method(
       (m) {
         m
           ..name = collectionStreamMethodName
           ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
-          ..body = _referenceServiceInstanceReference.method(collectionReferenceMethodName).returnSnapshotsMapDocs(
-                eventVarName: eventVarName,
-                snapshotVarName: snapshotVarName,
-              );
+          ..optionalParameters.addAll(parameters)
+          ..body = _referenceServiceInstanceReference.method(
+            _collectionReferenceMethodName,
+            namedArguments: {
+              for (final parameter in parameters) parameter.name: Reference(parameter.name),
+            },
+          ).returnSnapshotsMapDocs(
+            eventVarName: eventVarName,
+            snapshotVarName: snapshotVarName,
+          );
       },
     );
   }
@@ -118,17 +133,25 @@ extension on Collection {
     const snapshotVarName = 'snapshot';
     final whereFunctionParameter = this.whereFunctionParameter;
 
+    final parameters = _collectionReferenceMethodParameters;
+
     return Method(
       (m) {
         m
           ..name = collectionWhereStreamMethodName
           ..returns = BasicTypes.streamOf(BasicTypes.listOf(modelRef))
-          ..optionalParameters.add(whereFunctionParameter)
+          ..optionalParameters.addAll([
+            ...parameters,
+            whereFunctionParameter,
+          ])
           ..body = Block.of([
             declareFinal(collectionVarName)
                 .assign(
                   _referenceServiceInstanceReference.method(
-                    collectionReferenceMethodName,
+                    _collectionReferenceMethodName,
+                    namedArguments: {
+                      for (final parameter in parameters) parameter.name: Reference(parameter.name),
+                    },
                   ),
                 )
                 .statement,
@@ -152,11 +175,13 @@ extension on Collection {
         m
           ..name = documentStreamMethodName
           ..returns = BasicTypes.streamOf(modelRef.nullSafe)
-          ..requiredParameters.add(_idParameter)
+          ..optionalParameters.addAll(_documentReferenceMethodParameters)
           ..body = _referenceServiceInstanceReference
               .method(
-                documentReferenceMethodName,
-                positionalArguments: [Reference(_idParameter.name)],
+                _documentReferenceMethodName,
+                namedArguments: {
+                  for (final parameter in _documentReferenceMethodParameters) parameter.name: Reference(parameter.name),
+                },
               )
               .method(FirestoreSymbols.snapshotsMethod)
               .map(

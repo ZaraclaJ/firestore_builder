@@ -106,7 +106,7 @@ Field get _firestoreInstanceField {
   );
 }
 
-extension on Collection {
+extension ReferenceServiceCollectionExtensions on Collection {
   Method get collectionReferenceMethod {
     final modelRef = modelReference;
 
@@ -129,7 +129,7 @@ extension on Collection {
           ..name = collectionReferenceMethodName
           ..returns = FirestoreTypes.collectionReferenceOf(modelRef)
           ..optionalParameters.addAll(
-            pathParameters,
+            _pathParameters,
           )
           ..body = pathReference
               .method(
@@ -163,27 +163,6 @@ extension on Collection {
     );
   }
 
-  Parameter get modelIdParameter {
-    return Parameter(
-      (p) => p
-        ..name = modelIdFieldName
-        ..type = modelIdReference,
-    ).toRequired;
-  }
-
-  List<Parameter> get documentReferenceParameters {
-    return [
-      modelIdParameter,
-      ...collectionPath.map(
-        (c) => c.modelIdParameter,
-      ),
-    ];
-  }
-
-  List<Parameter> get pathParameters {
-    return collectionPath.lastOrNull?.documentReferenceParameters ?? [];
-  }
-
   Method get documentReferenceMethod {
     final modelRef = modelReference;
     final idVarName = modelIdFieldName;
@@ -194,7 +173,7 @@ extension on Collection {
           ..name = documentReferenceMethodName
           ..returns = FirestoreTypes.documentReferenceOf(modelRef)
           ..optionalParameters.addAll(
-            documentReferenceParameters,
+            _documentReferenceParameters,
           )
           ..body = Reference(collectionReferenceMethodName)
               .call([], {
@@ -209,5 +188,26 @@ extension on Collection {
               .statement;
       },
     );
+  }
+
+  Parameter get _modelIdParameter {
+    return Parameter(
+      (p) => p
+        ..name = modelIdFieldName
+        ..type = modelIdReference,
+    ).toRequired;
+  }
+
+  List<Parameter> get _documentReferenceParameters {
+    return [
+      _modelIdParameter,
+      ...collectionPath.map(
+        (c) => c._modelIdParameter,
+      ),
+    ];
+  }
+
+  List<Parameter> get _pathParameters {
+    return collectionPath.lastOrNull?._documentReferenceParameters ?? [];
   }
 }
