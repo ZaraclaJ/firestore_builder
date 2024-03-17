@@ -41,12 +41,14 @@ class FirestoreReferenceService {
     );
   }
 
-  DocumentReference<Team> teamReference(TeamId id) {
-    return teamsCollection().doc(id.value);
+  DocumentReference<Team> teamReference({required TeamId teamId}) {
+    return teamsCollection().doc(teamId.value);
   }
 
-  CollectionReference<User> usersCollection() {
-    return _firestore.collection(User.collectionKey).withConverter(
+  CollectionReference<User> usersCollection({required TeamId teamId}) {
+    return teamReference(teamId: teamId)
+        .collection(User.collectionKey)
+        .withConverter(
       fromFirestore: (
         snapshot,
         _,
@@ -62,12 +64,17 @@ class FirestoreReferenceService {
     );
   }
 
-  DocumentReference<User> userReference(UserId id) {
-    return usersCollection().doc(id.value);
+  DocumentReference<User> userReference({
+    required UserId userId,
+    required TeamId teamId,
+  }) {
+    return usersCollection(teamId: teamId).doc(userId.value);
   }
 
-  CollectionReference<Message> messagesCollection() {
-    return _firestore.collection(Message.collectionKey).withConverter(
+  CollectionReference<Message> messagesCollection({required TeamId teamId}) {
+    return teamReference(teamId: teamId)
+        .collection(Message.collectionKey)
+        .withConverter(
       fromFirestore: (
         snapshot,
         _,
@@ -83,8 +90,11 @@ class FirestoreReferenceService {
     );
   }
 
-  DocumentReference<Message> messageReference(MessageId id) {
-    return messagesCollection().doc(id.value);
+  DocumentReference<Message> messageReference({
+    required MessageId messageId,
+    required TeamId teamId,
+  }) {
+    return messagesCollection(teamId: teamId).doc(messageId.value);
   }
 
   CollectionReference<Task> tasksCollection() {
@@ -104,7 +114,7 @@ class FirestoreReferenceService {
     );
   }
 
-  DocumentReference<Task> taskReference(TaskId id) {
-    return tasksCollection().doc(id.value);
+  DocumentReference<Task> taskReference({required TaskId taskId}) {
+    return tasksCollection().doc(taskId.value);
   }
 }

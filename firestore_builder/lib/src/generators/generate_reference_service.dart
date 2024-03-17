@@ -115,12 +115,23 @@ extension on Collection {
     const fromFirestore = FirestoreSymbols.fromFirestoreParam;
     const toFirestore = FirestoreSymbols.toFirestoreParam;
 
+    final last = collectionPath.lastOrNull;
+    final pathReference = last == null
+        ? const Reference(firestoreInstanceName)
+        : Reference(last.documentReferenceMethod.name).call([], {
+            for (final parameterName in last.documentReferenceMethod.optionalParameters.map((p0) => p0.name))
+              parameterName: Reference(parameterName),
+          });
+
     return Method(
       (m) {
         m
           ..name = collectionReferenceMethodName
           ..returns = FirestoreTypes.collectionReferenceOf(modelRef)
-          ..body = const Reference(firestoreInstanceName)
+          ..optionalParameters.addAll(
+            pathParameters,
+          )
+          ..body = pathReference
               .method(
                 FirestoreSymbols.collectionMethod,
                 positionalArguments: [modelRef.property(collectionKeyName)],
@@ -152,27 +163,47 @@ extension on Collection {
     );
   }
 
+  Parameter get modelIdParameter {
+    return Parameter(
+      (p) => p
+        ..name = modelIdFieldName
+        ..type = modelIdReference,
+    ).toRequired;
+  }
+
+  List<Parameter> get documentReferenceParameters {
+    return [
+      modelIdParameter,
+      ...collectionPath.map(
+        (c) => c.modelIdParameter,
+      ),
+    ];
+  }
+
+  List<Parameter> get pathParameters {
+    return collectionPath.lastOrNull?.documentReferenceParameters ?? [];
+  }
+
   Method get documentReferenceMethod {
     final modelRef = modelReference;
-    const idVarName = 'id';
+    final idVarName = modelIdFieldName;
 
     return Method(
       (m) {
         m
           ..name = documentReferenceMethodName
           ..returns = FirestoreTypes.documentReferenceOf(modelRef)
-          ..requiredParameters.add(
-            Parameter(
-              (p) => p
-                ..name = idVarName
-                ..type = modelIdReference,
-            ),
+          ..optionalParameters.addAll(
+            documentReferenceParameters,
           )
           ..body = Reference(collectionReferenceMethodName)
-              .call([])
+              .call([], {
+                for (final parameterName in collectionReferenceMethod.optionalParameters.map((p) => p.name))
+                  parameterName: Reference(parameterName),
+              })
               .method(
                 FirestoreSymbols.docMethod,
-                positionalArguments: [const Reference(idVarName).property('value')],
+                positionalArguments: [Reference(idVarName).property('value')],
               )
               .returned
               .statement;
