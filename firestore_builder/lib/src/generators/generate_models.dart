@@ -31,6 +31,7 @@ extension ModelCollectionExtensions on Collection {
         library.body.addAll([
           _modelClass,
           _idClass,
+          if (collectionPath.isNotEmpty) _pathClass,
         ]);
       },
     ).buildLibrary(
@@ -179,5 +180,35 @@ extension ModelCollectionExtensions on Collection {
           );
       },
     ).buildClassConstructor(optional: false);
+  }
+
+  Class get _pathClass {
+    return Class(
+      (classBuilder) {
+        classBuilder
+          ..name = modelPathClassName
+          ..fields.add(
+            _pathIdField(withImport: false),
+          )
+          ..fields.addAll(
+            collectionPath.map(
+              (c) => c._pathIdField(withImport: true),
+            ),
+          );
+      },
+    ).buildClassConstructor();
+  }
+
+  Field _pathIdField({
+    required bool withImport,
+  }) {
+    return Field(
+      (field) {
+        field
+          ..name = modelIdFieldName
+          ..type = withImport ? modelIdReference : modelIdReference.withoutUrl
+          ..modifier = FieldModifier.final$;
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_builder/test/output/models/team.dart';
+import 'package:example/firestore/models/team.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message.freezed.dart';
