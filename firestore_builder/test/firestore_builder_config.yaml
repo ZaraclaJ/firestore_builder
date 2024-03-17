@@ -18,6 +18,12 @@ firestore_builder:
               - name: String
               - current_job: String?
               - age: int
+          sub_collections:
+            - collection:
+                collection_name: items
+                model_name: item
+                fields:
+                  - name: String
         - collection:
             collection_name: messages
             model_name: message

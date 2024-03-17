@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/firestore/models/item.dart';
 import 'package:example/firestore/models/message.dart';
 import 'package:example/firestore/models/task.dart';
 import 'package:example/firestore/models/team.dart';
@@ -75,6 +76,52 @@ class FirestoreStreamService {
         .userReference(
           userId: userId,
           teamId: teamId,
+        )
+        .snapshots()
+        .map(
+          (event) => event.data(),
+        );
+  }
+
+  Stream<List<Item>> itemsCollectionStream({
+    required UserId userId,
+    required TeamId teamId,
+  }) {
+    return _firestoreReferenceService
+        .itemsCollection(
+          userId: userId,
+          teamId: teamId,
+        )
+        .snapshots()
+        .map(
+          (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
+        );
+  }
+
+  Stream<List<Item>> itemsCollectionWhereStream({
+    required UserId userId,
+    required TeamId teamId,
+    required Query<Item> Function(CollectionReference<Item>) where,
+  }) {
+    final collection = _firestoreReferenceService.itemsCollection(
+      userId: userId,
+      teamId: teamId,
+    );
+    return where(collection).snapshots().map(
+          (event) => event.docs.map((snapshot) => snapshot.data()).toList(),
+        );
+  }
+
+  Stream<Item?> itemStream({
+    required ItemId itemId,
+    required TeamId teamId,
+    required UserId userId,
+  }) {
+    return _firestoreReferenceService
+        .itemReference(
+          itemId: itemId,
+          teamId: teamId,
+          userId: userId,
         )
         .snapshots()
         .map(

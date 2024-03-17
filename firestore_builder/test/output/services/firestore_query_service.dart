@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_builder/test/output/models/item.dart';
 import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/task.dart';
 import 'package:firestore_builder/test/output/models/team.dart';
@@ -126,6 +127,52 @@ class FirestoreQueryService {
 
   Future<void> deleteUser(UserId userId) async {
     await _firestoreReferenceService.userReference(userId).delete();
+  }
+
+  Future<List<Item>> getItemsCollection() async {
+    final result = await _firestoreReferenceService.itemsCollection().get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
+  }
+
+  Future<List<Item>> getItemsCollectionWhere(
+      {required Query<Item> Function(CollectionReference<Item>) where}) async {
+    final collection = _firestoreReferenceService.itemsCollection();
+    final result = await where(collection).get();
+    return result.docs.map((snapshot) => snapshot.data()).toList();
+  }
+
+  Future<Item?> getItem(ItemId itemId) async {
+    final result = await _firestoreReferenceService.itemReference(itemId).get();
+    return result.data();
+  }
+
+  Future<String> addItem(Item item) async {
+    final result = await _firestoreReferenceService.itemsCollection().add(item);
+    return result.id;
+  }
+
+  Future<void> setItem(Item item) async {
+    final itemId = item.itemId;
+    assert(
+      itemId.value.isNotEmpty,
+      'item must have a itemId: $item',
+    );
+    await _firestoreReferenceService.itemReference(itemId).set(item);
+  }
+
+  Future<void> updateItem({
+    required ItemId itemId,
+    UpdatedValue<String>? name,
+  }) async {
+    final data = {if (name != null) Item.nameFieldKey: name.value};
+    if (data.isEmpty) {
+      return;
+    }
+    await _firestoreReferenceService.itemReference(itemId).update(data);
+  }
+
+  Future<void> deleteItem(ItemId itemId) async {
+    await _firestoreReferenceService.itemReference(itemId).delete();
   }
 
   Future<List<Message>> getMessagesCollection() async {

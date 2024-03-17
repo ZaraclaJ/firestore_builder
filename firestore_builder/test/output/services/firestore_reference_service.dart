@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_builder/test/output/models/item.dart';
 import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/task.dart';
 import 'package:firestore_builder/test/output/models/team.dart';
@@ -69,6 +70,44 @@ class FirestoreReferenceService {
     required TeamId teamId,
   }) {
     return usersCollection(teamId: teamId).doc(userId.value);
+  }
+
+  CollectionReference<Item> itemsCollection({
+    required UserId userId,
+    required TeamId teamId,
+  }) {
+    return userReference(
+      userId: userId,
+      teamId: teamId,
+    )
+        .collection(
+      Item.collectionKey,
+    )
+        .withConverter(
+      fromFirestore: (
+        snapshot,
+        _,
+      ) {
+        return Item.fromFirestore(snapshot);
+      },
+      toFirestore: (
+        value,
+        _,
+      ) {
+        return value.toFirestore();
+      },
+    );
+  }
+
+  DocumentReference<Item> itemReference({
+    required ItemId itemId,
+    required TeamId teamId,
+    required UserId userId,
+  }) {
+    return itemsCollection(
+      userId: userId,
+      teamId: teamId,
+    ).doc(itemId.value);
   }
 
   CollectionReference<Message> messagesCollection({required TeamId teamId}) {
