@@ -8,7 +8,7 @@ import 'package:firestore_builder/src/models/yaml_config.dart';
 Future<void> generateStates({
   required YamlConfig config,
 }) async {
-  final collections = config.collections;
+  final collections = config.allCollections;
 
   final futures = collections.map(
     (c) => generateLibrary(

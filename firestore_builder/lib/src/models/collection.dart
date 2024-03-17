@@ -96,6 +96,13 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
   final List<Collection> collectionPath;
   final YamlConfig configLight;
 
+  List<Collection> get allCollection {
+    return [
+      this,
+      ...subCollections.expand((c) => c.allCollection),
+    ].toList();
+  }
+
   String get _camelName => name.camelCase;
   String get _pascalName => name.pascalCase;
 
@@ -105,6 +112,7 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   String get modelClassName => modelName.pascalCase;
   String get modelIdClassName => '${modelClassName}Id';
+  String get modelPathClassName => '${modelClassName}Path';
   String get modelIdFieldName => modelIdClassName.camelCase;
   String get modelIdValueFieldName => 'value';
   String get modelProviderName => '${modelClassName}Provider'.camelCase;

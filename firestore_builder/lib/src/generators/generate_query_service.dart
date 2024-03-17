@@ -71,7 +71,7 @@ Class _queryServiceClass({
           config.referenceServiceClass.field,
         )
         ..methods.addAll([
-          ...config.collections.expand(
+          ...config.allCollections.expand(
             (c) => [
               c.getCollectionMethod,
               c.getCollectionWhereMethod,

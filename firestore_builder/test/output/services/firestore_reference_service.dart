@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/task.dart';
 import 'package:firestore_builder/test/output/models/team.dart';
+import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final firestoreProvider = Provider.autoDispose<FirebaseFirestore>(
@@ -41,6 +43,48 @@ class FirestoreReferenceService {
 
   DocumentReference<Team> teamReference(TeamId id) {
     return teamsCollection().doc(id.value);
+  }
+
+  CollectionReference<User> usersCollection() {
+    return _firestore.collection(User.collectionKey).withConverter(
+      fromFirestore: (
+        snapshot,
+        _,
+      ) {
+        return User.fromFirestore(snapshot);
+      },
+      toFirestore: (
+        value,
+        _,
+      ) {
+        return value.toFirestore();
+      },
+    );
+  }
+
+  DocumentReference<User> userReference(UserId id) {
+    return usersCollection().doc(id.value);
+  }
+
+  CollectionReference<Message> messagesCollection() {
+    return _firestore.collection(Message.collectionKey).withConverter(
+      fromFirestore: (
+        snapshot,
+        _,
+      ) {
+        return Message.fromFirestore(snapshot);
+      },
+      toFirestore: (
+        value,
+        _,
+      ) {
+        return value.toFirestore();
+      },
+    );
+  }
+
+  DocumentReference<Message> messageReference(MessageId id) {
+    return messagesCollection().doc(id.value);
   }
 
   CollectionReference<Task> tasksCollection() {

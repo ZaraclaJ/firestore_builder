@@ -86,7 +86,7 @@ Class _referenceServiceClass({
         ..name = config.referenceServiceClass.className
         ..fields.add(_firestoreInstanceField)
         ..methods.addAll([
-          ...config.collections.expand(
+          ...config.allCollections.expand(
             (c) => [
               c.collectionReferenceMethod,
               c.documentReferenceMethod,

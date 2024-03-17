@@ -71,9 +71,14 @@ The configuration file does not contain a correct clear section: $firestoreBuild
   }
 
   final String outputPath;
-  final List<Collection> collections;
   final String projectName;
   final bool clear;
+
+  final List<Collection> collections;
+
+  List<Collection> get allCollections {
+    return collections.expand((c) => c.allCollection).toList();
+  }
 
   String get modelsPath => '$outputPath/models';
   String get servicesPath => '$outputPath/services';

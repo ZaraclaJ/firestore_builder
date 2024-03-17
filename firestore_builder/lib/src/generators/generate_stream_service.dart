@@ -70,7 +70,7 @@ Class _streamServiceClass({
           config.referenceServiceClass.field,
         )
         ..methods.addAll([
-          ...config.collections.expand(
+          ...config.allCollections.expand(
             (c) => [
               c.collectionStreamMethod,
               c.collectionWhereStreamMethod,
