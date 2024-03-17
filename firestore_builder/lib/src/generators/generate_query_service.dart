@@ -5,6 +5,7 @@ import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/code_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
+import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
@@ -131,8 +132,13 @@ extension on Collection {
           ..type = modelIdReference,
       );
 
+  String get _collectionReferenceMethodName => collectionReferenceMethod.name!;
+  List<Parameter> get _collectionReferenceMethodParameters => collectionReferenceMethod.optionalParameters.asList();
+
+  String get _documentReferenceMethodName => documentReferenceMethod.name!;
+  List<Parameter> get _documentReferenceMethodParameters => documentReferenceMethod.optionalParameters.asList();
+
   Method get getDocumentMethod {
-    final modelIdParam = this.modelIdParam;
     const resultVarName = 'result';
 
     return Method(
@@ -141,13 +147,16 @@ extension on Collection {
           ..name = getDocumentMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(modelReference.nullSafe)
-          ..requiredParameters.add(modelIdParam)
+          ..optionalParameters.addAll(_documentReferenceMethodParameters)
           ..body = Block.of([
             declareFinal(resultVarName)
                 .assign(
                   _referenceServiceInstanceReference.awaited.method(
-                    documentReferenceMethodName,
-                    positionalArguments: [Reference(modelIdParam.name)],
+                    _documentReferenceMethodName,
+                    namedArguments: {
+                      for (final parameter in _documentReferenceMethodParameters)
+                        parameter.name: Reference(parameter.name),
+                    },
                   ).method(
                     FirestoreSymbols.getMethod,
                   ),
@@ -169,16 +178,19 @@ extension on Collection {
           ..name = getCollectionMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.listOf(modelReference))
+          ..optionalParameters.addAll(_collectionReferenceMethodParameters)
           ..body = Block.of([
             declareFinal(resultVarName)
                 .assign(
-                  _referenceServiceInstanceReference.awaited
-                      .method(
-                        collectionReferenceMethodName,
-                      )
-                      .method(
-                        FirestoreSymbols.getMethod,
-                      ),
+                  _referenceServiceInstanceReference.awaited.method(
+                    _collectionReferenceMethodName,
+                    namedArguments: {
+                      for (final parameter in _collectionReferenceMethodParameters)
+                        parameter.name: Reference(parameter.name),
+                    },
+                  ).method(
+                    FirestoreSymbols.getMethod,
+                  ),
                 )
                 .statement,
             _returnDocsResult(
@@ -202,12 +214,19 @@ extension on Collection {
           ..name = getCollectionWhereMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.listOf(modelReference))
-          ..optionalParameters.add(whereFunctionParameter)
+          ..optionalParameters.addAll([
+            ..._collectionReferenceMethodParameters,
+            whereFunctionParameter,
+          ])
           ..body = Block.of([
             declareFinal(collectionVarName)
                 .assign(
                   _referenceServiceInstanceReference.method(
-                    collectionReferenceMethodName,
+                    _collectionReferenceMethodName,
+                    namedArguments: {
+                      for (final parameter in _collectionReferenceMethodParameters)
+                        parameter.name: Reference(parameter.name),
+                    },
                   ),
                 )
                 .statement,
@@ -255,21 +274,24 @@ extension on Collection {
           ..name = addDocumentMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.string)
-          ..requiredParameters.add(
+          ..optionalParameters.addAll([
+            ..._collectionReferenceMethodParameters,
             Parameter(
               (p) => p
                 ..name = modelVarName
                 ..type = modelRef,
-            ),
-          )
+            ).toRequired,
+          ])
           ..body = Block.of([
             declareFinal(resultVarName)
                 .assign(
-                  _referenceServiceInstanceReference.awaited
-                      .method(
-                    collectionReferenceMethodName,
-                  )
-                      .method(
+                  _referenceServiceInstanceReference.awaited.method(
+                    _collectionReferenceMethodName,
+                    namedArguments: {
+                      for (final parameter in _collectionReferenceMethodParameters)
+                        parameter.name: Reference(parameter.name),
+                    },
+                  ).method(
                     FirestoreSymbols.addMethod,
                     positionalArguments: [Reference(modelVarName)],
                   ),
@@ -292,12 +314,15 @@ extension on Collection {
           ..name = setDocumentMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.void$)
-          ..requiredParameters.add(
-            Parameter(
-              (p) => p
-                ..name = modelVarName
-                ..type = modelRef,
-            ),
+          ..optionalParameters.addAll(
+            [
+              ..._documentReferenceMethodParameters,
+              Parameter(
+                (p) => p
+                  ..name = modelVarName
+                  ..type = modelRef,
+              ).toRequired,
+            ],
           )
           ..body = Block.of([
             declareFinal(idVarName).assign(Reference(modelVarName).property(modelIdFieldName)).statement,
@@ -308,8 +333,10 @@ extension on Collection {
               ],
             ).statement,
             _referenceServiceInstanceReference.awaited.method(
-              documentReferenceMethodName,
-              positionalArguments: [Reference(idVarName)],
+              _documentReferenceMethodName,
+              namedArguments: {
+                for (final parameter in _documentReferenceMethodParameters) parameter.name: Reference(parameter.name),
+              },
             ).method(
               FirestoreSymbols.setMethod,
               positionalArguments: [Reference(modelVarName)],
@@ -320,7 +347,6 @@ extension on Collection {
   }
 
   Method get updateDocumentMethod {
-    final modelIdParam = this.modelIdParam;
     const dataVarName = 'data';
 
     final parameters = fields.map(
@@ -334,7 +360,7 @@ extension on Collection {
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.void$)
           ..optionalParameters.addAll([
-            modelIdParam.toRequired,
+            ..._documentReferenceMethodParameters,
             ...parameters,
           ])
           ..body = Block.of([
@@ -351,8 +377,10 @@ extension on Collection {
                 .statement,
             const Reference('').returned.statement.ifBlock(const Reference(dataVarName).isEmpty.code),
             _referenceServiceInstanceReference.awaited.method(
-              documentReferenceMethodName,
-              positionalArguments: [Reference(modelIdParam.name)],
+              _documentReferenceMethodName,
+              namedArguments: {
+                for (final parameter in _documentReferenceMethodParameters) parameter.name: Reference(parameter.name),
+              },
             ).method(
               FirestoreSymbols.updateMethod,
               positionalArguments: [const Reference(dataVarName)],
@@ -363,19 +391,19 @@ extension on Collection {
   }
 
   Method get deleteDocumentMethod {
-    final modelIdParam = this.modelIdParam;
-
     return Method(
       (m) {
         m
           ..name = deleteDocumentMethodName
           ..modifier = MethodModifier.async
           ..returns = BasicTypes.futureOf(BasicTypes.void$)
-          ..requiredParameters.add(modelIdParam)
+          ..optionalParameters.addAll(_documentReferenceMethodParameters)
           ..body = _referenceServiceInstanceReference.awaited
               .method(
-                documentReferenceMethodName,
-                positionalArguments: [Reference(modelIdParam.name)],
+                _documentReferenceMethodName,
+                namedArguments: {
+                  for (final parameter in _documentReferenceMethodParameters) parameter.name: Reference(parameter.name),
+                },
               )
               .method(
                 FirestoreSymbols.deleteMethod,

@@ -84,12 +84,6 @@ Class _streamServiceClass({
 }
 
 extension on Collection {
-  Parameter get _idParameter => Parameter(
-        (p) => p
-          ..name = 'id'
-          ..type = modelIdReference,
-      );
-
   Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
 
   String get _collectionReferenceMethodName => collectionReferenceMethod.name!;
