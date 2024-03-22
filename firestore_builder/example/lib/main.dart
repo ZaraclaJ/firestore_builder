@@ -104,7 +104,7 @@ class AddTeamButton extends ConsumerWidget {
                 userCount: 0,
                 createdAt: DateTime.now(),
               );
-              ref.read(firestoreQueryServiceProvider).addTeam(team);
+              ref.read(firestoreQueryServiceProvider).addTeam(team: team);
               ref.invalidate(nameProvider);
             },
       child: const Text('Add'),
@@ -140,7 +140,9 @@ class TeamList extends ConsumerWidget {
               color: Colors.red,
             ),
             onPressed: () {
-              ref.read(firestoreQueryServiceProvider).deleteTeam(team.teamId);
+              ref.read(firestoreQueryServiceProvider).deleteTeam(
+                    teamId: team.teamId,
+                  );
             },
           ),
         );
