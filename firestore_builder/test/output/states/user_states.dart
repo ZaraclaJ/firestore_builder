@@ -1,34 +1,45 @@
+import 'package:firestore_builder/test/output/models/team.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:firestore_builder/test/output/services/firestore_stream_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userStreamProvider = StreamProvider.autoDispose.family<User?, UserId>(
+final userStreamProvider = StreamProvider.autoDispose.family<User?, UserPath>(
   (
     ref,
-    id,
+    userPath,
   ) {
     final service = ref.watch(firestoreStreamServiceProvider);
-    return service.userStream(id);
+    return service.userStream(
+      userId: userPath.userId,
+      teamId: userPath.teamId,
+    );
   },
 );
-final userProvider = Provider.autoDispose.family<User?, UserId>(
+final userProvider = Provider.autoDispose.family<User?, UserPath>(
   (
     ref,
-    id,
+    userPath,
   ) {
-    final stream = ref.watch(userStreamProvider(id));
+    final stream = ref.watch(userStreamProvider(userPath));
     return stream.value;
   },
 );
-final userCollectionStreamProvider = StreamProvider.autoDispose<List<User>>(
-  (ref) {
+final userCollectionStreamProvider =
+    StreamProvider.autoDispose.family<List<User>, TeamId>(
+  (
+    ref,
+    teamId,
+  ) {
     final service = ref.watch(firestoreStreamServiceProvider);
-    return service.usersCollectionStream();
+    return service.usersCollectionStream(teamId: teamId);
   },
 );
-final userCollectionProvider = Provider.autoDispose<List<User>?>(
-  (ref) {
-    final stream = ref.watch(userCollectionStreamProvider);
+final userCollectionProvider = Provider.autoDispose.family<List<User>?, TeamId>(
+  (
+    ref,
+    teamId,
+  ) {
+    final stream = ref.watch(userCollectionStreamProvider(teamId));
     return stream.value;
   },
 );

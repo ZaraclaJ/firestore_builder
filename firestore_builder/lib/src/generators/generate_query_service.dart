@@ -45,19 +45,19 @@ Field _queryServiceProvider({
     (f) => f
       ..name = config.queryServiceClass.providerName
       ..modifier = FieldModifier.final$
-      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
-        typeArguments: [
-          queryServiceReference,
-        ],
-        parameters: [refVarName],
-        body: queryServiceReference
-            .call([], {
-              config.referenceServiceClass.field.toParameter.publicName:
-                  const Reference(refVarName).watch(config.referenceServiceClass.providerReference),
-            })
-            .returned
-            .statement,
-      ).code,
+      ..assignment = RiverpodTypes.provider
+          .autoDisposeFamilyMethod(
+            state: queryServiceReference,
+            parameters: [refVarName],
+            body: queryServiceReference
+                .call([], {
+                  config.referenceServiceClass.field.toParameter.publicName:
+                      const Reference(refVarName).watch(config.referenceServiceClass.providerReference),
+                })
+                .returned
+                .statement,
+          )
+          .code,
   );
 }
 
@@ -125,12 +125,6 @@ Class _updatedValueClass({
 
 extension on Collection {
   Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
-
-  Parameter get modelIdParam => Parameter(
-        (p) => p
-          ..name = modelIdReference.symbol!.camelCase
-          ..type = modelIdReference,
-      );
 
   String get _collectionReferenceMethodName => collectionReferenceMethod.name!;
   List<Parameter> get _collectionReferenceMethodParameters => collectionReferenceMethod.optionalParameters.asList();

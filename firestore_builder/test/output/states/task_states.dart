@@ -5,18 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final taskStreamProvider = StreamProvider.autoDispose.family<Task?, TaskId>(
   (
     ref,
-    id,
+    taskId,
   ) {
     final service = ref.watch(firestoreStreamServiceProvider);
-    return service.taskStream(id);
+    return service.taskStream(taskId: taskId);
   },
 );
 final taskProvider = Provider.autoDispose.family<Task?, TaskId>(
   (
     ref,
-    id,
+    taskId,
   ) {
-    final stream = ref.watch(taskStreamProvider(id));
+    final stream = ref.watch(taskStreamProvider(taskId));
     return stream.value;
   },
 );

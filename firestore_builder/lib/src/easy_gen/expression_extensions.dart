@@ -62,14 +62,14 @@ extension ExpressionExtensions on Expression {
 }
 
 extension RiverpodExpressionExtensions on Expression {
-  Expression get autoDispose {
+  Expression get _autoDispose {
     return property(RiverpodSymbols.autoDispose);
   }
 
-  Expression autoDisposeMethod({
+  Expression _autoDisposeMethod({
     required List<String> parameters,
     required Code body,
-    required List<Reference> typeArguments,
+    required Reference state,
   }) {
     return method(
       RiverpodSymbols.autoDispose,
@@ -80,16 +80,25 @@ extension RiverpodExpressionExtensions on Expression {
           body: body,
         ),
       ],
-      typeArguments: typeArguments,
+      typeArguments: [state],
     );
   }
 
-  Expression familyMethod({
+  Expression autoDisposeFamilyMethod({
     required List<String> parameters,
     required Code body,
-    required List<Reference> typeArguments,
+    required Reference state,
+    Reference? arg,
   }) {
-    return method(
+    if (arg == null) {
+      return _autoDisposeMethod(
+        body: body,
+        parameters: parameters,
+        state: state,
+      );
+    }
+
+    return _autoDispose.method(
       RiverpodSymbols.family,
       positionalArguments: [
         Expressions.lambdaMethod(
@@ -98,7 +107,10 @@ extension RiverpodExpressionExtensions on Expression {
           body: body,
         ),
       ],
-      typeArguments: typeArguments,
+      typeArguments: [
+        state,
+        arg,
+      ],
     );
   }
 

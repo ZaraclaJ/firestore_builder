@@ -44,19 +44,19 @@ Field _streamServiceProvider({
     (f) => f
       ..name = config.streamServiceClass.providerName
       ..modifier = FieldModifier.final$
-      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
-        typeArguments: [
-          streamServiceReference,
-        ],
-        parameters: [refVarName],
-        body: streamServiceReference
-            .call([], {
-              config.referenceServiceClass.field.toParameter.publicName:
-                  const Reference(refVarName).watch(config.referenceServiceClass.providerReference.withoutUrl),
-            })
-            .returned
-            .statement,
-      ).code,
+      ..assignment = RiverpodTypes.provider
+          .autoDisposeFamilyMethod(
+            state: streamServiceReference,
+            parameters: [refVarName],
+            body: streamServiceReference
+                .call([], {
+                  config.referenceServiceClass.field.toParameter.publicName:
+                      const Reference(refVarName).watch(config.referenceServiceClass.providerReference.withoutUrl),
+                })
+                .returned
+                .statement,
+          )
+          .code,
   );
 }
 
@@ -83,7 +83,7 @@ Class _streamServiceClass({
   );
 }
 
-extension on Collection {
+extension StreamServiceCollectionExtensions on Collection {
   Reference get _referenceServiceInstanceReference => configLight.referenceServiceClass.fieldReference;
 
   String get _collectionReferenceMethodName => collectionReferenceMethod.name!;

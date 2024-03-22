@@ -41,13 +41,13 @@ Field _firestoreProvider({
     (f) => f
       ..name = config.firestoreProviderName
       ..modifier = FieldModifier.final$
-      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
-        typeArguments: [
-          FirestoreTypes.firebaseFirestore,
-        ],
-        parameters: ['ref'],
-        body: FirestoreTypes.firebaseFirestore.property('instance').returned.statement,
-      ).code,
+      ..assignment = RiverpodTypes.provider
+          .autoDisposeFamilyMethod(
+            state: FirestoreTypes.firebaseFirestore,
+            parameters: ['ref'],
+            body: FirestoreTypes.firebaseFirestore.property('instance').returned.statement,
+          )
+          .code,
   );
 }
 
@@ -61,19 +61,19 @@ Field _referenceServiceProvider({
     (f) => f
       ..name = config.referenceServiceClass.providerName
       ..modifier = FieldModifier.final$
-      ..assignment = RiverpodTypes.provider.autoDisposeMethod(
-        typeArguments: [
-          referenceServiceReference,
-        ],
-        parameters: [refVarName],
-        body: referenceServiceReference
-            .call([], {
-              _firestoreInstanceField.toParameter.publicName:
-                  const Reference(refVarName).watch(config.firestoreProviderReference.withoutUrl),
-            })
-            .returned
-            .statement,
-      ).code,
+      ..assignment = RiverpodTypes.provider
+          .autoDisposeFamilyMethod(
+            state: referenceServiceReference,
+            parameters: [refVarName],
+            body: referenceServiceReference
+                .call([], {
+                  _firestoreInstanceField.toParameter.publicName:
+                      const Reference(refVarName).watch(config.firestoreProviderReference.withoutUrl),
+                })
+                .returned
+                .statement,
+          )
+          .code,
   );
 }
 

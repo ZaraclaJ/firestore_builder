@@ -5,18 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final teamStreamProvider = StreamProvider.autoDispose.family<Team?, TeamId>(
   (
     ref,
-    id,
+    teamId,
   ) {
     final service = ref.watch(firestoreStreamServiceProvider);
-    return service.teamStream(id);
+    return service.teamStream(teamId: teamId);
   },
 );
 final teamProvider = Provider.autoDispose.family<Team?, TeamId>(
   (
     ref,
-    id,
+    teamId,
   ) {
-    final stream = ref.watch(teamStreamProvider(id));
+    final stream = ref.watch(teamStreamProvider(teamId));
     return stream.value;
   },
 );

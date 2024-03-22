@@ -103,6 +103,42 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
     ].toList();
   }
 
+  Parameter get documentFamilyParameter {
+    final Reference type;
+    if (collectionPath.isEmpty) {
+      type = modelIdReference;
+    } else {
+      type = modelPathReference;
+    }
+
+    return Parameter(
+      (p) => p
+        ..name = type.symbol!.camelCase
+        ..type = type,
+    );
+  }
+
+  Parameter? get collectionFamilyParameter {
+    if (collectionPath.isEmpty) {
+      return null;
+    }
+
+    final Reference type;
+    if (collectionPath.length == 1) {
+      final collection = collectionPath.first;
+      type = collection.modelIdReference;
+    } else {
+      final last = collectionPath.last;
+      type = last.modelPathReference;
+    }
+
+    return Parameter(
+      (p) => p
+        ..name = type.symbol!.camelCase
+        ..type = type,
+    );
+  }
+
   String get _camelName => name.camelCase;
   String get _pascalName => name.pascalCase;
 
@@ -137,6 +173,11 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
 
   Reference get modelIdReference => Reference(
         modelIdClassName.pascalCase,
+        _modelFileUrl,
+      );
+
+  Reference get modelPathReference => Reference(
+        modelPathClassName.pascalCase,
         _modelFileUrl,
       );
 
