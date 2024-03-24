@@ -1,9 +1,9 @@
+import 'package:example/constants/messages.dart';
 import 'package:example/constants/users.dart';
 import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/states/message_states.dart';
 import 'package:example/firestore/states/team_states.dart';
-import 'package:example/firestore/states/user_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,6 +44,33 @@ class _Layout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _TeamDetails(
+            teamId: teamId,
+          ),
+          Expanded(
+            child: _TabBarView(
+              teamId: teamId,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TeamDetails extends ConsumerWidget {
+  const _TeamDetails({
+    required this.teamId,
+  });
+
+  final TeamId teamId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final team = ref.watch(teamProvider(teamId));
     if (team == null) {
       return const Center(
@@ -51,18 +78,14 @@ class _Layout extends ConsumerWidget {
       );
     }
 
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Id : ${teamId.value}'),
           Text('Name : ${team.name}'),
           Text('Description : ${team.description}'),
-          Expanded(
-            child: _TabBarView(
-              teamId: teamId,
-            ),
-          ),
         ],
       ),
     );
@@ -125,7 +148,6 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
   Widget build(BuildContext context) {
     final service = ref.watch(firestoreQueryServiceProvider);
 
-    final users = ref.watch(userCollectionProvider(widget.teamId));
     return Column(
       children: [
         RangeSlider(
@@ -229,13 +251,15 @@ class _AddButton extends ConsumerWidget {
           icon: const Icon(Icons.add),
           label: index == 0 ? const Text('Add User') : const Text('Add Message'),
           onPressed: () async {
+            final service = ref.watch(firestoreQueryServiceProvider);
             if (index == 0) {
               // Add user
               final user = getRandomUser();
-              final service = ref.watch(firestoreQueryServiceProvider);
               await service.addUser(teamId: teamId, user: user);
             } else {
               // Add message
+              final message = getRandomMessage();
+              await service.addMessage(teamId: teamId, message: message);
             }
           },
         );
