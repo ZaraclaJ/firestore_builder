@@ -4,6 +4,7 @@ import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/states/message_states.dart';
 import 'package:example/firestore/states/team_states.dart';
+import 'package:example/pages/user_details_page.dart';
 import 'package:example/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -215,6 +216,16 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
                   return ListTile(
                     title: Text(user.name),
                     subtitle: Text(user.age.toString()),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (context) => UserDetailsPage(
+                            teamId: widget.teamId,
+                            userId: user.userId,
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               );
