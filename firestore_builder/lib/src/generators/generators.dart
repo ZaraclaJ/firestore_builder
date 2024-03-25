@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firestore_builder/src/extensions.dart/map_entry_extensions.dart';
 import 'package:firestore_builder/src/generators/clear_files.dart';
+import 'package:firestore_builder/src/generators/generate_freezed_converters.dart';
 import 'package:firestore_builder/src/generators/generate_models.dart';
 import 'package:firestore_builder/src/generators/generate_query_service.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
@@ -39,6 +40,7 @@ You can also indicate the path of your configuration file:
   }
 
   await Future.wait([
+    generateFreezedConverters(config: config),
     generateModels(config: config),
     generateReferenceService(config: config),
     generateStreamService(config: config),

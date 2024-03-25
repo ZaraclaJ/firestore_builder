@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/firestore/converters/freezed_converters.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team.freezed.dart';
@@ -12,7 +13,9 @@ class Team with _$Team {
   const factory Team({
     @JsonKey(name: Team.nameFieldKey) required String name,
     @JsonKey(name: Team.userCountFieldKey) required int userCount,
-    @JsonKey(name: Team.createdAtFieldKey) required DateTime createdAt,
+    @DateTimeConverter()
+    @JsonKey(name: Team.createdAtFieldKey)
+    required DateTime createdAt,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
     @JsonKey(
       includeFromJson: false,

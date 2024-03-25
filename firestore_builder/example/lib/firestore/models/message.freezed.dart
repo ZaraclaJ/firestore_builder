@@ -22,6 +22,7 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 mixin _$Message {
   @JsonKey(name: Message.contentFieldKey)
   String get content => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   @JsonKey(name: Message.dateFieldKey)
   DateTime? get date => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -39,7 +40,7 @@ abstract class $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @JsonKey(name: Message.dateFieldKey) DateTime? date,
+      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -97,7 +98,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @JsonKey(name: Message.dateFieldKey) DateTime? date,
+      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -142,7 +143,7 @@ class __$$MessageImplCopyWithImpl<$Res>
 class _$MessageImpl extends _Message {
   const _$MessageImpl(
       {@JsonKey(name: Message.contentFieldKey) required this.content,
-      @JsonKey(name: Message.dateFieldKey) this.date,
+      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) this.date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.messageId = const MessageId('')})
       : super._();
@@ -154,6 +155,7 @@ class _$MessageImpl extends _Message {
   @JsonKey(name: Message.contentFieldKey)
   final String content;
   @override
+  @DateTimeConverter()
   @JsonKey(name: Message.dateFieldKey)
   final DateTime? date;
   @override
@@ -197,7 +199,9 @@ class _$MessageImpl extends _Message {
 abstract class _Message extends Message {
   const factory _Message(
       {@JsonKey(name: Message.contentFieldKey) required final String content,
-      @JsonKey(name: Message.dateFieldKey) final DateTime? date,
+      @DateTimeConverter()
+      @JsonKey(name: Message.dateFieldKey)
+      final DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final MessageId messageId}) = _$MessageImpl;
   const _Message._() : super._();
@@ -208,6 +212,7 @@ abstract class _Message extends Message {
   @JsonKey(name: Message.contentFieldKey)
   String get content;
   @override
+  @DateTimeConverter()
   @JsonKey(name: Message.dateFieldKey)
   DateTime? get date;
   @override

@@ -125,6 +125,12 @@ abstract class FreezedSymbols {
 
   /// 'copyWith'
   static const String copyWithMethod = 'copyWith';
+
+  /// 'DateTimeConverter'
+  static const String dateTimeConverter = 'DateTimeConverter';
+
+  /// 'JsonConverter'
+  static const String jsonConverter = 'JsonConverter';
 }
 
 abstract class RiverpodSymbols {

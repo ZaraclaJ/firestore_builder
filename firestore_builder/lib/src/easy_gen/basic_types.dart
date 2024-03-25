@@ -1,6 +1,8 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
+import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
+import 'package:firestore_builder/src/models/yaml_config.dart';
 
 abstract class BasicTypes {
   /// 'T'
@@ -153,4 +155,30 @@ abstract class RiverpodTypes {
     RiverpodSymbols.streamProviderClass,
     BasicPackages.flutterRiverpod,
   );
+}
+
+abstract class FreezedTypes {
+  /// DateTimeConverter
+  static Reference dateTimeConverter({
+    required YamlConfig config,
+  }) =>
+      Reference(
+        FreezedSymbols.dateTimeConverter,
+        config.convertersPath.toPackageUrl(
+          projectName: config.projectName,
+        ),
+      );
+
+  /// JsonConverter<ref1, ref2>
+  static TypeReference jsonConverterOf(Reference ref1, Reference ref2) {
+    return TypeReference(
+      (type) => type
+        ..symbol = FreezedSymbols.jsonConverter
+        ..url = BasicPackages.freezedAnnotation
+        ..types.addAll([
+          ref1,
+          ref2,
+        ]),
+    );
+  }
 }

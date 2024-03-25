@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_builder/test/output/converters/freezed_converters.dart';
 import 'package:firestore_builder/test/output/models/team.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,7 +13,7 @@ part 'message.g.dart';
 class Message with _$Message {
   const factory Message({
     @JsonKey(name: Message.contentFieldKey) required String content,
-    @JsonKey(name: Message.dateFieldKey) required DateTime date,
+    @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,

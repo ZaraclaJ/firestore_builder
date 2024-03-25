@@ -24,6 +24,7 @@ mixin _$Team {
   String get name => throw _privateConstructorUsedError;
   @JsonKey(name: Team.userCountFieldKey)
   int get userCount => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   @JsonKey(name: Team.createdAtFieldKey)
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: Team.descriptionFieldKey)
@@ -46,7 +47,9 @@ abstract class $TeamCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: Team.nameFieldKey) String name,
       @JsonKey(name: Team.userCountFieldKey) int userCount,
-      @JsonKey(name: Team.createdAtFieldKey) DateTime createdAt,
+      @DateTimeConverter()
+      @JsonKey(name: Team.createdAtFieldKey)
+      DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
@@ -122,7 +125,9 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: Team.nameFieldKey) String name,
       @JsonKey(name: Team.userCountFieldKey) int userCount,
-      @JsonKey(name: Team.createdAtFieldKey) DateTime createdAt,
+      @DateTimeConverter()
+      @JsonKey(name: Team.createdAtFieldKey)
+      DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
@@ -184,7 +189,9 @@ class _$TeamImpl extends _Team {
   const _$TeamImpl(
       {@JsonKey(name: Team.nameFieldKey) required this.name,
       @JsonKey(name: Team.userCountFieldKey) required this.userCount,
-      @JsonKey(name: Team.createdAtFieldKey) required this.createdAt,
+      @DateTimeConverter()
+      @JsonKey(name: Team.createdAtFieldKey)
+      required this.createdAt,
       @JsonKey(name: Team.descriptionFieldKey) this.description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.createdAtFieldValue,
@@ -202,6 +209,7 @@ class _$TeamImpl extends _Team {
   @JsonKey(name: Team.userCountFieldKey)
   final int userCount;
   @override
+  @DateTimeConverter()
   @JsonKey(name: Team.createdAtFieldKey)
   final DateTime createdAt;
   @override
@@ -259,7 +267,9 @@ abstract class _Team extends Team {
   const factory _Team(
       {@JsonKey(name: Team.nameFieldKey) required final String name,
       @JsonKey(name: Team.userCountFieldKey) required final int userCount,
-      @JsonKey(name: Team.createdAtFieldKey) required final DateTime createdAt,
+      @DateTimeConverter()
+      @JsonKey(name: Team.createdAtFieldKey)
+      required final DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) final String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final FieldValue? createdAtFieldValue,
@@ -276,6 +286,7 @@ abstract class _Team extends Team {
   @JsonKey(name: Team.userCountFieldKey)
   int get userCount;
   @override
+  @DateTimeConverter()
   @JsonKey(name: Team.createdAtFieldKey)
   DateTime get createdAt;
   @override

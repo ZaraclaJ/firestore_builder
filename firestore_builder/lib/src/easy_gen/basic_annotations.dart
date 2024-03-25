@@ -1,7 +1,14 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
+import 'package:firestore_builder/src/easy_gen/basic_types.dart';
+import 'package:firestore_builder/src/models/yaml_config.dart';
 
 abstract class BasicAnnotations {
+  /// @override
+  static Expression override = const Reference(
+    'override',
+  );
+
   /// @JsonKey
   static Expression jsonKey({
     Expression? name,
@@ -34,5 +41,12 @@ abstract class BasicAnnotations {
   /// @Default(value)
   static Expression defaultFreezed(Expression value) {
     return const Reference('Default', BasicPackages.freezedAnnotation).call([value]);
+  }
+
+  /// @DateTimeConverter()
+  static Expression dateTimeConverter({
+    required YamlConfig config,
+  }) {
+    return FreezedTypes.dateTimeConverter(config: config).call([]);
   }
 }

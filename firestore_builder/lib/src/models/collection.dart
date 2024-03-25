@@ -64,7 +64,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
     final fields = yamlFields?.nodes
             .whereType<YamlMap>()
             .map(
-              CollectionField.fromYaml,
+              (yamlMap) => CollectionField.fromYaml(
+                yamlMap: yamlMap,
+                configLight: configLight,
+              ),
             )
             .toList() ??
         const [];

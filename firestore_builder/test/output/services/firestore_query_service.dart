@@ -359,7 +359,7 @@ class FirestoreQueryService {
     required MessageId messageId,
     required TeamId teamId,
     UpdatedValue<String>? content,
-    UpdatedValue<DateTime>? date,
+    UpdatedValue<DateTime?>? date,
   }) async {
     final data = {
       if (content != null) Message.contentFieldKey: content.value,

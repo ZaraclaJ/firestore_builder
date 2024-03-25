@@ -80,6 +80,7 @@ The configuration file does not contain a correct clear section: $firestoreBuild
     return collections.expand((c) => c.allCollection).toList();
   }
 
+  String get convertersPath => '$outputPath/converters/freezed_converters.dart';
   String get modelsPath => '$outputPath/models';
   String get servicesPath => '$outputPath/services';
   String get statesPath => '$outputPath/states';

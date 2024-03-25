@@ -7,6 +7,7 @@ import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
+import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
@@ -16,11 +17,13 @@ class CollectionField extends Equatable {
     required this.type,
     required this.isNullable,
     required this.acceptFieldValue,
+    required this.configLight,
   });
 
-  factory CollectionField.fromYaml(
-    YamlMap yamlMap,
-  ) {
+  factory CollectionField.fromYaml({
+    required YamlMap yamlMap,
+    required YamlConfig configLight,
+  }) {
     final keys = yamlMap.keys.whereType<String>();
     final values = yamlMap.values;
     if (keys.length != 1 || values.length != 1) {
@@ -78,6 +81,7 @@ Invalid field definition, invalid field: $yamlMap''',
       type: fieldType,
       isNullable: isNullable,
       acceptFieldValue: acceptFieldValue ?? false,
+      configLight: configLight,
     );
   }
 
@@ -85,6 +89,7 @@ Invalid field definition, invalid field: $yamlMap''',
   final FieldType type;
   final bool isNullable;
   final bool acceptFieldValue;
+  final YamlConfig configLight;
 
   TypeReference get _typeReference {
     return TypeReference(
@@ -94,6 +99,8 @@ Invalid field definition, invalid field: $yamlMap''',
         ..isNullable = isNullable,
     );
   }
+
+  bool get isDateTime => type == FieldType.dateTime;
 
   String get fieldName => name.camelCase;
 
@@ -122,11 +129,12 @@ Invalid field definition, invalid field: $yamlMap''',
           ..modifier = FieldModifier.final$
           ..type = _typeReference
           ..name = fieldName
-          ..annotations.add(
+          ..annotations.addAll([
+            if (isDateTime) BasicAnnotations.dateTimeConverter(config: configLight),
             BasicAnnotations.jsonKey(
               name: Reference(className).property(keyVarName),
             ),
-          );
+          ]);
       },
     );
   }
