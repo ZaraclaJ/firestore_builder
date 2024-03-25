@@ -4,6 +4,7 @@ import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/states/message_states.dart';
 import 'package:example/firestore/states/team_states.dart';
+import 'package:example/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,7 +86,29 @@ class _TeamDetails extends ConsumerWidget {
         children: [
           Text('Id : ${teamId.value}'),
           Text('Name : ${team.name}'),
-          Text('Description : ${team.description}'),
+          Row(
+            children: [
+              Text('Description : ${team.description}'),
+              IconButton(
+                onPressed: () async {
+                  await EditDialog.show(
+                    context: context,
+                    title: 'Edit Description',
+                    initialText: team.description ?? '',
+                    onValidate: (value) async {
+                      final service = ref.read(firestoreQueryServiceProvider);
+                      await service.updateTeam(
+                        teamId: teamId,
+                        description: UpdatedValue(value),
+                      );
+                    },
+                  );
+                },
+                iconSize: 16,
+                icon: const Icon(Icons.edit),
+              ),
+            ],
+          ),
         ],
       ),
     );
