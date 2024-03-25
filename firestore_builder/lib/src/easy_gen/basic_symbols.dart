@@ -1,4 +1,7 @@
 abstract class BasicSymbols {
+  /// 'T'
+  static const String generic = 'T';
+
   /// 'void'
   static const String void$ = 'void';
 
@@ -139,4 +142,12 @@ abstract class RiverpodSymbols {
 
   /// 'watch'
   static const String watchMethod = 'watch';
+}
+
+abstract class UpdatedValueSymbols {
+  /// 'UpdatedValue'
+  static const String updatedValueClass = 'UpdatedValue';
+
+  /// 'value'
+  static const String valueProperty = 'value';
 }

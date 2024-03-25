@@ -1,4 +1,5 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
@@ -7,6 +8,7 @@ import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
 
@@ -91,12 +93,12 @@ Class _queryServiceClass({
 Class _updatedValueClass({
   required YamlConfig config,
 }) {
-  final reference = config.updatedValueFieldReference;
-  final fieldName = config.updatedValueFieldName;
+  const reference = BasicTypes.generic;
+  const fieldName = UpdatedValueSymbols.valueProperty;
   return Class(
     (c) {
       c
-        ..name = config.updatedValueClassName
+        ..name = UpdatedValueSymbols.updatedValueClass
         ..types.add(reference)
         ..constructors.add(
           Constructor(
@@ -343,9 +345,17 @@ extension on Collection {
   Method get updateDocumentMethod {
     const dataVarName = 'data';
 
+    const updatedClassName = UpdatedValueSymbols.updatedValueClass;
+
     final parameters = fields.map(
-      (f) => f.parameter().toUpdatedValueParam(configLight.updatedValueClassName),
+      (f) => f.parameter().toUpdatedValueParam(updatedClassName),
     );
+
+    final firestoreFieldParameters = fields
+        .map(
+          (f) => f.firestoreFieldValue()?.toParameter.toUpdatedValueParam(updatedClassName),
+        )
+        .whereNotNull();
 
     return Method(
       (m) {
@@ -356,16 +366,22 @@ extension on Collection {
           ..optionalParameters.addAll([
             ..._documentReferenceMethodParameters,
             ...parameters,
+            ...firestoreFieldParameters,
           ])
           ..body = Block.of([
             declareFinal(dataVarName)
                 .assign(
                   literalMap({
                     for (final item in fields)
-                      modelReference.property(item.staticKeyField().name).code.ifBlock(
-                            Code('${item.parameter().name} != null'),
-                            withBrackets: false,
-                          ): Reference(item.parameter().name).property(configLight.updatedValueFieldName),
+                      item.dataKey(
+                        modelReference: modelReference,
+                        name: item.fieldName,
+                      ): item.fieldDataValue(name: item.fieldName),
+                    for (final item in fields.where((element) => element.acceptFieldValue))
+                      item.dataKey(
+                        modelReference: modelReference,
+                        name: item.firestoreFieldValueName,
+                      ): item.fieldDataValue(name: item.firestoreFieldValueName),
                   }),
                 )
                 .statement,
@@ -420,5 +436,23 @@ extension on Parameter {
             ..types.add(p.type!),
         ),
     );
+  }
+}
+
+extension on CollectionField {
+  Code dataKey({
+    required Reference modelReference,
+    required String name,
+  }) {
+    return modelReference.property(staticKeyField().name).code.ifBlock(
+          Code('$name != null'),
+          withBrackets: false,
+        );
+  }
+
+  Expression fieldDataValue({
+    required String name,
+  }) {
+    return Reference(name).property(UpdatedValueSymbols.valueProperty);
   }
 }

@@ -64,12 +64,15 @@ class FirestoreQueryService {
     UpdatedValue<String?>? description,
     UpdatedValue<int>? userCount,
     UpdatedValue<DateTime>? createdAt,
+    UpdatedValue<FieldValue?>? createdAtFieldValue,
   }) async {
     final data = {
       if (name != null) Team.nameFieldKey: name.value,
       if (description != null) Team.descriptionFieldKey: description.value,
       if (userCount != null) Team.userCountFieldKey: userCount.value,
       if (createdAt != null) Team.createdAtFieldKey: createdAt.value,
+      if (createdAtFieldValue != null)
+        Team.createdAtFieldKey: createdAtFieldValue.value,
     };
     if (data.isEmpty) {
       return;
