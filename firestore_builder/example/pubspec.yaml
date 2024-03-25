@@ -34,7 +34,7 @@ flutter:
 
 firestore_builder:
   output: lib/firestore
-  clear: True
+  clear: false
   collections:
     - collection:
         collection_name: teams
@@ -43,7 +43,9 @@ firestore_builder:
           - name: String
           - description: String?
           - user_count: int
-          - created_at: DateTime
+          - created_at: 
+              type: DateTime
+              accept_field_value: true
       sub_collections:
         - collection:
             collection_name: users

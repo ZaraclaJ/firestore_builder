@@ -6,6 +6,7 @@ import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
+import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
@@ -14,22 +15,55 @@ class CollectionField extends Equatable {
     required this.name,
     required this.type,
     required this.isNullable,
+    required this.acceptFieldValue,
   });
 
   factory CollectionField.fromYaml(
     YamlMap yamlMap,
   ) {
     final keys = yamlMap.keys.whereType<String>();
-    final values = yamlMap.values.whereType<String>();
+    final values = yamlMap.values;
     if (keys.length != 1 || values.length != 1) {
       throw Exception(
         '''
 Invalid field definition, there should be only one key and one value: $yamlMap''',
       );
     }
-
     final name = keys.first;
-    final type = values.first;
+    final first = values.first;
+
+    final String type;
+    final bool? acceptFieldValue;
+
+    if (first is String) {
+      type = first;
+      acceptFieldValue = false;
+    } else if (first is YamlMap) {
+      final yamlType = first[typeKey];
+      if (yamlType is! String) {
+        throw Exception(
+          '''
+Invalid field definition, missing or invalid $typeKey key: $first''',
+        );
+      }
+
+      type = yamlType;
+
+      final yamlAcceptFieldValue = first[acceptFieldValueKey];
+      if (yamlAcceptFieldValue is! bool?) {
+        throw Exception(
+          '''
+Invalid field definition, invalid $acceptFieldValueKey key: $first''',
+        );
+      }
+
+      acceptFieldValue = yamlAcceptFieldValue;
+    } else {
+      throw Exception(
+        '''
+Invalid field definition, invalid field: $yamlMap''',
+      );
+    }
 
     final isNullable = type.isNullable;
     final typeName = type.withoutQuestionMark;
@@ -43,12 +77,14 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
       name: name,
       type: fieldType,
       isNullable: isNullable,
+      acceptFieldValue: acceptFieldValue ?? false,
     );
   }
 
   final String name;
   final FieldType type;
   final bool isNullable;
+  final bool acceptFieldValue;
 
   TypeReference get _typeReference {
     return TypeReference(

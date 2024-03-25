@@ -16,3 +16,6 @@ const String subCollectionsKey = 'sub_collections';
 const String collectionNameKey = 'collection_name';
 const String modelNameKey = 'model_name';
 const String fieldsKey = 'fields';
+
+const String typeKey = 'type';
+const String acceptFieldValueKey = 'accept_field_value';
