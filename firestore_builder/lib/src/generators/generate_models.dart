@@ -1,8 +1,10 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/code_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
@@ -60,6 +62,11 @@ extension ModelCollectionExtensions on Collection {
                 className: modelClassName,
               ),
             ),
+            ...fields
+                .map(
+                  (collectionField) => collectionField.firestoreFieldValue(),
+                )
+                .whereNotNull(),
             _idField,
           ])
           ..methods.addAll([
@@ -157,6 +164,14 @@ extension ModelCollectionExtensions on Collection {
                   const Reference(FreezedSymbols.toJsonMethod).call([]),
                 )
                 .statement,
+            ...fields.where((element) => element.acceptFieldValue).map(
+              (field) {
+                final firestoreFieldValueName = field.firestoreFieldValueName;
+                return Code('$jsonVarName[${field.keyVarName}] = $firestoreFieldValueName;').ifBlock(
+                  Code('$firestoreFieldValueName != null'),
+                );
+              },
+            ),
             const Reference(jsonVarName).returned.statement,
           ]);
       },

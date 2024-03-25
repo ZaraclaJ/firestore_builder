@@ -46,6 +46,9 @@ abstract class BasicSymbols {
 }
 
 abstract class FirestoreSymbols {
+  /// 'FieldValue'
+  static const String fieldValueClass = 'FieldValue';
+
   /// 'Query'
   static const String queryClass = 'Query';
 

@@ -97,7 +97,8 @@ Invalid field definition, invalid field: $yamlMap''',
 
   String get fieldName => name.camelCase;
 
-  String get _keyVarName => '${fieldName}FieldKey';
+  String get keyVarName => '${fieldName}FieldKey';
+  String get firestoreFieldValueName => '${fieldName}FieldValue';
 
   Field staticKeyField() {
     return Field(
@@ -106,7 +107,7 @@ Invalid field definition, invalid field: $yamlMap''',
           ..static = true
           ..modifier = FieldModifier.constant
           ..type = BasicTypes.string
-          ..name = _keyVarName
+          ..name = keyVarName
           ..assignment = literalString(name).code;
       },
     );
@@ -123,7 +124,28 @@ Invalid field definition, invalid field: $yamlMap''',
           ..name = fieldName
           ..annotations.add(
             BasicAnnotations.jsonKey(
-              name: Reference(className).property(_keyVarName),
+              name: Reference(className).property(keyVarName),
+            ),
+          );
+      },
+    );
+  }
+
+  Field? firestoreFieldValue() {
+    if (!acceptFieldValue) {
+      return null;
+    }
+
+    return Field(
+      (fieldBuilder) {
+        fieldBuilder
+          ..modifier = FieldModifier.final$
+          ..type = FirestoreTypes.fieldValue(isNullable: true)
+          ..name = firestoreFieldValueName
+          ..annotations.add(
+            BasicAnnotations.jsonKey(
+              includeFromJson: false,
+              includeToJson: false,
             ),
           );
       },

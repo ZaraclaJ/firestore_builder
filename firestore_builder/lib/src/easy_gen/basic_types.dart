@@ -116,6 +116,16 @@ abstract class FirestoreTypes {
     );
   }
 
+  /// SnapshotOptions
+  static TypeReference fieldValue({bool isNullable = false}) {
+    return TypeReference(
+      (type) => type
+        ..symbol = FirestoreSymbols.fieldValueClass
+        ..url = BasicPackages.cloudFirestore
+        ..isNullable = isNullable,
+    );
+  }
+
   /// Query<model> Function(CollectionReference<model>)
   static Reference whereFunctionOf(Reference model) {
     return FunctionType((f) {

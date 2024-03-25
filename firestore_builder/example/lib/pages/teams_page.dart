@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/states/team_states.dart';
@@ -113,6 +114,7 @@ class _AddTeamButton extends ConsumerWidget {
                     name: name,
                     userCount: 0,
                     createdAt: DateTime.now(),
+                    createdAtFieldValue: FieldValue.serverTimestamp(),
                   );
                   ref.read(firestoreQueryServiceProvider).addTeam(team: team);
                   controller.clear();

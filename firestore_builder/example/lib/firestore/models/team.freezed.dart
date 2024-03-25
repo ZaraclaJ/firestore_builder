@@ -29,6 +29,8 @@ mixin _$Team {
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
+  FieldValue? get createdAtFieldValue => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   TeamId get teamId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,6 +48,8 @@ abstract class $TeamCopyWith<$Res> {
       @JsonKey(name: Team.userCountFieldKey) int userCount,
       @JsonKey(name: Team.createdAtFieldKey) DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      FieldValue? createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false) TeamId teamId});
 
   $TeamIdCopyWith<$Res> get teamId;
@@ -68,6 +72,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
     Object? userCount = null,
     Object? createdAt = null,
     Object? description = freezed,
+    Object? createdAtFieldValue = freezed,
     Object? teamId = null,
   }) {
     return _then(_value.copyWith(
@@ -87,6 +92,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAtFieldValue: freezed == createdAtFieldValue
+          ? _value.createdAtFieldValue
+          : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
+              as FieldValue?,
       teamId: null == teamId
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
@@ -115,6 +124,8 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
       @JsonKey(name: Team.userCountFieldKey) int userCount,
       @JsonKey(name: Team.createdAtFieldKey) DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      FieldValue? createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false) TeamId teamId});
 
   @override
@@ -135,6 +146,7 @@ class __$$TeamImplCopyWithImpl<$Res>
     Object? userCount = null,
     Object? createdAt = null,
     Object? description = freezed,
+    Object? createdAtFieldValue = freezed,
     Object? teamId = null,
   }) {
     return _then(_$TeamImpl(
@@ -154,6 +166,10 @@ class __$$TeamImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAtFieldValue: freezed == createdAtFieldValue
+          ? _value.createdAtFieldValue
+          : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
+              as FieldValue?,
       teamId: null == teamId
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
@@ -170,6 +186,8 @@ class _$TeamImpl extends _Team {
       @JsonKey(name: Team.userCountFieldKey) required this.userCount,
       @JsonKey(name: Team.createdAtFieldKey) required this.createdAt,
       @JsonKey(name: Team.descriptionFieldKey) this.description,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      this.createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.teamId = const TeamId('')})
       : super._();
@@ -191,11 +209,14 @@ class _$TeamImpl extends _Team {
   final String? description;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
+  final FieldValue? createdAtFieldValue;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final TeamId teamId;
 
   @override
   String toString() {
-    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, description: $description, teamId: $teamId)';
+    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, description: $description, createdAtFieldValue: $createdAtFieldValue, teamId: $teamId)';
   }
 
   @override
@@ -210,13 +231,15 @@ class _$TeamImpl extends _Team {
                 other.createdAt == createdAt) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.createdAtFieldValue, createdAtFieldValue) ||
+                other.createdAtFieldValue == createdAtFieldValue) &&
             (identical(other.teamId, teamId) || other.teamId == teamId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, userCount, createdAt, description, teamId);
+  int get hashCode => Object.hash(runtimeType, name, userCount, createdAt,
+      description, createdAtFieldValue, teamId);
 
   @JsonKey(ignore: true)
   @override
@@ -239,6 +262,8 @@ abstract class _Team extends Team {
       @JsonKey(name: Team.createdAtFieldKey) required final DateTime createdAt,
       @JsonKey(name: Team.descriptionFieldKey) final String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
+      final FieldValue? createdAtFieldValue,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       final TeamId teamId}) = _$TeamImpl;
   const _Team._() : super._();
 
@@ -256,6 +281,9 @@ abstract class _Team extends Team {
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  FieldValue? get createdAtFieldValue;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   TeamId get teamId;

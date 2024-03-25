@@ -18,6 +18,11 @@ class Team with _$Team {
       includeFromJson: false,
       includeToJson: false,
     )
+    FieldValue? createdAtFieldValue,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
     @Default(TeamId(''))
     TeamId teamId,
   }) = _Team;
@@ -48,6 +53,9 @@ class Team with _$Team {
 
   Map<String, Object?> toFirestore() {
     final json = toJson();
+    if (createdAtFieldValue != null) {
+      json[createdAtFieldKey] = createdAtFieldValue;
+    }
     return json;
   }
 }
