@@ -9,7 +9,7 @@ firestore_builder:
           - name: String
           - description: String?
           - user_count: int
-          - created_at:
+          - created_at: 
               type: DateTime
               accept_field_value: true
       sub_collections:
@@ -31,7 +31,7 @@ firestore_builder:
             model_name: message
             fields:
               - content: String
-              - date: DateTime
+              - date: DateTime?
     - collection:
         collection_name: tasks
         model_name: task

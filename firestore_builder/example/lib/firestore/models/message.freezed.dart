@@ -23,7 +23,7 @@ mixin _$Message {
   @JsonKey(name: Message.contentFieldKey)
   String get content => throw _privateConstructorUsedError;
   @JsonKey(name: Message.dateFieldKey)
-  DateTime get date => throw _privateConstructorUsedError;
+  DateTime? get date => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   MessageId get messageId => throw _privateConstructorUsedError;
 
@@ -39,7 +39,7 @@ abstract class $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @JsonKey(name: Message.dateFieldKey) DateTime date,
+      @JsonKey(name: Message.dateFieldKey) DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -60,7 +60,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
   @override
   $Res call({
     Object? content = null,
-    Object? date = null,
+    Object? date = freezed,
     Object? messageId = null,
   }) {
     return _then(_value.copyWith(
@@ -68,10 +68,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      date: null == date
+      date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       messageId: null == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -97,7 +97,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @JsonKey(name: Message.dateFieldKey) DateTime date,
+      @JsonKey(name: Message.dateFieldKey) DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -117,7 +117,7 @@ class __$$MessageImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? content = null,
-    Object? date = null,
+    Object? date = freezed,
     Object? messageId = null,
   }) {
     return _then(_$MessageImpl(
@@ -125,10 +125,10 @@ class __$$MessageImplCopyWithImpl<$Res>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      date: null == date
+      date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       messageId: null == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -142,7 +142,7 @@ class __$$MessageImplCopyWithImpl<$Res>
 class _$MessageImpl extends _Message {
   const _$MessageImpl(
       {@JsonKey(name: Message.contentFieldKey) required this.content,
-      @JsonKey(name: Message.dateFieldKey) required this.date,
+      @JsonKey(name: Message.dateFieldKey) this.date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.messageId = const MessageId('')})
       : super._();
@@ -155,7 +155,7 @@ class _$MessageImpl extends _Message {
   final String content;
   @override
   @JsonKey(name: Message.dateFieldKey)
-  final DateTime date;
+  final DateTime? date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageId messageId;
@@ -197,7 +197,7 @@ class _$MessageImpl extends _Message {
 abstract class _Message extends Message {
   const factory _Message(
       {@JsonKey(name: Message.contentFieldKey) required final String content,
-      @JsonKey(name: Message.dateFieldKey) required final DateTime date,
+      @JsonKey(name: Message.dateFieldKey) final DateTime? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final MessageId messageId}) = _$MessageImpl;
   const _Message._() : super._();
@@ -209,7 +209,7 @@ abstract class _Message extends Message {
   String get content;
   @override
   @JsonKey(name: Message.dateFieldKey)
-  DateTime get date;
+  DateTime? get date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   MessageId get messageId;
