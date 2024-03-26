@@ -19,6 +19,9 @@ class Team with _$Team {
     @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
     @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
+    @DocumentReferenceConverter()
+    @JsonKey(name: Team.teamRefFieldKey)
+    DocumentReference? teamRef,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
@@ -64,6 +67,8 @@ class Team with _$Team {
   static const String labelsFieldKey = 'labels';
 
   static const String presencesFieldKey = 'presences';
+
+  static const String teamRefFieldKey = 'team_ref';
 
   Map<String, Object?> toFirestore() {
     final json = toJson();

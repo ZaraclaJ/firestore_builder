@@ -91,6 +91,13 @@ abstract class FirestoreTypes {
     );
   }
 
+  /// DocumentReference
+  static TypeReference documentReference = TypeReference(
+    (type) => type
+      ..symbol = FirestoreSymbols.documentReferenceClass
+      ..url = BasicPackages.cloudFirestore,
+  );
+
   /// DocumentReference<ref>
   static TypeReference documentReferenceOf(Reference ref) {
     return TypeReference(
@@ -158,15 +165,35 @@ abstract class RiverpodTypes {
 }
 
 abstract class FreezedTypes {
+  static String _converterUrl(YamlConfig config) => config.convertersPath.toPackageUrl(
+        projectName: config.projectName,
+      );
+
   /// DateTimeConverter
   static Reference dateTimeConverter({
     required YamlConfig config,
   }) =>
       Reference(
         FreezedSymbols.dateTimeConverter,
-        config.convertersPath.toPackageUrl(
-          projectName: config.projectName,
-        ),
+        _converterUrl(config),
+      );
+
+  /// TimestampConverter
+  static Reference timestampConverter({
+    required YamlConfig config,
+  }) =>
+      Reference(
+        FreezedSymbols.timestampConverter,
+        _converterUrl(config),
+      );
+
+  /// TimestampConverter
+  static Reference documentReferenceConverter({
+    required YamlConfig config,
+  }) =>
+      Reference(
+        FreezedSymbols.documentReferenceConverter,
+        _converterUrl(config),
       );
 
   /// JsonConverter<ref1, ref2>

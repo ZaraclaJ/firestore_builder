@@ -49,4 +49,18 @@ abstract class BasicAnnotations {
   }) {
     return FreezedTypes.dateTimeConverter(config: config).call([]);
   }
+
+  /// @TimestampConverter()
+  static Expression timestampConverter({
+    required YamlConfig config,
+  }) {
+    return FreezedTypes.timestampConverter(config: config).call([]);
+  }
+
+  /// @DocumentReferenceConverter()
+  static Expression documentReferenceConverter({
+    required YamlConfig config,
+  }) {
+    return FreezedTypes.documentReferenceConverter(config: config).call([]);
+  }
 }

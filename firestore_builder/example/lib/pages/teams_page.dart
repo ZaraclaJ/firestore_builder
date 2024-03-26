@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
+import 'package:example/firestore/services/firestore_reference_service.dart';
 import 'package:example/firestore/states/team_states.dart';
 import 'package:example/pages/team_details_page.dart';
 import 'package:flutter/material.dart';
@@ -110,11 +111,16 @@ class _AddTeamButton extends ConsumerWidget {
           onPressed: name.isEmpty
               ? null
               : () {
+                  final teamRef = ref.read(firestoreReferenceServiceProvider).teamReference(
+                        teamId: const TeamId('fake-id'),
+                      );
+
                   final team = Team(
                     name: name,
                     userCount: 0,
                     createdAt: DateTime.now(),
                     createdAtFieldValue: FieldValue.serverTimestamp(),
+                    teamRef: teamRef,
                     labels: [
                       'New',
                       'Agile',

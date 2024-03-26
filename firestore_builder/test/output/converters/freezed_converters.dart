@@ -28,3 +28,18 @@ class TimestampConverter implements JsonConverter<Timestamp, Timestamp> {
     return timestamp;
   }
 }
+
+class DocumentReferenceConverter
+    implements JsonConverter<DocumentReference, DocumentReference> {
+  const DocumentReferenceConverter();
+
+  @override
+  DocumentReference fromJson(DocumentReference documentReference) {
+    return documentReference;
+  }
+
+  @override
+  DocumentReference toJson(DocumentReference documentReference) {
+    return documentReference;
+  }
+}

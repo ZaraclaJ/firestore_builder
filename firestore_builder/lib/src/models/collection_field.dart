@@ -85,6 +85,7 @@ Invalid field definition, invalid field: $yamlMap''',
 
   bool get isDateTime => type is FieldTypeDateTime;
   bool get isTimestamp => type is FieldTypeTimestamp;
+  bool get isDocumentReference => type is FieldTypeDocumentReference;
 
   String get fieldName => name.camelCase;
 
@@ -115,6 +116,8 @@ Invalid field definition, invalid field: $yamlMap''',
           ..name = fieldName
           ..annotations.addAll([
             if (isDateTime) BasicAnnotations.dateTimeConverter(config: configLight),
+            if (isTimestamp) BasicAnnotations.timestampConverter(config: configLight),
+            if (isDocumentReference) BasicAnnotations.documentReferenceConverter(config: configLight),
             BasicAnnotations.jsonKey(
               name: Reference(className).property(keyVarName),
             ),

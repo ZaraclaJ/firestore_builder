@@ -135,6 +135,9 @@ abstract class FreezedSymbols {
   /// 'TimestampConverter'
   static const String timestampConverter = 'TimestampConverter';
 
+  /// 'TimestampConverter'
+  static const String documentReferenceConverter = 'DocumentReferenceConverter';
+
   /// 'JsonConverter'
   static const String jsonConverter = 'JsonConverter';
 }

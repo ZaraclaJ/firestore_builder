@@ -17,6 +17,9 @@ _$TeamImpl _$$TeamImplFromJson(Map<String, dynamic> json) => _$TeamImpl(
       presences: (json['presences'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as bool),
       ),
+      teamRef: _$JsonConverterFromJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          json['team_ref'], const DocumentReferenceConverter().fromJson),
     );
 
 Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
@@ -27,7 +30,22 @@ Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
       'labels': instance.labels,
       'description': instance.description,
       'presences': instance.presences,
+      'team_ref': _$JsonConverterToJson<DocumentReference<Object?>,
+              DocumentReference<Object?>>(
+          instance.teamRef, const DocumentReferenceConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$TeamIdImpl _$$TeamIdImplFromJson(Map<String, dynamic> json) => _$TeamIdImpl(
       json['value'] as String,

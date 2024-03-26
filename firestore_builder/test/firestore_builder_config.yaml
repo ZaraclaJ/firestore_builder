@@ -15,7 +15,8 @@ firestore_builder:
           - labels: 
               type: List<String>
               accept_field_value: true
-          - presences: Map<bool>?            
+          - presences: Map<bool>?
+          - team_ref: DocumentReference?    
       sub_collections:
         - collection:
             collection_name: users

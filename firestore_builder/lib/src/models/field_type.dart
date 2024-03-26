@@ -18,6 +18,7 @@ sealed class FieldType {
   /// - `bool`
   /// - `Timestamp`
   /// - `DateTime`
+  /// - `DocumentReference`
   /// - `List<T>`
   /// - `Map<T>`
   static FieldType fromDartSymbol(String symbol) {
@@ -41,8 +42,9 @@ sealed class FieldType {
       BasicSymbols.int => FieldTypeInt(isNullable: isNullable),
       BasicSymbols.double => FieldTypeDouble(isNullable: isNullable),
       BasicSymbols.bool => FieldTypeBool(isNullable: isNullable),
-      BasicSymbols.timestamp => FieldTypeTimestamp(isNullable: isNullable),
       BasicSymbols.dateTime => FieldTypeDateTime(isNullable: isNullable),
+      BasicSymbols.timestamp => FieldTypeTimestamp(isNullable: isNullable),
+      FirestoreSymbols.documentReferenceClass => FieldTypeDocumentReference(isNullable: isNullable),
       _ => throw Exception('Unknown field type: $symbol'),
     };
   }
@@ -74,6 +76,7 @@ sealed class FieldType {
       FieldTypeDouble() => BasicSymbols.double,
       FieldTypeBool() => BasicSymbols.bool,
       FieldTypeTimestamp() => BasicSymbols.timestamp,
+      FieldTypeDocumentReference() => FirestoreSymbols.documentReferenceClass,
       FieldTypeDateTime() => BasicSymbols.dateTime,
       FieldTypeMap() => BasicSymbols.map,
     };
@@ -82,6 +85,7 @@ sealed class FieldType {
   String? get packageUrl {
     return switch (this) {
       FieldTypeTimestamp() => BasicPackages.cloudFirestore,
+      FieldTypeDocumentReference() => BasicPackages.cloudFirestore,
       _ => null,
     };
   }
@@ -119,6 +123,12 @@ class FieldTypeTimestamp extends FieldType {
 
 class FieldTypeDateTime extends FieldType {
   const FieldTypeDateTime({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeDocumentReference extends FieldType {
+  const FieldTypeDocumentReference({
     required super.isNullable,
   });
 }
