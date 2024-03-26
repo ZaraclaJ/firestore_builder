@@ -23,23 +23,14 @@ class TeamDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('Team Details'),
-        ),
-        floatingActionButton: _AddButton(
-          teamId: teamId,
-        ),
-        body: _Layout(
-          teamId: teamId,
-        ),
+      child: _Layout(
+        teamId: teamId,
       ),
     );
   }
 }
 
-class _Layout extends ConsumerWidget {
+class _Layout extends StatefulWidget {
   const _Layout({
     required this.teamId,
   });
@@ -47,20 +38,37 @@ class _Layout extends ConsumerWidget {
   final TeamId teamId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _TeamDetails(
-            teamId: teamId,
-          ),
-          Expanded(
-            child: _TabBarView(
-              teamId: teamId,
+  State<_Layout> createState() => _LayoutState();
+}
+
+class _LayoutState extends State<_Layout> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('Team Details'),
+      ),
+      floatingActionButton: _AddButton(
+        teamId: widget.teamId,
+        onAdd: () {
+          setState(() {});
+        },
+      ),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _TeamDetails(
+              teamId: widget.teamId,
             ),
-          ),
-        ],
+            Expanded(
+              child: _TabBarView(
+                teamId: widget.teamId,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -366,9 +374,11 @@ class _MessagesTab extends ConsumerWidget {
 class _AddButton extends ConsumerWidget {
   const _AddButton({
     required this.teamId,
+    required this.onAdd,
   });
 
   final TeamId teamId;
+  final void Function() onAdd;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -391,6 +401,7 @@ class _AddButton extends ConsumerWidget {
               final message = getRandomMessage();
               await service.addMessage(teamId: teamId, message: message);
             }
+            onAdd();
           },
         );
       },
