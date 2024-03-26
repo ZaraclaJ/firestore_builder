@@ -1,3 +1,4 @@
+import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:recase/recase.dart';
 
 const String _nullableSuffix = '?';
@@ -22,6 +23,24 @@ extension StringExtensions on String {
   String toPackageUrl({required String projectName}) {
     final filePath = withoutPrefix('lib/');
     return 'package:$projectName/$filePath';
+  }
+
+  String? extractListType() {
+    return _extractType(BasicSymbols.list);
+  }
+
+  String? extractMapType() {
+    return _extractType(BasicSymbols.map);
+  }
+
+  String? _extractType(String prefix) {
+    final regex = RegExp('$prefix<(.*?)>');
+    final match = regex.firstMatch(this);
+    if (match == null) {
+      return null;
+    }
+
+    return substring(match.start + 1 + prefix.length, match.end - 1);
   }
 }
 

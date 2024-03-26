@@ -1,12 +1,9 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
-import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
-import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
-import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
+import 'package:firestore_builder/src/models/field_type.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
@@ -15,7 +12,6 @@ class CollectionField extends Equatable {
   const CollectionField({
     required this.name,
     required this.type,
-    required this.isNullable,
     required this.acceptFieldValue,
     required this.configLight,
   });
@@ -68,18 +64,11 @@ Invalid field definition, invalid field: $yamlMap''',
       );
     }
 
-    final isNullable = type.isNullable;
-    final typeName = type.withoutQuestionMark;
-
-    final fieldType = FieldType.fromDartSymbol(typeName);
-    if (fieldType == null) {
-      throw Exception('Unknown field type: $type');
-    }
+    final fieldType = FieldType.fromDartSymbol(type);
 
     return CollectionField(
       name: name,
       type: fieldType,
-      isNullable: isNullable,
       acceptFieldValue: acceptFieldValue ?? false,
       configLight: configLight,
     );
@@ -87,20 +76,14 @@ Invalid field definition, invalid field: $yamlMap''',
 
   final String name;
   final FieldType type;
-  final bool isNullable;
   final bool acceptFieldValue;
   final YamlConfig configLight;
 
   TypeReference get _typeReference {
-    return TypeReference(
-      (b) => b
-        ..symbol = type.dartSymbol
-        ..url = type.packageUrl
-        ..isNullable = isNullable,
-    );
+    return type.typeReference;
   }
 
-  bool get isDateTime => type == FieldType.dateTime;
+  bool get isDateTime => type is FieldTypeDateTime;
 
   String get fieldName => name.camelCase;
 
@@ -178,39 +161,7 @@ Invalid field definition, invalid field: $yamlMap''',
   List<Object> get props => [
         name,
         type,
-        isNullable,
+        acceptFieldValue,
+        configLight,
       ];
-}
-
-enum FieldType {
-  string,
-  int,
-  double,
-  bool,
-  timestamp,
-  dateTime;
-
-  static FieldType? fromDartSymbol(String symbol) {
-    return FieldType.values.firstWhereOrNull(
-      (element) => element.dartSymbol == symbol,
-    );
-  }
-
-  String? get packageUrl {
-    return switch (this) {
-      FieldType.timestamp => BasicPackages.cloudFirestore,
-      _ => null,
-    };
-  }
-
-  String get dartSymbol {
-    return switch (this) {
-      FieldType.string => BasicSymbols.string,
-      FieldType.int => BasicSymbols.int,
-      FieldType.double => BasicSymbols.double,
-      FieldType.bool => BasicSymbols.bool,
-      FieldType.timestamp => BasicSymbols.timestamp,
-      FieldType.dateTime => BasicSymbols.dateTime,
-    };
-  }
 }

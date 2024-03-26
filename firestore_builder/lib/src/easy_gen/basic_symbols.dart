@@ -29,6 +29,9 @@ abstract class BasicSymbols {
   /// 'List'
   static const String list = 'List';
 
+  /// 'Map'
+  static const String map = 'Map';
+
   /// Map<String, Object?>
   static const String json = 'Map<String, Object?>';
 
