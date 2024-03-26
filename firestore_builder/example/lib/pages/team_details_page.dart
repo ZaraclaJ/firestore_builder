@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/constants/labels.dart';
 import 'package:example/constants/messages.dart';
 import 'package:example/constants/users.dart';
 import 'package:example/firestore/models/team.dart';
@@ -110,8 +112,102 @@ class _TeamDetails extends ConsumerWidget {
               ),
             ],
           ),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 8,
+            spacing: 8,
+            children: [
+              const Text('Labels :'),
+              ...team.labels.map(
+                (label) => _LabelChip(
+                  label: label,
+                  teamId: teamId,
+                ),
+              ),
+              // Add chip
+              _AddLabelChip(
+                teamId: teamId,
+              ),
+              _ClearAllLabelsChip(
+                teamId: teamId,
+              ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _AddLabelChip extends ConsumerWidget {
+  const _AddLabelChip({
+    required this.teamId,
+  });
+
+  final TeamId teamId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ActionChip(
+      label: const Text('Add'),
+      avatar: const Icon(Icons.add),
+      onPressed: () async {
+        final service = ref.read(firestoreQueryServiceProvider);
+        final label = getRandomLabel();
+        await service.updateTeam(
+          teamId: teamId,
+          labelsFieldValue: UpdatedValue(FieldValue.arrayUnion([label])),
+        );
+      },
+    );
+  }
+}
+
+class _ClearAllLabelsChip extends ConsumerWidget {
+  const _ClearAllLabelsChip({
+    required this.teamId,
+  });
+
+  final TeamId teamId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ActionChip(
+      label: const Text('Clear All'),
+      avatar: const Icon(
+        Icons.clear_all,
+      ),
+      onPressed: () async {
+        final service = ref.read(firestoreQueryServiceProvider);
+        await service.updateTeam(
+          teamId: teamId,
+          labels: const UpdatedValue([]),
+        );
+      },
+    );
+  }
+}
+
+class _LabelChip extends ConsumerWidget {
+  const _LabelChip({
+    required this.teamId,
+    required this.label,
+  });
+
+  final TeamId teamId;
+  final String label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Chip(
+      label: Text(label),
+      onDeleted: () async {
+        final service = ref.read(firestoreQueryServiceProvider);
+        await service.updateTeam(
+          teamId: teamId,
+          labelsFieldValue: UpdatedValue(FieldValue.arrayRemove([label])),
+        );
+      },
     );
   }
 }

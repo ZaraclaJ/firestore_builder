@@ -12,6 +12,9 @@ firestore_builder:
           - created_at: 
               type: DateTime
               accept_field_value: true
+          - labels: 
+              type: List<String>
+              accept_field_value: true
       sub_collections:
         - collection:
             collection_name: users

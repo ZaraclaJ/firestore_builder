@@ -115,6 +115,12 @@ class _AddTeamButton extends ConsumerWidget {
                     userCount: 0,
                     createdAt: DateTime.now(),
                     createdAtFieldValue: FieldValue.serverTimestamp(),
+                    labels: [
+                      'New',
+                      'Agile',
+                      'Innovative',
+                      'Collaborative',
+                    ],
                   );
                   ref.read(firestoreQueryServiceProvider).addTeam(team: team);
                   controller.clear();

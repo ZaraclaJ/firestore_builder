@@ -16,12 +16,18 @@ class Team with _$Team {
     @DateTimeConverter()
     @JsonKey(name: Team.createdAtFieldKey)
     required DateTime createdAt,
+    @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
     )
     FieldValue? createdAtFieldValue,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    FieldValue? labelsFieldValue,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
@@ -54,10 +60,15 @@ class Team with _$Team {
 
   static const String createdAtFieldKey = 'created_at';
 
+  static const String labelsFieldKey = 'labels';
+
   Map<String, Object?> toFirestore() {
     final json = toJson();
     if (createdAtFieldValue != null) {
       json[createdAtFieldKey] = createdAtFieldValue;
+    }
+    if (labelsFieldValue != null) {
+      json[labelsFieldKey] = labelsFieldValue;
     }
     return json;
   }

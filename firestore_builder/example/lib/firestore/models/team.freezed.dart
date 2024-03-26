@@ -27,10 +27,14 @@ mixin _$Team {
   @DateTimeConverter()
   @JsonKey(name: Team.createdAtFieldKey)
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: Team.labelsFieldKey)
+  List<String> get labels => throw _privateConstructorUsedError;
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   FieldValue? get createdAtFieldValue => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  FieldValue? get labelsFieldValue => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   TeamId get teamId => throw _privateConstructorUsedError;
 
@@ -50,9 +54,12 @@ abstract class $TeamCopyWith<$Res> {
       @DateTimeConverter()
       @JsonKey(name: Team.createdAtFieldKey)
       DateTime createdAt,
+      @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      FieldValue? labelsFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false) TeamId teamId});
 
   $TeamIdCopyWith<$Res> get teamId;
@@ -74,8 +81,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
     Object? name = null,
     Object? userCount = null,
     Object? createdAt = null,
+    Object? labels = null,
     Object? description = freezed,
     Object? createdAtFieldValue = freezed,
+    Object? labelsFieldValue = freezed,
     Object? teamId = null,
   }) {
     return _then(_value.copyWith(
@@ -91,6 +100,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      labels: null == labels
+          ? _value.labels
+          : labels // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -98,6 +111,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
       createdAtFieldValue: freezed == createdAtFieldValue
           ? _value.createdAtFieldValue
           : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
+              as FieldValue?,
+      labelsFieldValue: freezed == labelsFieldValue
+          ? _value.labelsFieldValue
+          : labelsFieldValue // ignore: cast_nullable_to_non_nullable
               as FieldValue?,
       teamId: null == teamId
           ? _value.teamId
@@ -128,9 +145,12 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
       @DateTimeConverter()
       @JsonKey(name: Team.createdAtFieldKey)
       DateTime createdAt,
+      @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      FieldValue? labelsFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false) TeamId teamId});
 
   @override
@@ -150,8 +170,10 @@ class __$$TeamImplCopyWithImpl<$Res>
     Object? name = null,
     Object? userCount = null,
     Object? createdAt = null,
+    Object? labels = null,
     Object? description = freezed,
     Object? createdAtFieldValue = freezed,
+    Object? labelsFieldValue = freezed,
     Object? teamId = null,
   }) {
     return _then(_$TeamImpl(
@@ -167,6 +189,10 @@ class __$$TeamImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      labels: null == labels
+          ? _value._labels
+          : labels // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -174,6 +200,10 @@ class __$$TeamImplCopyWithImpl<$Res>
       createdAtFieldValue: freezed == createdAtFieldValue
           ? _value.createdAtFieldValue
           : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
+              as FieldValue?,
+      labelsFieldValue: freezed == labelsFieldValue
+          ? _value.labelsFieldValue
+          : labelsFieldValue // ignore: cast_nullable_to_non_nullable
               as FieldValue?,
       teamId: null == teamId
           ? _value.teamId
@@ -192,12 +222,16 @@ class _$TeamImpl extends _Team {
       @DateTimeConverter()
       @JsonKey(name: Team.createdAtFieldKey)
       required this.createdAt,
+      @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) this.description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
+      this.labelsFieldValue,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       this.teamId = const TeamId('')})
-      : super._();
+      : _labels = labels,
+        super._();
 
   factory _$TeamImpl.fromJson(Map<String, dynamic> json) =>
       _$$TeamImplFromJson(json);
@@ -212,6 +246,15 @@ class _$TeamImpl extends _Team {
   @DateTimeConverter()
   @JsonKey(name: Team.createdAtFieldKey)
   final DateTime createdAt;
+  final List<String> _labels;
+  @override
+  @JsonKey(name: Team.labelsFieldKey)
+  List<String> get labels {
+    if (_labels is EqualUnmodifiableListView) return _labels;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_labels);
+  }
+
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   final String? description;
@@ -220,11 +263,14 @@ class _$TeamImpl extends _Team {
   final FieldValue? createdAtFieldValue;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
+  final FieldValue? labelsFieldValue;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final TeamId teamId;
 
   @override
   String toString() {
-    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, description: $description, createdAtFieldValue: $createdAtFieldValue, teamId: $teamId)';
+    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, description: $description, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
   }
 
   @override
@@ -237,17 +283,28 @@ class _$TeamImpl extends _Team {
                 other.userCount == userCount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._labels, _labels) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.createdAtFieldValue, createdAtFieldValue) ||
                 other.createdAtFieldValue == createdAtFieldValue) &&
+            (identical(other.labelsFieldValue, labelsFieldValue) ||
+                other.labelsFieldValue == labelsFieldValue) &&
             (identical(other.teamId, teamId) || other.teamId == teamId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, userCount, createdAt,
-      description, createdAtFieldValue, teamId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      userCount,
+      createdAt,
+      const DeepCollectionEquality().hash(_labels),
+      description,
+      createdAtFieldValue,
+      labelsFieldValue,
+      teamId);
 
   @JsonKey(ignore: true)
   @override
@@ -270,9 +327,12 @@ abstract class _Team extends Team {
       @DateTimeConverter()
       @JsonKey(name: Team.createdAtFieldKey)
       required final DateTime createdAt,
+      @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) final String? description,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final FieldValue? createdAtFieldValue,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final FieldValue? labelsFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final TeamId teamId}) = _$TeamImpl;
   const _Team._() : super._();
@@ -290,11 +350,17 @@ abstract class _Team extends Team {
   @JsonKey(name: Team.createdAtFieldKey)
   DateTime get createdAt;
   @override
+  @JsonKey(name: Team.labelsFieldKey)
+  List<String> get labels;
+  @override
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   FieldValue? get createdAtFieldValue;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  FieldValue? get labelsFieldValue;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   TeamId get teamId;
