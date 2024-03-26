@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/firestore/models/message.dart';
 
 Message getRandomMessage() {
   final date = DateTime.now();
+  final timestamp = Timestamp.fromDate(date);
   final randomIndex = Random().nextInt(_messageList.length);
-  return Message(content: _messageList[randomIndex], date: date);
+  return Message(content: _messageList[randomIndex], date: timestamp);
 }
 
 final _messageList = [

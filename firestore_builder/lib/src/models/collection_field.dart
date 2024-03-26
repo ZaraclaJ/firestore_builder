@@ -84,6 +84,7 @@ Invalid field definition, invalid field: $yamlMap''',
   }
 
   bool get isDateTime => type is FieldTypeDateTime;
+  bool get isTimestamp => type is FieldTypeTimestamp;
 
   String get fieldName => name.camelCase;
 

@@ -132,6 +132,9 @@ abstract class FreezedSymbols {
   /// 'DateTimeConverter'
   static const String dateTimeConverter = 'DateTimeConverter';
 
+  /// 'TimestampConverter'
+  static const String timestampConverter = 'TimestampConverter';
+
   /// 'JsonConverter'
   static const String jsonConverter = 'JsonConverter';
 }

@@ -35,7 +35,7 @@ firestore_builder:
             model_name: message
             fields:
               - content: String
-              - date: DateTime?
+              - date: Timestamp?
     - collection:
         collection_name: tasks
         model_name: task

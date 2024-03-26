@@ -11,8 +11,9 @@ Future<void> generateFreezedConverters({
 }) async {
   final collections = config.allCollections;
   final hasDateTimeField = collections.any((c) => c.fields.any((f) => f.isDateTime));
+  final hasTimestampField = collections.any((c) => c.fields.any((f) => f.isTimestamp));
 
-  if (!hasDateTimeField) {
+  if (!hasDateTimeField && !hasTimestampField) {
     return;
   }
 
@@ -22,67 +23,124 @@ Future<void> generateFreezedConverters({
   final library = Library(
     (library) {
       library.body.addAll([
-        Class(
-          (c) {
-            c
-              ..name = FreezedSymbols.dateTimeConverter
-              ..implements.add(
-                FreezedTypes.jsonConverterOf(
-                  BasicTypes.dateTime,
-                  BasicTypes.timestamp,
-                ),
-              )
-              ..constructors.add(
-                Constructor(
-                  (ctor) {
-                    ctor.constant = true;
-                  },
-                ),
-              )
-              ..methods.addAll([
-                Method(
-                  (m) {
-                    m
-                      ..annotations.add(BasicAnnotations.override)
-                      ..returns = BasicTypes.dateTime
-                      ..name = FreezedSymbols.fromJsonMethod
-                      ..requiredParameters.add(
-                        Parameter(
-                          (p) => p
-                            ..name = timestampVarName
-                            ..type = BasicTypes.timestamp,
-                        ),
-                      )
-                      ..lambda = false
-                      ..body = const Reference(timestampVarName).method('toDate').returned.statement;
-                  },
-                ),
-                Method(
-                  (m) {
-                    m
-                      ..annotations.add(BasicAnnotations.override)
-                      ..returns = BasicTypes.timestamp
-                      ..name = FreezedSymbols.toJsonMethod
-                      ..requiredParameters.add(
-                        Parameter(
-                          (p) => p
-                            ..name = dateTimeVarName
-                            ..type = BasicTypes.dateTime,
-                        ),
-                      )
-                      ..lambda = false
-                      ..body = BasicTypes.timestamp
-                          .method(
-                            'fromDate',
-                            positionalArguments: [const Reference(dateTimeVarName)],
-                          )
-                          .returned
-                          .statement;
-                  },
-                ),
-              ]);
-          },
-        ),
+        if (hasDateTimeField)
+          Class(
+            (c) {
+              c
+                ..name = FreezedSymbols.dateTimeConverter
+                ..implements.add(
+                  FreezedTypes.jsonConverterOf(
+                    BasicTypes.dateTime,
+                    BasicTypes.timestamp,
+                  ),
+                )
+                ..constructors.add(
+                  Constructor(
+                    (ctor) {
+                      ctor.constant = true;
+                    },
+                  ),
+                )
+                ..methods.addAll([
+                  Method(
+                    (m) {
+                      m
+                        ..annotations.add(BasicAnnotations.override)
+                        ..returns = BasicTypes.dateTime
+                        ..name = FreezedSymbols.fromJsonMethod
+                        ..requiredParameters.add(
+                          Parameter(
+                            (p) => p
+                              ..name = timestampVarName
+                              ..type = BasicTypes.timestamp,
+                          ),
+                        )
+                        ..lambda = false
+                        ..body = const Reference(timestampVarName).method('toDate').returned.statement;
+                    },
+                  ),
+                  Method(
+                    (m) {
+                      m
+                        ..annotations.add(BasicAnnotations.override)
+                        ..returns = BasicTypes.timestamp
+                        ..name = FreezedSymbols.toJsonMethod
+                        ..requiredParameters.add(
+                          Parameter(
+                            (p) => p
+                              ..name = dateTimeVarName
+                              ..type = BasicTypes.dateTime,
+                          ),
+                        )
+                        ..lambda = false
+                        ..body = BasicTypes.timestamp
+                            .method(
+                              'fromDate',
+                              positionalArguments: [const Reference(dateTimeVarName)],
+                            )
+                            .returned
+                            .statement;
+                    },
+                  ),
+                ]);
+            },
+          ),
+        if (hasTimestampField)
+          Class(
+            (c) {
+              c
+                ..name = FreezedSymbols.timestampConverter
+                ..implements.add(
+                  FreezedTypes.jsonConverterOf(
+                    BasicTypes.timestamp,
+                    BasicTypes.timestamp,
+                  ),
+                )
+                ..constructors.add(
+                  Constructor(
+                    (ctor) {
+                      ctor.constant = true;
+                    },
+                  ),
+                )
+                ..methods.addAll([
+                  Method(
+                    (m) {
+                      m
+                        ..annotations.add(BasicAnnotations.override)
+                        ..returns = BasicTypes.timestamp
+                        ..name = FreezedSymbols.fromJsonMethod
+                        ..requiredParameters.add(
+                          Parameter(
+                            (p) => p
+                              ..name = timestampVarName
+                              ..type = BasicTypes.timestamp,
+                          ),
+                        )
+                        ..lambda = false
+                        ..body = const Reference(timestampVarName).returned.statement;
+                    },
+                  ),
+                  Method(
+                    (m) {
+                      m
+                        ..annotations.add(BasicAnnotations.override)
+                        ..returns = BasicTypes.timestamp
+                        ..name = FreezedSymbols.toJsonMethod
+                        ..requiredParameters.add(
+                          Parameter(
+                            (p) => p
+                              ..name = timestampVarName
+                              ..type = BasicTypes.timestamp,
+                          ),
+                        )
+                        ..lambda = false
+                        ..body = const Reference(timestampVarName).returned.statement;
+                    },
+                  ),
+                ]);
+            },
+          ),
       ]);
     },
   );

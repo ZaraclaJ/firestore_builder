@@ -13,7 +13,7 @@ part 'message.g.dart';
 class Message with _$Message {
   const factory Message({
     @JsonKey(name: Message.contentFieldKey) required String content,
-    @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
+    @TimestampConverter() @JsonKey(name: Message.dateFieldKey) Timestamp? date,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,

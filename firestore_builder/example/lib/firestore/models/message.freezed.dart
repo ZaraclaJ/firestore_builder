@@ -22,9 +22,9 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
 mixin _$Message {
   @JsonKey(name: Message.contentFieldKey)
   String get content => throw _privateConstructorUsedError;
-  @DateTimeConverter()
+  @TimestampConverter()
   @JsonKey(name: Message.dateFieldKey)
-  DateTime? get date => throw _privateConstructorUsedError;
+  Timestamp? get date => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   MessageId get messageId => throw _privateConstructorUsedError;
 
@@ -40,7 +40,9 @@ abstract class $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
+      @TimestampConverter()
+      @JsonKey(name: Message.dateFieldKey)
+      Timestamp? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -72,7 +74,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
       date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as Timestamp?,
       messageId: null == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -98,7 +100,9 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: Message.contentFieldKey) String content,
-      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) DateTime? date,
+      @TimestampConverter()
+      @JsonKey(name: Message.dateFieldKey)
+      Timestamp? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       MessageId messageId});
 
@@ -129,7 +133,7 @@ class __$$MessageImplCopyWithImpl<$Res>
       date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as Timestamp?,
       messageId: null == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
@@ -143,7 +147,7 @@ class __$$MessageImplCopyWithImpl<$Res>
 class _$MessageImpl extends _Message {
   const _$MessageImpl(
       {@JsonKey(name: Message.contentFieldKey) required this.content,
-      @DateTimeConverter() @JsonKey(name: Message.dateFieldKey) this.date,
+      @TimestampConverter() @JsonKey(name: Message.dateFieldKey) this.date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.messageId = const MessageId('')})
       : super._();
@@ -155,9 +159,9 @@ class _$MessageImpl extends _Message {
   @JsonKey(name: Message.contentFieldKey)
   final String content;
   @override
-  @DateTimeConverter()
+  @TimestampConverter()
   @JsonKey(name: Message.dateFieldKey)
-  final DateTime? date;
+  final Timestamp? date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final MessageId messageId;
@@ -199,9 +203,9 @@ class _$MessageImpl extends _Message {
 abstract class _Message extends Message {
   const factory _Message(
       {@JsonKey(name: Message.contentFieldKey) required final String content,
-      @DateTimeConverter()
+      @TimestampConverter()
       @JsonKey(name: Message.dateFieldKey)
-      final DateTime? date,
+      final Timestamp? date,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final MessageId messageId}) = _$MessageImpl;
   const _Message._() : super._();
@@ -212,9 +216,9 @@ abstract class _Message extends Message {
   @JsonKey(name: Message.contentFieldKey)
   String get content;
   @override
-  @DateTimeConverter()
+  @TimestampConverter()
   @JsonKey(name: Message.dateFieldKey)
-  DateTime? get date;
+  Timestamp? get date;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   MessageId get messageId;

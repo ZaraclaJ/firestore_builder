@@ -9,15 +9,15 @@ part of 'message.dart';
 _$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
     _$MessageImpl(
       content: json['content'] as String,
-      date: _$JsonConverterFromJson<Timestamp, DateTime>(
-          json['date'], const DateTimeConverter().fromJson),
+      date: _$JsonConverterFromJson<Timestamp, Timestamp>(
+          json['date'], const TimestampConverter().fromJson),
     );
 
 Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
     <String, dynamic>{
       'content': instance.content,
-      'date': _$JsonConverterToJson<Timestamp, DateTime>(
-          instance.date, const DateTimeConverter().toJson),
+      'date': _$JsonConverterToJson<Timestamp, Timestamp>(
+          instance.date, const TimestampConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

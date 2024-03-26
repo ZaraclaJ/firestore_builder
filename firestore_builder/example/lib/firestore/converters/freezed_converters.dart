@@ -14,3 +14,17 @@ class DateTimeConverter implements JsonConverter<DateTime, Timestamp> {
     return Timestamp.fromDate(dateTime);
   }
 }
+
+class TimestampConverter implements JsonConverter<Timestamp, Timestamp> {
+  const TimestampConverter();
+
+  @override
+  Timestamp fromJson(Timestamp timestamp) {
+    return timestamp;
+  }
+
+  @override
+  Timestamp toJson(Timestamp timestamp) {
+    return timestamp;
+  }
+}
