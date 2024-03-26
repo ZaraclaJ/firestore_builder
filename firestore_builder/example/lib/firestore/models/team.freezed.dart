@@ -31,6 +31,8 @@ mixin _$Team {
   List<String> get labels => throw _privateConstructorUsedError;
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description => throw _privateConstructorUsedError;
+  @JsonKey(name: Team.presencesFieldKey)
+  Map<String, bool>? get presences => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   FieldValue? get createdAtFieldValue => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -56,6 +58,7 @@ abstract class $TeamCopyWith<$Res> {
       DateTime createdAt,
       @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -83,6 +86,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
     Object? createdAt = null,
     Object? labels = null,
     Object? description = freezed,
+    Object? presences = freezed,
     Object? createdAtFieldValue = freezed,
     Object? labelsFieldValue = freezed,
     Object? teamId = null,
@@ -108,6 +112,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      presences: freezed == presences
+          ? _value.presences
+          : presences // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>?,
       createdAtFieldValue: freezed == createdAtFieldValue
           ? _value.createdAtFieldValue
           : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
@@ -147,6 +155,7 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
       DateTime createdAt,
       @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @JsonKey(includeFromJson: false, includeToJson: false)
       FieldValue? createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -172,6 +181,7 @@ class __$$TeamImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? labels = null,
     Object? description = freezed,
+    Object? presences = freezed,
     Object? createdAtFieldValue = freezed,
     Object? labelsFieldValue = freezed,
     Object? teamId = null,
@@ -197,6 +207,10 @@ class __$$TeamImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      presences: freezed == presences
+          ? _value._presences
+          : presences // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>?,
       createdAtFieldValue: freezed == createdAtFieldValue
           ? _value.createdAtFieldValue
           : createdAtFieldValue // ignore: cast_nullable_to_non_nullable
@@ -224,6 +238,7 @@ class _$TeamImpl extends _Team {
       required this.createdAt,
       @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) this.description,
+      @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -231,6 +246,7 @@ class _$TeamImpl extends _Team {
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.teamId = const TeamId('')})
       : _labels = labels,
+        _presences = presences,
         super._();
 
   factory _$TeamImpl.fromJson(Map<String, dynamic> json) =>
@@ -258,6 +274,17 @@ class _$TeamImpl extends _Team {
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   final String? description;
+  final Map<String, bool>? _presences;
+  @override
+  @JsonKey(name: Team.presencesFieldKey)
+  Map<String, bool>? get presences {
+    final value = _presences;
+    if (value == null) return null;
+    if (_presences is EqualUnmodifiableMapView) return _presences;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final FieldValue? createdAtFieldValue;
@@ -270,7 +297,7 @@ class _$TeamImpl extends _Team {
 
   @override
   String toString() {
-    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, description: $description, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
+    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, description: $description, presences: $presences, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
   }
 
   @override
@@ -286,6 +313,8 @@ class _$TeamImpl extends _Team {
             const DeepCollectionEquality().equals(other._labels, _labels) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            const DeepCollectionEquality()
+                .equals(other._presences, _presences) &&
             (identical(other.createdAtFieldValue, createdAtFieldValue) ||
                 other.createdAtFieldValue == createdAtFieldValue) &&
             (identical(other.labelsFieldValue, labelsFieldValue) ||
@@ -302,6 +331,7 @@ class _$TeamImpl extends _Team {
       createdAt,
       const DeepCollectionEquality().hash(_labels),
       description,
+      const DeepCollectionEquality().hash(_presences),
       createdAtFieldValue,
       labelsFieldValue,
       teamId);
@@ -329,6 +359,7 @@ abstract class _Team extends Team {
       required final DateTime createdAt,
       @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.descriptionFieldKey) final String? description,
+      @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final FieldValue? createdAtFieldValue,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -355,6 +386,9 @@ abstract class _Team extends Team {
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description;
+  @override
+  @JsonKey(name: Team.presencesFieldKey)
+  Map<String, bool>? get presences;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   FieldValue? get createdAtFieldValue;

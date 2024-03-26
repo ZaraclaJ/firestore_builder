@@ -65,6 +65,7 @@ class FirestoreQueryService {
     UpdatedValue<int>? userCount,
     UpdatedValue<DateTime>? createdAt,
     UpdatedValue<List<String>>? labels,
+    UpdatedValue<Map<String, bool>?>? presences,
     UpdatedValue<FieldValue?>? createdAtFieldValue,
     UpdatedValue<FieldValue?>? labelsFieldValue,
   }) async {
@@ -74,6 +75,7 @@ class FirestoreQueryService {
       if (userCount != null) Team.userCountFieldKey: userCount.value,
       if (createdAt != null) Team.createdAtFieldKey: createdAt.value,
       if (labels != null) Team.labelsFieldKey: labels.value,
+      if (presences != null) Team.presencesFieldKey: presences.value,
       if (createdAtFieldValue != null)
         Team.createdAtFieldKey: createdAtFieldValue.value,
       if (labelsFieldValue != null) Team.labelsFieldKey: labelsFieldValue.value,

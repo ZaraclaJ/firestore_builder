@@ -49,6 +49,7 @@ firestore_builder:
           - labels: 
               type: List<String>
               accept_field_value: true
+          - presences: Map<bool>?          
       sub_collections:
         - collection:
             collection_name: users

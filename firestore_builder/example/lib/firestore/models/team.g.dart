@@ -14,6 +14,9 @@ _$TeamImpl _$$TeamImplFromJson(Map<String, dynamic> json) => _$TeamImpl(
       labels:
           (json['labels'] as List<dynamic>).map((e) => e as String).toList(),
       description: json['description'] as String?,
+      presences: (json['presences'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as bool),
+      ),
     );
 
 Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
@@ -23,6 +26,7 @@ Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
       'created_at': const DateTimeConverter().toJson(instance.createdAt),
       'labels': instance.labels,
       'description': instance.description,
+      'presences': instance.presences,
     };
 
 _$TeamIdImpl _$$TeamIdImplFromJson(Map<String, dynamic> json) => _$TeamIdImpl(

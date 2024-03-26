@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
+import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 
 sealed class FieldType {
@@ -18,6 +19,7 @@ sealed class FieldType {
   /// - `Timestamp`
   /// - `DateTime`
   /// - `List<T>`
+  /// - `Map<T>`
   static FieldType fromDartSymbol(String symbol) {
     final isNullable = symbol.isNullable;
     final pureType = symbol.withoutQuestionMark;
@@ -26,6 +28,12 @@ sealed class FieldType {
       final a when a.extractListType() != null => FieldTypeList(
           subType: FieldType.fromDartSymbol(
             a.extractListType()!,
+          ),
+          isNullable: isNullable,
+        ),
+      final a when a.extractMapType() != null => FieldTypeMap(
+          subType: FieldType.fromDartSymbol(
+            a.extractMapType()!,
           ),
           isNullable: isNullable,
         ),
@@ -50,6 +58,10 @@ sealed class FieldType {
         ..isNullable = isNullable
         ..types.addAll([
           if (type is FieldTypeList) type.subType.typeReference,
+          if (type is FieldTypeMap) ...[
+            BasicTypes.string,
+            type.subType.typeReference,
+          ],
         ]),
     );
   }
@@ -63,6 +75,7 @@ sealed class FieldType {
       FieldTypeBool() => BasicSymbols.bool,
       FieldTypeTimestamp() => BasicSymbols.timestamp,
       FieldTypeDateTime() => BasicSymbols.dateTime,
+      FieldTypeMap() => BasicSymbols.map,
     };
   }
 
@@ -112,6 +125,15 @@ class FieldTypeDateTime extends FieldType {
 
 class FieldTypeList extends FieldType {
   const FieldTypeList({
+    required this.subType,
+    required super.isNullable,
+  });
+
+  final FieldType subType;
+}
+
+class FieldTypeMap extends FieldType {
+  const FieldTypeMap({
     required this.subType,
     required super.isNullable,
   });

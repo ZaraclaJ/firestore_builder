@@ -121,6 +121,11 @@ class _AddTeamButton extends ConsumerWidget {
                       'Innovative',
                       'Collaborative',
                     ],
+                    presences: {
+                      'Alice': true,
+                      'Bob': false,
+                      'Charlie': true,
+                    },
                   );
                   ref.read(firestoreQueryServiceProvider).addTeam(team: team);
                   controller.clear();

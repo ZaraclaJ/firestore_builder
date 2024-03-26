@@ -18,6 +18,7 @@ class Team with _$Team {
     required DateTime createdAt,
     @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
+    @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
@@ -61,6 +62,8 @@ class Team with _$Team {
   static const String createdAtFieldKey = 'created_at';
 
   static const String labelsFieldKey = 'labels';
+
+  static const String presencesFieldKey = 'presences';
 
   Map<String, Object?> toFirestore() {
     final json = toJson();

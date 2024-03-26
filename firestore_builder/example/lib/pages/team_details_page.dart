@@ -90,6 +90,8 @@ class _TeamDetails extends ConsumerWidget {
       );
     }
 
+    final presences = team.presences;
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -139,6 +141,22 @@ class _TeamDetails extends ConsumerWidget {
               _ClearAllLabelsChip(
                 teamId: teamId,
               ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 8,
+            spacing: 8,
+            children: [
+              const Text('Presences :'),
+              if (presences != null)
+                ...presences.keys.map(
+                  (name) => Chip(
+                    color: presences[name]! ? MaterialStateProperty.all(Theme.of(context).primaryColor) : null,
+                    label: Text(name),
+                  ),
+                ), // Add chip
             ],
           ),
         ],
