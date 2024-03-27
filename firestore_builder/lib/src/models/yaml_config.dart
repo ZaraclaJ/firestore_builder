@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
@@ -73,11 +74,14 @@ The configuration file does not contain a correct clear section: $firestoreBuild
   final String outputPath;
   final String projectName;
   final bool clear;
-
   final List<Collection> collections;
 
   List<Collection> get allCollections {
     return collections.expand((c) => c.allCollection).toList();
+  }
+
+  List<CollectionField> get allFields {
+    return allCollections.expand((c) => c.fields).toList();
   }
 
   String get convertersPath => '$outputPath/converters/freezed_converters.dart';
@@ -106,6 +110,12 @@ The configuration file does not contain a correct clear section: $firestoreBuild
   ServiceClass get queryServiceClass => ServiceClass(
         className: 'FirestoreQueryService',
         folderPath: servicesPath,
+        projectName: projectName,
+      );
+
+  ServiceClass get updatedValueClass => ServiceClass(
+        className: 'UpdatedValue',
+        folderPath: modelsPath,
         projectName: projectName,
       );
 
@@ -161,7 +171,8 @@ class ServiceClass {
 
   String get className => _className;
   String get providerName => '${_className}Provider'.camelCase;
-  String get path => '$_folderPath/${className.snakeCase}.dart';
+  String get path => '$_folderPath/$fileName.dart';
+  String get fileName => className.snakeCase;
   String get url => path.toPackageUrl(projectName: _projectName);
 
   Reference get reference => Reference(

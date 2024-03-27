@@ -46,7 +46,7 @@ Class get _dateTimeConverter {
       c
         ..name = FreezedSymbols.dateTimeConverter
         ..implements.add(
-          FreezedTypes.jsonConverterOf(
+          CustomTypes.jsonConverterOf(
             BasicTypes.dateTime,
             BasicTypes.timestamp,
           ),
@@ -111,7 +111,7 @@ Class get _timestampConverter {
       c
         ..name = FreezedSymbols.timestampConverter
         ..implements.add(
-          FreezedTypes.jsonConverterOf(
+          CustomTypes.jsonConverterOf(
             BasicTypes.timestamp,
             BasicTypes.timestamp,
           ),
@@ -170,7 +170,7 @@ Class get _documentReferenceConverter {
       c
         ..name = FreezedSymbols.documentReferenceConverter
         ..implements.add(
-          FreezedTypes.jsonConverterOf(
+          CustomTypes.jsonConverterOf(
             FirestoreTypes.documentReference,
             FirestoreTypes.documentReference,
           ),

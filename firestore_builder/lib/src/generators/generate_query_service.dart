@@ -31,7 +31,6 @@ Library _queryServiceLibrary({
       library.body.addAll([
         _queryServiceProvider(config: config),
         _queryServiceClass(config: config),
-        _updatedValueClass(config: config),
       ]);
     },
   ).buildLibrary();
@@ -86,41 +85,6 @@ Class _queryServiceClass({
             ],
           ),
         ]);
-    },
-  );
-}
-
-Class _updatedValueClass({
-  required YamlConfig config,
-}) {
-  const reference = BasicTypes.generic;
-  const fieldName = UpdatedValueSymbols.valueProperty;
-  return Class(
-    (c) {
-      c
-        ..name = UpdatedValueSymbols.updatedValueClass
-        ..types.add(reference)
-        ..constructors.add(
-          Constructor(
-            (c) => c
-              ..constant = true
-              ..requiredParameters.add(
-                Parameter(
-                  (p) => p
-                    ..name = fieldName
-                    ..type = reference,
-                ).inConstructor,
-              ),
-          ),
-        )
-        ..fields.add(
-          Field(
-            (f) => f
-              ..name = fieldName
-              ..modifier = FieldModifier.final$
-              ..type = reference,
-          ),
-        );
     },
   );
 }
@@ -345,15 +309,20 @@ extension on Collection {
   Method get updateDocumentMethod {
     const dataVarName = 'data';
 
-    const updatedClassName = UpdatedValueSymbols.updatedValueClass;
-
     final parameters = fields.map(
-      (f) => f.parameter().toUpdatedValueParam(updatedClassName),
+      (f) {
+        return f.parameter().toUpdatedValueParam(
+              config: configLight,
+              customClass: f.customClassReference?.symbol,
+            );
+      },
     );
 
     final firestoreFieldParameters = fields
         .map(
-          (f) => f.firestoreFieldValue()?.toParameter.toUpdatedValueParam(updatedClassName),
+          (f) => f.firestoreFieldValue()?.toParameter.toUpdatedValueParam(
+                config: configLight,
+              ),
         )
         .whereNotNull();
 
@@ -425,15 +394,25 @@ extension on Collection {
 }
 
 extension on Parameter {
-  Parameter toUpdatedValueParam(String updatedClassName) {
+  Parameter toUpdatedValueParam({
+    required YamlConfig config,
+    String? customClass,
+  }) {
+    final updatedValueReference = CustomTypes.updatedValue(
+      config: config,
+      customClass: customClass,
+    );
     return rebuild(
       (p) => p
         ..required = false
         ..type = TypeReference(
           (type) => type
-            ..symbol = updatedClassName
+            ..symbol = updatedValueReference.symbol
+            ..url = updatedValueReference.url
             ..isNullable = true
-            ..types.add(p.type!),
+            ..types.addAll([
+              if (customClass == null) p.type!,
+            ]),
         ),
     );
   }

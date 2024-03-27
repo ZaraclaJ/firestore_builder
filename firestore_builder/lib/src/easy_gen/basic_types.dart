@@ -1,12 +1,17 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
+import 'package:recase/recase.dart';
 
 abstract class BasicTypes {
   /// 'T'
   static const Reference generic = Reference(BasicSymbols.generic);
+
+  /// 'Object'
+  static const Reference object = Reference(BasicSymbols.object);
 
   /// 'void'
   static const Reference void$ = Reference(BasicSymbols.void$);
@@ -164,8 +169,12 @@ abstract class RiverpodTypes {
   );
 }
 
-abstract class FreezedTypes {
+abstract class CustomTypes {
   static String _converterUrl(YamlConfig config) => config.convertersPath.toPackageUrl(
+        projectName: config.projectName,
+      );
+
+  static String _updatedValueUrl(YamlConfig config) => config.updatedValueClass.path.toPackageUrl(
         projectName: config.projectName,
       );
 
@@ -194,6 +203,19 @@ abstract class FreezedTypes {
       Reference(
         FreezedSymbols.documentReferenceConverter,
         _converterUrl(config),
+      );
+
+  /// TimestampConverter
+  static Reference updatedValue({
+    required YamlConfig config,
+    String? customClass,
+  }) =>
+      Reference(
+        [
+          UpdatedValueSymbols.updatedValueClass,
+          customClass?.pascalCase,
+        ].whereNotNull().join(),
+        _updatedValueUrl(config),
       );
 
   /// JsonConverter<ref1, ref2>

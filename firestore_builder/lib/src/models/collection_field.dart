@@ -2,6 +2,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
+import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/field_type.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -33,10 +34,12 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
 
     final String type;
     final bool? acceptFieldValue;
+    final String? path;
 
     if (first is String) {
       type = first;
       acceptFieldValue = false;
+      path = null;
     } else if (first is YamlMap) {
       final yamlType = first[typeKey];
       if (yamlType is! String) {
@@ -57,6 +60,16 @@ Invalid field definition, invalid $acceptFieldValueKey key: $first''',
       }
 
       acceptFieldValue = yamlAcceptFieldValue;
+
+      final yamlPath = first[pathKey];
+      if (yamlPath is! String?) {
+        throw Exception(
+          '''
+Invalid field definition, invalid $pathKey key: $first''',
+        );
+      }
+
+      path = yamlPath;
     } else {
       throw Exception(
         '''
@@ -64,7 +77,10 @@ Invalid field definition, invalid field: $yamlMap''',
       );
     }
 
-    final fieldType = FieldType.fromDartSymbol(type);
+    final fieldType = FieldType.fromDartSymbol(
+      symbol: type,
+      path: path?.toPackageUrl(projectName: configLight.projectName),
+    );
 
     return CollectionField(
       name: name,
@@ -86,6 +102,14 @@ Invalid field definition, invalid field: $yamlMap''',
   bool get isDateTime => type is FieldTypeDateTime;
   bool get isTimestamp => type is FieldTypeTimestamp;
   bool get isDocumentReference => type is FieldTypeDocumentReference;
+
+  TypeReference? get customClassReference {
+    final type = this.type;
+    if (type is FieldTypeCustomClass) {
+      return _typeReference;
+    }
+    return null;
+  }
 
   String get fieldName => name.camelCase;
 

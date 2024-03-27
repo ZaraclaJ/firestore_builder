@@ -47,20 +47,20 @@ abstract class BasicAnnotations {
   static Expression dateTimeConverter({
     required YamlConfig config,
   }) {
-    return FreezedTypes.dateTimeConverter(config: config).call([]);
+    return CustomTypes.dateTimeConverter(config: config).call([]);
   }
 
   /// @TimestampConverter()
   static Expression timestampConverter({
     required YamlConfig config,
   }) {
-    return FreezedTypes.timestampConverter(config: config).call([]);
+    return CustomTypes.timestampConverter(config: config).call([]);
   }
 
   /// @DocumentReferenceConverter()
   static Expression documentReferenceConverter({
     required YamlConfig config,
   }) {
-    return FreezedTypes.documentReferenceConverter(config: config).call([]);
+    return CustomTypes.documentReferenceConverter(config: config).call([]);
   }
 }

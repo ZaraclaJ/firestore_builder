@@ -21,22 +21,29 @@ sealed class FieldType {
   /// - `DocumentReference`
   /// - `List<T>`
   /// - `Map<T>`
-  static FieldType fromDartSymbol(String symbol) {
+  static FieldType fromDartSymbol({
+    required String symbol,
+    required String? path,
+  }) {
     final isNullable = symbol.isNullable;
     final pureType = symbol.withoutQuestionMark;
 
     return switch (pureType) {
       final a when a.extractListType() != null => FieldTypeList(
           subType: FieldType.fromDartSymbol(
-            a.extractListType()!,
+            symbol: a.extractListType()!,
+            path: path,
           ),
           isNullable: isNullable,
+          path: path,
         ),
       final a when a.extractMapType() != null => FieldTypeMap(
           subType: FieldType.fromDartSymbol(
-            a.extractMapType()!,
+            symbol: a.extractMapType()!,
+            path: path,
           ),
           isNullable: isNullable,
+          path: path,
         ),
       BasicSymbols.string => FieldTypeString(isNullable: isNullable),
       BasicSymbols.int => FieldTypeInt(isNullable: isNullable),
@@ -45,7 +52,11 @@ sealed class FieldType {
       BasicSymbols.dateTime => FieldTypeDateTime(isNullable: isNullable),
       BasicSymbols.timestamp => FieldTypeTimestamp(isNullable: isNullable),
       FirestoreSymbols.documentReferenceClass => FieldTypeDocumentReference(isNullable: isNullable),
-      _ => throw Exception('Unknown field type: $symbol'),
+      _ => FieldTypeCustomClass(
+          className: pureType,
+          isNullable: isNullable,
+          path: path,
+        ),
     };
   }
 
@@ -79,6 +90,7 @@ sealed class FieldType {
       FieldTypeDocumentReference() => FirestoreSymbols.documentReferenceClass,
       FieldTypeDateTime() => BasicSymbols.dateTime,
       FieldTypeMap() => BasicSymbols.map,
+      final FieldTypeCustomClass field => field.className,
     };
   }
 
@@ -86,6 +98,7 @@ sealed class FieldType {
     return switch (this) {
       FieldTypeTimestamp() => BasicPackages.cloudFirestore,
       FieldTypeDocumentReference() => BasicPackages.cloudFirestore,
+      final FieldTypeCustomClass type => type.path,
       _ => null,
     };
   }
@@ -133,20 +146,35 @@ class FieldTypeDocumentReference extends FieldType {
   });
 }
 
+class FieldTypeCustomClass extends FieldType {
+  const FieldTypeCustomClass({
+    required this.className,
+    required this.path,
+    required super.isNullable,
+  });
+
+  final String className;
+  final String? path;
+}
+
 class FieldTypeList extends FieldType {
   const FieldTypeList({
     required this.subType,
+    required this.path,
     required super.isNullable,
   });
 
   final FieldType subType;
+  final String? path;
 }
 
 class FieldTypeMap extends FieldType {
   const FieldTypeMap({
     required this.subType,
+    required this.path,
     required super.isNullable,
   });
 
   final FieldType subType;
+  final String? path;
 }

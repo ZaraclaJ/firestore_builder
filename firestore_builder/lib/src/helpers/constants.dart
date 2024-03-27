@@ -19,3 +19,4 @@ const String fieldsKey = 'fields';
 
 const String typeKey = 'type';
 const String acceptFieldValueKey = 'accept_field_value';
+const String pathKey = 'path';

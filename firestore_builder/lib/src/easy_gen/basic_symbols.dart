@@ -2,6 +2,9 @@ abstract class BasicSymbols {
   /// 'T'
   static const String generic = 'T';
 
+  /// 'Object'
+  static const String object = 'Object';
+
   /// 'void'
   static const String void$ = 'void';
 

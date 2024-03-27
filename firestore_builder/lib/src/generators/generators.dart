@@ -8,6 +8,7 @@ import 'package:firestore_builder/src/generators/generate_query_service.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/generators/generate_states.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
+import 'package:firestore_builder/src/generators/generate_updated_value.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:yaml/yaml.dart';
@@ -46,6 +47,7 @@ You can also indicate the path of your configuration file:
     generateStreamService(config: config),
     generateStates(config: config),
     generateQueryService(config: config),
+    generateUpdatedValue(config: config),
   ]);
 }
 

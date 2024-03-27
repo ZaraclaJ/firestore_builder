@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/firestore/converters/freezed_converters.dart';
+import 'package:example/models/enums/team_size.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team.freezed.dart';
@@ -17,6 +18,7 @@ class Team with _$Team {
     @JsonKey(name: Team.createdAtFieldKey)
     required DateTime createdAt,
     @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
+    @JsonKey(name: Team.teamSizeFieldKey) required TeamSize teamSize,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
     @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
     @DocumentReferenceConverter()
@@ -69,6 +71,8 @@ class Team with _$Team {
   static const String presencesFieldKey = 'presences';
 
   static const String teamRefFieldKey = 'team_ref';
+
+  static const String teamSizeFieldKey = 'team_size';
 
   Map<String, Object?> toFirestore() {
     final json = toJson();

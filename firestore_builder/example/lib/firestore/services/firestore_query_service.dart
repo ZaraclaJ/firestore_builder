@@ -3,6 +3,7 @@ import 'package:example/firestore/models/item.dart';
 import 'package:example/firestore/models/message.dart';
 import 'package:example/firestore/models/task.dart';
 import 'package:example/firestore/models/team.dart';
+import 'package:example/firestore/models/updated_value.dart';
 import 'package:example/firestore/models/user.dart';
 import 'package:example/firestore/services/firestore_reference_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,6 +68,7 @@ class FirestoreQueryService {
     UpdatedValue<List<String>>? labels,
     UpdatedValue<Map<String, bool>?>? presences,
     UpdatedValue<DocumentReference?>? teamRef,
+    UpdatedValueTeamSize? teamSize,
     UpdatedValue<FieldValue?>? createdAtFieldValue,
     UpdatedValue<FieldValue?>? labelsFieldValue,
   }) async {
@@ -78,6 +80,7 @@ class FirestoreQueryService {
       if (labels != null) Team.labelsFieldKey: labels.value,
       if (presences != null) Team.presencesFieldKey: presences.value,
       if (teamRef != null) Team.teamRefFieldKey: teamRef.value,
+      if (teamSize != null) Team.teamSizeFieldKey: teamSize.value,
       if (createdAtFieldValue != null)
         Team.createdAtFieldKey: createdAtFieldValue.value,
       if (labelsFieldValue != null) Team.labelsFieldKey: labelsFieldValue.value,
@@ -453,12 +456,4 @@ class FirestoreQueryService {
   Future<void> deleteTask({required TaskId taskId}) async {
     await _firestoreReferenceService.taskReference(taskId: taskId).delete();
   }
-}
-
-class UpdatedValue<T> {
-  const UpdatedValue(
-    this.value,
-  );
-
-  final T value;
 }

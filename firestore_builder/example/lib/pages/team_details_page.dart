@@ -3,9 +3,11 @@ import 'package:example/constants/labels.dart';
 import 'package:example/constants/messages.dart';
 import 'package:example/constants/users.dart';
 import 'package:example/firestore/models/team.dart';
+import 'package:example/firestore/models/updated_value.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/states/message_states.dart';
 import 'package:example/firestore/states/team_states.dart';
+import 'package:example/models/enums/team_size.dart';
 import 'package:example/pages/user_details_page.dart';
 import 'package:example/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +124,24 @@ class _TeamDetails extends ConsumerWidget {
               ),
             ],
           ),
+          SegmentedButton(
+            segments: TeamSize.values
+                .map(
+                  (e) => ButtonSegment(
+                    value: e,
+                    label: Text(e.name),
+                  ),
+                )
+                .toList(),
+            selected: {team.teamSize},
+            onSelectionChanged: (teamSizeSet) {
+              ref.read(firestoreQueryServiceProvider).updateTeam(
+                    teamId: teamId,
+                    teamSize: UpdatedValueTeamSize(teamSizeSet.first),
+                  );
+            },
+          ),
+          const SizedBox(height: 8),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             runSpacing: 8,

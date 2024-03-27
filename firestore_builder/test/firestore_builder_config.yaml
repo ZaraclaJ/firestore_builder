@@ -16,7 +16,10 @@ firestore_builder:
               type: List<String>
               accept_field_value: true
           - presences: Map<bool>?
-          - team_ref: DocumentReference?    
+          - team_ref: DocumentReference?
+          - team_size: 
+              type: TeamSize
+              path: models/enums/team_size.dart
       sub_collections:
         - collection:
             collection_name: users

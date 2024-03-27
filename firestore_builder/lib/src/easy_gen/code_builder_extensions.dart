@@ -9,10 +9,12 @@ class FreezedConfig {
   const FreezedConfig({
     required this.withJson,
     required this.fileName,
+    this.ignoredClassNames = const [],
   });
 
   final bool withJson;
   final String fileName;
+  final List<String> ignoredClassNames;
 }
 
 extension LibraryExtensions on Library {
@@ -35,9 +37,11 @@ extension LibraryExtensions on Library {
             }
 
             if (freezedConfig != null) {
-              class$ = class$.toFreezed(
-                withJson: freezedConfig.withJson,
-              );
+              if (!freezedConfig.ignoredClassNames.contains(class$.name)) {
+                class$ = class$.toFreezed(
+                  withJson: freezedConfig.withJson,
+                );
+              }
             }
 
             return class$;
@@ -154,6 +158,13 @@ extension ParameterExtensions on Parameter {
       (parameterBuilder) => parameterBuilder
         ..toThis = true
         ..type = null,
+    );
+  }
+
+  @UseResult()
+  Parameter get inRequiredParameters {
+    return rebuild(
+      (parameterBuilder) => parameterBuilder.required = false,
     );
   }
 

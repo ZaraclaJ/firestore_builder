@@ -3,6 +3,7 @@ import 'package:example/firestore/models/team.dart';
 import 'package:example/firestore/services/firestore_query_service.dart';
 import 'package:example/firestore/services/firestore_reference_service.dart';
 import 'package:example/firestore/states/team_states.dart';
+import 'package:example/models/enums/team_size.dart';
 import 'package:example/pages/team_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -121,6 +122,7 @@ class _AddTeamButton extends ConsumerWidget {
                     createdAt: DateTime.now(),
                     createdAtFieldValue: FieldValue.serverTimestamp(),
                     teamRef: teamRef,
+                    teamSize: TeamSize.solo,
                     labels: [
                       'New',
                       'Agile',
