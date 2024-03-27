@@ -99,9 +99,9 @@ Invalid field definition, invalid field: $yamlMap''',
     return type.typeReference;
   }
 
-  bool get isDateTime => type is FieldTypeDateTime;
-  bool get isTimestamp => type is FieldTypeTimestamp;
-  bool get isDocumentReference => type is FieldTypeDocumentReference;
+  bool get hasDateTime => type.hasDateTime;
+  bool get hasTimestamp => type.hasTimestamp;
+  bool get hasDocumentReference => type.hasDocumentReference;
 
   TypeReference? get customClassReference {
     final type = this.type;
@@ -139,9 +139,9 @@ Invalid field definition, invalid field: $yamlMap''',
           ..type = _typeReference
           ..name = fieldName
           ..annotations.addAll([
-            if (isDateTime) BasicAnnotations.dateTimeConverter(config: configLight),
-            if (isTimestamp) BasicAnnotations.timestampConverter(config: configLight),
-            if (isDocumentReference) BasicAnnotations.documentReferenceConverter(config: configLight),
+            if (hasDateTime) BasicAnnotations.dateTimeConverter(config: configLight),
+            if (hasTimestamp) BasicAnnotations.timestampConverter(config: configLight),
+            if (hasDocumentReference) BasicAnnotations.documentReferenceConverter(config: configLight),
             BasicAnnotations.jsonKey(
               name: Reference(className).property(keyVarName),
             ),

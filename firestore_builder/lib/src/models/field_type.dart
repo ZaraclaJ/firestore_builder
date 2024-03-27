@@ -102,6 +102,19 @@ sealed class FieldType {
       _ => null,
     };
   }
+
+  bool get hasDateTime => this is FieldTypeDateTime || (_subtypeNullable != null && _subtypeNullable!.hasDateTime);
+  bool get hasTimestamp => this is FieldTypeTimestamp || (_subtypeNullable != null && _subtypeNullable!.hasTimestamp);
+  bool get hasDocumentReference =>
+      this is FieldTypeDocumentReference || (_subtypeNullable != null && _subtypeNullable!.hasDocumentReference);
+
+  FieldType? get _subtypeNullable {
+    return switch (this) {
+      final FieldTypeList type => type.subType,
+      final FieldTypeMap type => type.subType,
+      _ => null,
+    };
+  }
 }
 
 class FieldTypeString extends FieldType {

@@ -20,6 +20,9 @@ class Team with _$Team {
     @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
     @JsonKey(name: Team.teamSizeFieldKey) required TeamSize teamSize,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
+    @TimestampConverter()
+    @JsonKey(name: Team.datesFieldKey)
+    List<Timestamp?>? dates,
     @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
     @DocumentReferenceConverter()
     @JsonKey(name: Team.teamRefFieldKey)
@@ -65,6 +68,8 @@ class Team with _$Team {
   static const String userCountFieldKey = 'user_count';
 
   static const String createdAtFieldKey = 'created_at';
+
+  static const String datesFieldKey = 'dates';
 
   static const String labelsFieldKey = 'labels';
 

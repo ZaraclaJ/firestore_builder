@@ -10,9 +10,9 @@ Future<void> generateFreezedConverters({
   required YamlConfig config,
 }) async {
   final collections = config.allCollections;
-  final hasDateTimeField = collections.any((c) => c.fields.any((f) => f.isDateTime));
-  final hasTimestampField = collections.any((c) => c.fields.any((f) => f.isTimestamp));
-  final hasDocumentReferenceField = collections.any((c) => c.fields.any((f) => f.isDocumentReference));
+  final hasDateTimeField = collections.any((c) => c.fields.any((f) => f.hasDateTime));
+  final hasTimestampField = collections.any((c) => c.fields.any((f) => f.hasTimestamp));
+  final hasDocumentReferenceField = collections.any((c) => c.fields.any((f) => f.hasDocumentReference));
 
   if ([
     hasDateTimeField,

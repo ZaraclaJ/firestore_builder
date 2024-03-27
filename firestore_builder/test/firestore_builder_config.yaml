@@ -12,6 +12,7 @@ firestore_builder:
           - created_at: 
               type: DateTime
               accept_field_value: true
+          - dates: List<Timestamp?>?
           - labels: 
               type: List<String>
               accept_field_value: true

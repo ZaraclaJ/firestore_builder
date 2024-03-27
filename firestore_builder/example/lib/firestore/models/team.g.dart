@@ -15,6 +15,10 @@ _$TeamImpl _$$TeamImplFromJson(Map<String, dynamic> json) => _$TeamImpl(
           (json['labels'] as List<dynamic>).map((e) => e as String).toList(),
       teamSize: $enumDecode(_$TeamSizeEnumMap, json['team_size']),
       description: json['description'] as String?,
+      dates: (json['dates'] as List<dynamic>?)
+          ?.map((e) => _$JsonConverterFromJson<Timestamp, Timestamp>(
+              e, const TimestampConverter().fromJson))
+          .toList(),
       presences: (json['presences'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as bool),
       ),
@@ -31,6 +35,10 @@ Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
       'labels': instance.labels,
       'team_size': _$TeamSizeEnumMap[instance.teamSize]!,
       'description': instance.description,
+      'dates': instance.dates
+          ?.map((e) => _$JsonConverterToJson<Timestamp, Timestamp>(
+              e, const TimestampConverter().toJson))
+          .toList(),
       'presences': instance.presences,
       'team_ref': _$JsonConverterToJson<DocumentReference<Object?>,
               DocumentReference<Object?>>(

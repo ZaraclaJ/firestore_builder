@@ -33,6 +33,9 @@ mixin _$Team {
   TeamSize get teamSize => throw _privateConstructorUsedError;
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  @JsonKey(name: Team.datesFieldKey)
+  List<Timestamp?>? get dates => throw _privateConstructorUsedError;
   @JsonKey(name: Team.presencesFieldKey)
   Map<String, bool>? get presences => throw _privateConstructorUsedError;
   @DocumentReferenceConverter()
@@ -64,6 +67,9 @@ abstract class $TeamCopyWith<$Res> {
       @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.teamSizeFieldKey) TeamSize teamSize,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @TimestampConverter()
+      @JsonKey(name: Team.datesFieldKey)
+      List<Timestamp?>? dates,
       @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -96,6 +102,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
     Object? labels = null,
     Object? teamSize = null,
     Object? description = freezed,
+    Object? dates = freezed,
     Object? presences = freezed,
     Object? teamRef = freezed,
     Object? createdAtFieldValue = freezed,
@@ -127,6 +134,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      dates: freezed == dates
+          ? _value.dates
+          : dates // ignore: cast_nullable_to_non_nullable
+              as List<Timestamp?>?,
       presences: freezed == presences
           ? _value.presences
           : presences // ignore: cast_nullable_to_non_nullable
@@ -175,6 +186,9 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
       @JsonKey(name: Team.labelsFieldKey) List<String> labels,
       @JsonKey(name: Team.teamSizeFieldKey) TeamSize teamSize,
       @JsonKey(name: Team.descriptionFieldKey) String? description,
+      @TimestampConverter()
+      @JsonKey(name: Team.datesFieldKey)
+      List<Timestamp?>? dates,
       @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -205,6 +219,7 @@ class __$$TeamImplCopyWithImpl<$Res>
     Object? labels = null,
     Object? teamSize = null,
     Object? description = freezed,
+    Object? dates = freezed,
     Object? presences = freezed,
     Object? teamRef = freezed,
     Object? createdAtFieldValue = freezed,
@@ -236,6 +251,10 @@ class __$$TeamImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      dates: freezed == dates
+          ? _value._dates
+          : dates // ignore: cast_nullable_to_non_nullable
+              as List<Timestamp?>?,
       presences: freezed == presences
           ? _value._presences
           : presences // ignore: cast_nullable_to_non_nullable
@@ -272,6 +291,9 @@ class _$TeamImpl extends _Team {
       @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.teamSizeFieldKey) required this.teamSize,
       @JsonKey(name: Team.descriptionFieldKey) this.description,
+      @TimestampConverter()
+      @JsonKey(name: Team.datesFieldKey)
+      final List<Timestamp?>? dates,
       @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -283,6 +305,7 @@ class _$TeamImpl extends _Team {
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.teamId = const TeamId('')})
       : _labels = labels,
+        _dates = dates,
         _presences = presences,
         super._();
 
@@ -314,6 +337,18 @@ class _$TeamImpl extends _Team {
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   final String? description;
+  final List<Timestamp?>? _dates;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: Team.datesFieldKey)
+  List<Timestamp?>? get dates {
+    final value = _dates;
+    if (value == null) return null;
+    if (_dates is EqualUnmodifiableListView) return _dates;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final Map<String, bool>? _presences;
   @override
   @JsonKey(name: Team.presencesFieldKey)
@@ -341,7 +376,7 @@ class _$TeamImpl extends _Team {
 
   @override
   String toString() {
-    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, teamSize: $teamSize, description: $description, presences: $presences, teamRef: $teamRef, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
+    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, teamSize: $teamSize, description: $description, dates: $dates, presences: $presences, teamRef: $teamRef, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
   }
 
   @override
@@ -359,6 +394,7 @@ class _$TeamImpl extends _Team {
                 other.teamSize == teamSize) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            const DeepCollectionEquality().equals(other._dates, _dates) &&
             const DeepCollectionEquality()
                 .equals(other._presences, _presences) &&
             (identical(other.teamRef, teamRef) || other.teamRef == teamRef) &&
@@ -379,6 +415,7 @@ class _$TeamImpl extends _Team {
       const DeepCollectionEquality().hash(_labels),
       teamSize,
       description,
+      const DeepCollectionEquality().hash(_dates),
       const DeepCollectionEquality().hash(_presences),
       teamRef,
       createdAtFieldValue,
@@ -409,6 +446,9 @@ abstract class _Team extends Team {
       @JsonKey(name: Team.labelsFieldKey) required final List<String> labels,
       @JsonKey(name: Team.teamSizeFieldKey) required final TeamSize teamSize,
       @JsonKey(name: Team.descriptionFieldKey) final String? description,
+      @TimestampConverter()
+      @JsonKey(name: Team.datesFieldKey)
+      final List<Timestamp?>? dates,
       @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -442,6 +482,10 @@ abstract class _Team extends Team {
   @override
   @JsonKey(name: Team.descriptionFieldKey)
   String? get description;
+  @override
+  @TimestampConverter()
+  @JsonKey(name: Team.datesFieldKey)
+  List<Timestamp?>? get dates;
   @override
   @JsonKey(name: Team.presencesFieldKey)
   Map<String, bool>? get presences;
