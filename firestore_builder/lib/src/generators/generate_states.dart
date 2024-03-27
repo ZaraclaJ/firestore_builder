@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';

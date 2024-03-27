@@ -104,8 +104,7 @@ Invalid field definition, invalid field: $yamlMap''',
   bool get hasDocumentReference => type.hasDocumentReference;
 
   TypeReference? get customClassReference {
-    final type = this.type;
-    if (type is FieldTypeCustomClass) {
+    if (type.hasCustomClass) {
       return _typeReference;
     }
     return null;

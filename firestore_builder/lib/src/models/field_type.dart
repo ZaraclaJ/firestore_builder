@@ -107,6 +107,8 @@ sealed class FieldType {
   bool get hasTimestamp => this is FieldTypeTimestamp || (_subtypeNullable != null && _subtypeNullable!.hasTimestamp);
   bool get hasDocumentReference =>
       this is FieldTypeDocumentReference || (_subtypeNullable != null && _subtypeNullable!.hasDocumentReference);
+  bool get hasCustomClass =>
+      this is FieldTypeCustomClass || (_subtypeNullable != null && _subtypeNullable!.hasCustomClass);
 
   FieldType? get _subtypeNullable {
     return switch (this) {

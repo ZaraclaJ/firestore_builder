@@ -5,6 +5,7 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/code_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
+import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
@@ -313,7 +314,7 @@ extension on Collection {
       (f) {
         return f.parameter().toUpdatedValueParam(
               config: configLight,
-              customClass: f.customClassReference?.symbol,
+              customClass: f.customClassReference?.symbolName,
             );
       },
     );
