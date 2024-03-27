@@ -34,7 +34,7 @@ extension StringExtensions on String {
   }
 
   String? _extractType(String prefix) {
-    final regex = RegExp('$prefix<(.*?)>');
+    final regex = RegExp('^$prefix<(.*?)>\$');
     final match = regex.firstMatch(this);
     if (match == null) {
       return null;

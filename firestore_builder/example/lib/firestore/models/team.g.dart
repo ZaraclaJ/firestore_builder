@@ -19,6 +19,9 @@ _$TeamImpl _$$TeamImplFromJson(Map<String, dynamic> json) => _$TeamImpl(
           ?.map((e) => _$JsonConverterFromJson<Timestamp, Timestamp>(
               e, const TimestampConverter().fromJson))
           .toList(),
+      bytes: (json['bytes'] as List<dynamic>?)
+          ?.map((e) => (e as List<dynamic>).map((e) => e as int).toList())
+          .toList(),
       presences: (json['presences'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as bool),
       ),
@@ -39,6 +42,7 @@ Map<String, dynamic> _$$TeamImplToJson(_$TeamImpl instance) =>
           ?.map((e) => _$JsonConverterToJson<Timestamp, Timestamp>(
               e, const TimestampConverter().toJson))
           .toList(),
+      'bytes': instance.bytes,
       'presences': instance.presences,
       'team_ref': _$JsonConverterToJson<DocumentReference<Object?>,
               DocumentReference<Object?>>(

@@ -13,6 +13,7 @@ firestore_builder:
               type: DateTime
               accept_field_value: true
           - dates: List<Timestamp?>?
+          - bytes: List<List<int>>?
           - labels: 
               type: List<String>
               accept_field_value: true

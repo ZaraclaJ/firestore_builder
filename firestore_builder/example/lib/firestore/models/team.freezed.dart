@@ -36,6 +36,8 @@ mixin _$Team {
   @TimestampConverter()
   @JsonKey(name: Team.datesFieldKey)
   List<Timestamp?>? get dates => throw _privateConstructorUsedError;
+  @JsonKey(name: Team.bytesFieldKey)
+  List<List<int>>? get bytes => throw _privateConstructorUsedError;
   @JsonKey(name: Team.presencesFieldKey)
   Map<String, bool>? get presences => throw _privateConstructorUsedError;
   @DocumentReferenceConverter()
@@ -70,6 +72,7 @@ abstract class $TeamCopyWith<$Res> {
       @TimestampConverter()
       @JsonKey(name: Team.datesFieldKey)
       List<Timestamp?>? dates,
+      @JsonKey(name: Team.bytesFieldKey) List<List<int>>? bytes,
       @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -103,6 +106,7 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
     Object? teamSize = null,
     Object? description = freezed,
     Object? dates = freezed,
+    Object? bytes = freezed,
     Object? presences = freezed,
     Object? teamRef = freezed,
     Object? createdAtFieldValue = freezed,
@@ -138,6 +142,10 @@ class _$TeamCopyWithImpl<$Res, $Val extends Team>
           ? _value.dates
           : dates // ignore: cast_nullable_to_non_nullable
               as List<Timestamp?>?,
+      bytes: freezed == bytes
+          ? _value.bytes
+          : bytes // ignore: cast_nullable_to_non_nullable
+              as List<List<int>>?,
       presences: freezed == presences
           ? _value.presences
           : presences // ignore: cast_nullable_to_non_nullable
@@ -189,6 +197,7 @@ abstract class _$$TeamImplCopyWith<$Res> implements $TeamCopyWith<$Res> {
       @TimestampConverter()
       @JsonKey(name: Team.datesFieldKey)
       List<Timestamp?>? dates,
+      @JsonKey(name: Team.bytesFieldKey) List<List<int>>? bytes,
       @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -220,6 +229,7 @@ class __$$TeamImplCopyWithImpl<$Res>
     Object? teamSize = null,
     Object? description = freezed,
     Object? dates = freezed,
+    Object? bytes = freezed,
     Object? presences = freezed,
     Object? teamRef = freezed,
     Object? createdAtFieldValue = freezed,
@@ -255,6 +265,10 @@ class __$$TeamImplCopyWithImpl<$Res>
           ? _value._dates
           : dates // ignore: cast_nullable_to_non_nullable
               as List<Timestamp?>?,
+      bytes: freezed == bytes
+          ? _value._bytes
+          : bytes // ignore: cast_nullable_to_non_nullable
+              as List<List<int>>?,
       presences: freezed == presences
           ? _value._presences
           : presences // ignore: cast_nullable_to_non_nullable
@@ -294,6 +308,7 @@ class _$TeamImpl extends _Team {
       @TimestampConverter()
       @JsonKey(name: Team.datesFieldKey)
       final List<Timestamp?>? dates,
+      @JsonKey(name: Team.bytesFieldKey) final List<List<int>>? bytes,
       @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -306,6 +321,7 @@ class _$TeamImpl extends _Team {
       this.teamId = const TeamId('')})
       : _labels = labels,
         _dates = dates,
+        _bytes = bytes,
         _presences = presences,
         super._();
 
@@ -349,6 +365,17 @@ class _$TeamImpl extends _Team {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<List<int>>? _bytes;
+  @override
+  @JsonKey(name: Team.bytesFieldKey)
+  List<List<int>>? get bytes {
+    final value = _bytes;
+    if (value == null) return null;
+    if (_bytes is EqualUnmodifiableListView) return _bytes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final Map<String, bool>? _presences;
   @override
   @JsonKey(name: Team.presencesFieldKey)
@@ -376,7 +403,7 @@ class _$TeamImpl extends _Team {
 
   @override
   String toString() {
-    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, teamSize: $teamSize, description: $description, dates: $dates, presences: $presences, teamRef: $teamRef, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
+    return 'Team(name: $name, userCount: $userCount, createdAt: $createdAt, labels: $labels, teamSize: $teamSize, description: $description, dates: $dates, bytes: $bytes, presences: $presences, teamRef: $teamRef, createdAtFieldValue: $createdAtFieldValue, labelsFieldValue: $labelsFieldValue, teamId: $teamId)';
   }
 
   @override
@@ -395,6 +422,7 @@ class _$TeamImpl extends _Team {
             (identical(other.description, description) ||
                 other.description == description) &&
             const DeepCollectionEquality().equals(other._dates, _dates) &&
+            const DeepCollectionEquality().equals(other._bytes, _bytes) &&
             const DeepCollectionEquality()
                 .equals(other._presences, _presences) &&
             (identical(other.teamRef, teamRef) || other.teamRef == teamRef) &&
@@ -416,6 +444,7 @@ class _$TeamImpl extends _Team {
       teamSize,
       description,
       const DeepCollectionEquality().hash(_dates),
+      const DeepCollectionEquality().hash(_bytes),
       const DeepCollectionEquality().hash(_presences),
       teamRef,
       createdAtFieldValue,
@@ -449,6 +478,7 @@ abstract class _Team extends Team {
       @TimestampConverter()
       @JsonKey(name: Team.datesFieldKey)
       final List<Timestamp?>? dates,
+      @JsonKey(name: Team.bytesFieldKey) final List<List<int>>? bytes,
       @JsonKey(name: Team.presencesFieldKey) final Map<String, bool>? presences,
       @DocumentReferenceConverter()
       @JsonKey(name: Team.teamRefFieldKey)
@@ -486,6 +516,9 @@ abstract class _Team extends Team {
   @TimestampConverter()
   @JsonKey(name: Team.datesFieldKey)
   List<Timestamp?>? get dates;
+  @override
+  @JsonKey(name: Team.bytesFieldKey)
+  List<List<int>>? get bytes;
   @override
   @JsonKey(name: Team.presencesFieldKey)
   Map<String, bool>? get presences;

@@ -23,6 +23,7 @@ class Team with _$Team {
     @TimestampConverter()
     @JsonKey(name: Team.datesFieldKey)
     List<Timestamp?>? dates,
+    @JsonKey(name: Team.bytesFieldKey) List<List<int>>? bytes,
     @JsonKey(name: Team.presencesFieldKey) Map<String, bool>? presences,
     @DocumentReferenceConverter()
     @JsonKey(name: Team.teamRefFieldKey)
@@ -70,6 +71,8 @@ class Team with _$Team {
   static const String createdAtFieldKey = 'created_at';
 
   static const String datesFieldKey = 'dates';
+
+  static const String bytesFieldKey = 'bytes';
 
   static const String labelsFieldKey = 'labels';
 
