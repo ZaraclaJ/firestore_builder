@@ -1,5 +1,5 @@
 name: firestore_builder
-description: "An easy way to use firestore"
+description: "The easiest way to integrate Firestore into a Flutter application"
 version: 0.0.1
 
 environment:

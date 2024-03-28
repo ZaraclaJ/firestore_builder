@@ -1,6 +1,6 @@
 # Firestore Builder
 
-![social_card.png](Firestore%20Builder%207678ac4c6d0a4a44b5275725021736e5/social_card.png)
+![social_card.png](img/social_card.png)
 
 # Installation
 
@@ -78,7 +78,7 @@ dart run firestore_builder firestore_builder_config.yaml
 Do not forget to run the build_runner after to generate the freezed classes :
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs 
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ## Generation result
@@ -103,5 +103,5 @@ lib
 - `user.dart` is the model class of the user collection.
 - `firestore_query_service.dart` is the service to make API call (get, add, delete, update, …)
 - `firestore_reference_service.dart` is the service to easily access to the Firestore references (documents or collections)
-- `firestore_stream_service.dart`  is the service to consume Firestore data through streams
+- `firestore_stream_service.dart` is the service to consume Firestore data through streams
 - `user_states.dart` is where the Riverpod providers are defined
