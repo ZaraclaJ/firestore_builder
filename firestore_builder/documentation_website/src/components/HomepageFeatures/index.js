@@ -1,35 +1,39 @@
-import clsx from 'clsx';
 import Heading from '@theme/Heading';
+import clsx from 'clsx';
 import styles from './styles.module.css';
 
 const FeatureList = [
   {
     title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/easy.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Firestore Builder simplifies the creation and management of your Firestore database.
+        With just a few lines of configuration in a YAML file, Firestore Builder automates
+        the generation of model classes and service layers, eliminating the need for manual coding.
       </>
     ),
   },
   {
     title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/focus.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        With Firestore Builder, you can focus on designing your Firestore database
+        and organizing your data without worrying about the tedious management
+         of model code and services.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Time-saving',
+    Svg: require('@site/static/img/time.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Firestore Builder drastically reduces development time by simplifying 
+        the integration of Firestore into your Flutter application. This streamlined 
+        process accelerates your development workflow, allowing you to focus more on 
+        building features and less on boilerplate setup.
       </>
     ),
   },
