@@ -1,0 +1,23 @@
+name: firestore_builder_devtools_extension
+description: "A new Flutter project."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.3 <4.0.0"
+
+dependencies:
+  cupertino_icons: ^1.0.6
+  devtools_extensions: ^0.0.14
+  firestore_builder:
+    path: ../firestore_builder
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
