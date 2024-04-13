@@ -1,7 +1,10 @@
+import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/collections/start_collection_button.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CollectionsBloc extends StatelessWidget {
   const CollectionsBloc({super.key});
@@ -30,18 +33,38 @@ class CollectionsBloc extends StatelessWidget {
   }
 }
 
-class _CollectionList extends StatelessWidget {
+class _CollectionList extends ConsumerWidget {
   const _CollectionList();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collections = ref.watch(collectionsProvider);
     return ListView.builder(
-      itemCount: 1,
+      itemCount: collections.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return const StartCollectionButton();
         }
-        return null;
+        final collection = collections[index - 1];
+        return _CollectionItem(
+          collection: collection,
+        );
       },
+    );
+  }
+}
+
+class _CollectionItem extends StatelessWidget {
+  const _CollectionItem({required this.collection});
+
+  final Collection collection;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {},
+      title: Text(collection.name),
+      trailing: const Icon(Icons.chevron_right),
+      leading: const SizedBox(),
     );
   }
 }
