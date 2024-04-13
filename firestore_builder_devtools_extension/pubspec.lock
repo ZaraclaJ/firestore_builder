@@ -170,7 +170,7 @@ packages:
     source: hosted
     version: "2.3.6"
   devtools_app_shared:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: devtools_app_shared
       sha256: "6d25b09c98d9d4241d704a2fdd2d562fa433e552e679e96831d54659df665a63"
@@ -277,6 +277,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  gap:
+    dependency: "direct main"
+    description:
+      name: gap
+      sha256: f19387d4e32f849394758b91377f9153a1b41d79513ef7668c088c77dbc6955d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   glob:
     dependency: transitive
     description:

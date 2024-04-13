@@ -10,12 +10,14 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.6
+  devtools_app_shared: ^0.0.10
   devtools_extensions: ^0.0.14
   firestore_builder:
     path: ../firestore_builder
   flutter:
     sdk: flutter
   freezed_annotation: ^2.4.1
+  gap: ^3.0.1
   json_annotation: ^4.8.1
 
 dev_dependencies:

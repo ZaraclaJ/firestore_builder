@@ -1,4 +1,6 @@
+import 'package:firestore_builder_devtools_extension/collections/start_collection_button.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsBloc extends StatelessWidget {
@@ -11,19 +13,35 @@ class CollectionsBloc extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text('data'),
+              child: _CollectionList(),
             ),
-            VerticalDivider(),
+            AppDivider.vertical(),
             Expanded(
-              child: Text('data'),
+              child: SizedBox(),
             ),
-            VerticalDivider(),
+            AppDivider.vertical(),
             Expanded(
-              child: Text('data'),
+              child: SizedBox(),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CollectionList extends StatelessWidget {
+  const _CollectionList();
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return const StartCollectionButton();
+        }
+        return null;
+      },
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/collections/collections_bloc.dart';
-import 'package:firestore_builder_devtools_extension/theme/responsive_theme.dart';
 import 'package:flutter/material.dart';
 
 const YamlConfig config = YamlConfig(
@@ -15,9 +14,7 @@ class HomeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ResponsiveTheme(
-      child: _Layout(),
-    );
+    return const _Layout();
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:firestore_builder_devtools_extension/home_layout.dart';
+import 'package:firestore_builder_devtools_extension/theme/responsive_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,9 +13,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: HomeLayout(),
+    return const ResponsiveTheme(
+      child: MaterialApp(
+        home: Scaffold(
+          body: HomeLayout(),
+        ),
       ),
     );
   }
