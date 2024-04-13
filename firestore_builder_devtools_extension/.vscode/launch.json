@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch + simulated environment",            
+            "name": "Extension",            
             "request": "launch",
             "type": "dart",
             "args": [
@@ -13,21 +13,10 @@
             ],
         },
         {
-            "name": "Launch debug",
+            "name": "App",
             "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "Launch profile",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "Launch release",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
+            "type": "dart",           
+            "program": "${workspaceFolder}/lib/main_app.dart"
         }
     ]
 }
