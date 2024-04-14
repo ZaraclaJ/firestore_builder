@@ -13,8 +13,7 @@ class CollectionsBloc extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCollection = ref.watch(selectedCollectionProvider);
-
-    final previousCollection = selectedCollection?.collectionPath.lastOrNull;
+    final previousCollection = ref.watch(selectedCollectionPathProvider).lastOrNull;
     return AppPadding.regular(
       child: Card(
         shape: BeveledRectangleBorder(

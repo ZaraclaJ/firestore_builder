@@ -14,10 +14,11 @@ class ConfigViewModel {
   final Ref ref;
 
   Collection startCollection({
+    required Collection? inCollection,
     required String collectionName,
     required String modelName,
   }) {
-    final collection = Collection(
+    final newCollection = Collection(
       name: collectionName,
       modelName: modelName,
       fields: [],
@@ -27,10 +28,10 @@ class ConfigViewModel {
     );
     ref.read(configProvider.notifier).update(
           (config) => config.copyWith(
-            collections: [...config.collections, collection],
+            collections: [...config.collections, newCollection],
           ),
         );
 
-    return collection;
+    return newCollection;
   }
 }

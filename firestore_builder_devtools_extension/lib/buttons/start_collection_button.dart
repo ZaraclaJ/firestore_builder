@@ -1,7 +1,9 @@
 import 'package:devtools_app_shared/ui.dart';
+import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
+import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
@@ -37,58 +39,72 @@ final _canSaveProvider = Provider.autoDispose<bool>(
   },
 );
 
-class StartCollectionButton extends StatelessWidget {
+class StartCollectionButton extends ConsumerWidget {
   const StartCollectionButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TileButton.add(
       text: 'Start collection',
       onTap: () async {
-        await _StartCollectionDialog.show(context);
+        final collection = ref.read(collectionGetter);
+        await _StartCollectionDialog.show(
+          context: context,
+          collection: collection,
+        );
       },
     );
   }
 }
 
 class _StartCollectionDialog extends StatelessWidget {
-  const _StartCollectionDialog();
+  const _StartCollectionDialog({required this.collection});
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show({
+    required BuildContext context,
+    required Collection? collection,
+  }) async {
     await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return const _StartCollectionDialog();
+        return _StartCollectionDialog(
+          collection: collection,
+        );
       },
     );
   }
 
+  final Collection? collection;
+
   @override
   Widget build(BuildContext context) {
-    return const DevToolsDialog(
-      title: Text('Start a collection'),
-      content: SizedBox(
-        width: 600,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Parent path'),
-            AppGap.regular(),
-            Text('/'),
-            AppGap.semiBig(),
-            _CollectionNameInput(),
-            AppGap.semiBig(),
-            _ModelNameInput(),
-            AppGap.semiBig(),
-            AppDivider.horizontal(),
-          ],
+    return CollectionGetterInitializer(
+      collection: collection,
+      child: const DevToolsDialog(
+        title: Text('Start a collection'),
+        content: SizedBox(
+          width: 600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Parent path'),
+              AppGap.regular(),
+              Text('/'),
+              AppGap.semiBig(),
+              _CollectionNameInput(),
+              AppGap.semiBig(),
+              _ModelNameInput(),
+              AppGap.semiBig(),
+              AppDivider.horizontal(),
+            ],
+          ),
         ),
+        actions: [
+          _CancelButton(),
+          _SaveButton(),
+        ],
       ),
-      actions: [
-        _CancelButton(),
-        _SaveButton(),
-      ],
     );
   }
 }
@@ -182,6 +198,7 @@ class _SaveButton extends ConsumerWidget {
       onPressed: canSave
           ? () {
               final collection = ref.read(configViewModelProvider).startCollection(
+                    inCollection: ref.read(collectionGetter),
                     collectionName: ref.read(_collectionNameProvider),
                     modelName: ref.read(_modelNameProvider),
                   );

@@ -14,10 +14,10 @@ class PathDetails extends ConsumerWidget {
     final colors = context.colors;
 
     final selectedCollection = ref.watch(selectedCollectionProvider);
-    final subCollections = selectedCollection?.collectionPath ?? [];
+    final selectedCollectionPath = ref.watch(selectedCollectionPathProvider);
     final children = [
       const _HomeButton(),
-      ...subCollections.map(
+      ...selectedCollectionPath.map(
         (collection) => _PathItem(collection: collection),
       ),
       if (selectedCollection != null) _PathItem(collection: selectedCollection),

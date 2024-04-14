@@ -2,6 +2,7 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/add_field_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/start_collection_button.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
+import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
@@ -10,15 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-final _collectionGetter = Provider<Collection?>(
-  (ref) => throw Exception('Collection not found'),
-);
-
 final _isCollectionProvider = Provider<bool>(
   (ref) {
-    return ref.watch(_collectionGetter) != null;
+    return ref.watch(collectionGetter) != null;
   },
-  dependencies: [_collectionGetter],
+  dependencies: [collectionGetter],
 );
 
 class CollectionDetails extends StatelessWidget {
@@ -31,10 +28,8 @@ class CollectionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        _collectionGetter.overrideWithValue(collection),
-      ],
+    return CollectionGetterInitializer(
+      collection: collection,
       child: const _Layout(),
     );
   }
@@ -75,7 +70,7 @@ class _CollectionInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(_collectionGetter);
+    final collection = ref.watch(collectionGetter);
     final text = collection == null ? 'Root' : '${collection.name} (${collection.modelName})';
     final icon = collection == null ? FontAwesomeIcons.database : Icons.article;
 
@@ -127,7 +122,7 @@ class _SubCollectionList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(_collectionGetter);
+    final collection = ref.watch(collectionGetter);
     final subCollections = ref.watch(subCollectionsProvider(collection));
     return ListView.builder(
       itemCount: subCollections.length,
