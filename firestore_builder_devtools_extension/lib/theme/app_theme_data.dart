@@ -7,10 +7,12 @@ part 'app_theme_data.freezed.dart';
 class AppThemeData with _$AppThemeData {
   const factory AppThemeData({
     required SpacingThemeData spacings,
+    required RadiusThemeData radiuses,
   }) = _AppThemeData;
 
   factory AppThemeData.regular() => AppThemeData(
         spacings: SpacingThemeData.regular(),
+        radiuses: RadiusThemeData.regular(),
       );
 }
 
@@ -50,4 +52,35 @@ class EdgeInsetsThemeData {
   EdgeInsets get extraBig => EdgeInsets.all(_spacing.extraBig);
 
   final SpacingThemeData _spacing;
+}
+
+@freezed
+class RadiusThemeData with _$RadiusThemeData {
+  const factory RadiusThemeData({
+    required double small,
+    required double regular,
+    required double big,
+    required double extraBig,
+  }) = _RadiusThemeData;
+
+  const RadiusThemeData._();
+
+  factory RadiusThemeData.regular() => const RadiusThemeData(
+        small: 2,
+        regular: 8,
+        big: 16,
+        extraBig: 24,
+      );
+
+  BorderRadiusThemeData get borderRadius => BorderRadiusThemeData(this);
+}
+
+class BorderRadiusThemeData {
+  const BorderRadiusThemeData(this._radius);
+  final RadiusThemeData _radius;
+
+  BorderRadius get small => BorderRadius.all(Radius.circular(_radius.small));
+  BorderRadius get regular => BorderRadius.all(Radius.circular(_radius.regular));
+  BorderRadius get big => BorderRadius.all(Radius.circular(_radius.big));
+  BorderRadius get extraBig => BorderRadius.all(Radius.circular(_radius.extraBig));
 }

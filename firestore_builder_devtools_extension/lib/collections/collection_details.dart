@@ -5,19 +5,56 @@ import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CollectionList extends ConsumerWidget {
-  const CollectionList({super.key});
+final _collectionGetter = Provider<Collection?>(
+  (ref) => throw Exception('Collection not found'),
+);
+
+class CollectionDetails extends StatelessWidget {
+  const CollectionDetails({
+    required this.collection,
+    super.key,
+  });
+
+  final Collection? collection;
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      overrides: [
+        _collectionGetter.overrideWithValue(collection),
+      ],
+      child: const _Layout(),
+    );
+  }
+}
+
+class _Layout extends ConsumerWidget {
+  const _Layout();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collections = ref.watch(collectionsProvider);
+    return const Column(
+      children: [
+        Expanded(child: _SubCollectionList()),
+      ],
+    );
+  }
+}
+
+class _SubCollectionList extends ConsumerWidget {
+  const _SubCollectionList();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collection = ref.watch(_collectionGetter);
+    final subCollections = ref.watch(subCollectionsProvider(collection));
     return ListView.builder(
-      itemCount: collections.length + 1,
+      itemCount: subCollections.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return const StartCollectionButton();
         }
-        final collection = collections[index - 1];
+        final collection = subCollections[index - 1];
         return _CollectionItem(
           collection: collection,
         );

@@ -1,3 +1,4 @@
+import 'package:devtools_app_shared/ui.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -70,7 +71,7 @@ class _StartCollectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AlertDialog(
+    return const DevToolsDialog(
       title: Text('Start a collection'),
       content: SizedBox(
         width: 600,

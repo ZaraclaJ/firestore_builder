@@ -6,6 +6,8 @@ extension ThemeExtensions on BuildContext {
   AppThemeData get _appThemeData => AppTheme.of(this);
   SpacingThemeData get spacings => _appThemeData.spacings;
   EdgeInsetsThemeData get edgeInsets => spacings.edgeInsets;
+  RadiusThemeData get radius => _appThemeData.radiuses;
+  BorderRadiusThemeData get borderRadius => _appThemeData.radiuses.borderRadius;
   ThemeData get theme => Theme.of(this);
   ColorScheme get colors => theme.colorScheme;
   TextTheme get typos => theme.textTheme;

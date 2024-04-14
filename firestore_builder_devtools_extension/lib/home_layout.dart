@@ -25,7 +25,6 @@ class _Layout extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        Text('Home Page'),
         Expanded(
           child: CollectionsBloc(),
         ),

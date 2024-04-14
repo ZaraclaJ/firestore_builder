@@ -32,9 +32,13 @@ final configLightProvider = Provider<YamlConfig>(
   },
 );
 
-final collectionsProvider = Provider<List<Collection>>(
-  (ref) {
-    return ref.watch(configProvider).collections;
+final subCollectionsProvider = Provider.autoDispose.family<List<Collection>, Collection?>(
+  (ref, collection) {
+    if (collection == null) {
+      return ref.watch(configProvider).collections;
+    }
+
+    return collection.subCollections;
   },
 );
 
