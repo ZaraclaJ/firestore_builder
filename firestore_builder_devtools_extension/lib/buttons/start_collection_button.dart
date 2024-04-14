@@ -1,6 +1,7 @@
 import 'package:devtools_app_shared/ui.dart';
+import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
-import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
@@ -41,18 +42,11 @@ class StartCollectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-
-    return ListTile(
+    return TileButton.add(
+      text: 'Start collection',
       onTap: () async {
         await _StartCollectionDialog.show(context);
       },
-      title: const Text('Start collection'),
-      selectedColor: colors.primary,
-      selectedTileColor: colors.primaryContainer,
-      leading: const Icon(Icons.add),
-      textColor: colors.primary,
-      iconColor: colors.primary,
     );
   }
 }
@@ -187,10 +181,11 @@ class _SaveButton extends ConsumerWidget {
     return ElevatedButton(
       onPressed: canSave
           ? () {
-              ref.read(configViewModelProvider).startCollection(
+              final collection = ref.read(configViewModelProvider).startCollection(
                     collectionName: ref.read(_collectionNameProvider),
                     modelName: ref.read(_modelNameProvider),
                   );
+              ref.read(selectedCollectionProvider.notifier).state = collection;
               Navigator.of(context).pop();
             }
           : null,

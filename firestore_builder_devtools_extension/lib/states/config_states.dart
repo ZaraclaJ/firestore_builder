@@ -1,25 +1,26 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+const _configLight = YamlConfig(
+  projectName: '',
+  outputPath: 'lib/firestore',
+  clear: true,
+  collections: [],
+);
+
+const _userCollection = Collection(
+  configLight: _configLight,
+  modelName: 'User',
+  name: 'users',
+  subCollections: [],
+  collectionPath: [],
+  fields: [],
+);
+
 final configProvider = StateProvider<YamlConfig>(
-  (ref) => const YamlConfig(
-    projectName: '',
-    outputPath: 'lib/firestore',
-    clear: true,
+  (ref) => _configLight.copyWith(
     collections: [
-      Collection(
-        configLight: YamlConfig(
-          projectName: '',
-          outputPath: 'lib/firestore',
-          clear: true,
-          collections: [],
-        ),
-        modelName: 'User',
-        name: 'users',
-        subCollections: [],
-        collectionPath: [],
-        fields: [],
-      ),
+      _userCollection,
     ],
   ),
 );

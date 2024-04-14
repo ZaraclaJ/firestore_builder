@@ -13,7 +13,7 @@ class ConfigViewModel {
 
   final Ref ref;
 
-  void startCollection({
+  Collection startCollection({
     required String collectionName,
     required String modelName,
   }) {
@@ -30,5 +30,7 @@ class ConfigViewModel {
             collections: [...config.collections, collection],
           ),
         );
+
+    return collection;
   }
 }
