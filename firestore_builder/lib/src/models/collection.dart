@@ -1,24 +1,29 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-class Collection extends Equatable {
-  const Collection({
-    required this.name,
-    required this.modelName,
-    required this.fields,
-    required this.subCollections,
-    required this.collectionPath,
-    required this.configLight,
-  });
+part 'collection.freezed.dart';
 
+@freezed
+class Collection with _$Collection {
+  const factory Collection({
+    required String name,
+    required String modelName,
+    required List<CollectionField> fields,
+    required List<Collection> subCollections,
+    required List<Collection> collectionPath,
+    required YamlConfig configLight,
+  }) = _Collection;
+
+  const Collection._();
   factory Collection.fromYaml({
     required YamlMap yamlMap,
     required YamlConfig configLight,
@@ -89,15 +94,10 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
       ],
     );
 
-    return collection._copyWithSubCollections(subCollections);
+    return collection.copyWith(
+      subCollections: subCollections,
+    );
   }
-
-  final String name;
-  final String modelName;
-  final List<CollectionField> fields;
-  final List<Collection> subCollections;
-  final List<Collection> collectionPath;
-  final YamlConfig configLight;
 
   List<Collection> get allCollection {
     return [
@@ -206,25 +206,4 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
           ..name = FirestoreSymbols.whereMethod
           ..type = FirestoreTypes.whereFunctionOf(modelReference),
       );
-
-  Collection _copyWithSubCollections(List<Collection> subCollections) {
-    final collection = this;
-    return Collection(
-      name: collection.name,
-      modelName: collection.modelName,
-      fields: collection.fields,
-      configLight: collection.configLight,
-      collectionPath: collection.collectionPath,
-      subCollections: subCollections,
-    );
-  }
-
-  @override
-  List<Object> get props => [
-        name,
-        modelName,
-        fields,
-        subCollections,
-        configLight,
-      ];
 }

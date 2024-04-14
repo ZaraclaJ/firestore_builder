@@ -1,19 +1,25 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-class YamlConfig extends Equatable {
-  const YamlConfig({
-    required this.projectName,
-    required this.outputPath,
-    required this.collections,
-    required this.clear,
-  });
+part 'yaml_config.freezed.dart';
+
+@freezed
+class YamlConfig with _$YamlConfig {
+  const factory YamlConfig({
+    required String outputPath,
+    required String projectName,
+    required bool clear,
+    required List<Collection> collections,
+  }) = _YamlConfig;
+
+  const YamlConfig._();
 
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
@@ -58,23 +64,10 @@ The configuration file does not contain a correct clear section: $firestoreBuild
       currentPath: [],
     );
 
-    return configLight.copyWithCollections(collections);
-  }
-
-  YamlConfig copyWithCollections(List<Collection> collections) {
-    final config = this;
-    return YamlConfig(
-      projectName: config.projectName,
-      outputPath: config.outputPath,
-      clear: config.clear,
+    return configLight.copyWith(
       collections: collections,
     );
   }
-
-  final String outputPath;
-  final String projectName;
-  final bool clear;
-  final List<Collection> collections;
 
   List<Collection> get allCollections {
     return collections.expand((c) => c.allCollection).toList();
@@ -118,14 +111,6 @@ The configuration file does not contain a correct clear section: $firestoreBuild
         folderPath: modelsPath,
         projectName: projectName,
       );
-
-  @override
-  List<Object> get props => [
-        outputPath,
-        collections,
-        projectName,
-        clear,
-      ];
 }
 
 extension YamlMapExtensions on YamlMap {

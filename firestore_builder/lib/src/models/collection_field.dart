@@ -1,22 +1,27 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/field_type.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-class CollectionField extends Equatable {
-  const CollectionField({
-    required this.name,
-    required this.type,
-    required this.acceptFieldValue,
-    required this.configLight,
-  });
+part 'collection_field.freezed.dart';
 
+@freezed
+class CollectionField with _$CollectionField {
+  const factory CollectionField({
+    required String name,
+    required FieldType type,
+    required bool acceptFieldValue,
+    required YamlConfig configLight,
+  }) = _CollectionField;
+
+  const CollectionField._();
   factory CollectionField.fromYaml({
     required YamlMap yamlMap,
     required YamlConfig configLight,
@@ -89,11 +94,6 @@ Invalid field definition, invalid field: $yamlMap''',
       configLight: configLight,
     );
   }
-
-  final String name;
-  final FieldType type;
-  final bool acceptFieldValue;
-  final YamlConfig configLight;
 
   TypeReference get _typeReference {
     return type.typeReference;
@@ -183,12 +183,4 @@ Invalid field definition, invalid field: $yamlMap''',
       },
     );
   }
-
-  @override
-  List<Object> get props => [
-        name,
-        type,
-        acceptFieldValue,
-        configLight,
-      ];
 }

@@ -7,8 +7,9 @@ linter:
     public_member_api_docs: false
     lines_longer_than_80_chars: false
 
-
 analyzer:
   exclude:
     - test/output/**
     - example/**
+  errors:
+    invalid_annotation_target: ignore
