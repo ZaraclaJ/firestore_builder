@@ -1,12 +1,15 @@
-import 'package:devtools_app_shared/ui.dart';
 import 'package:firestore_builder/firestore_builder.dart';
+import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
+import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
+import 'package:firestore_builder_devtools_extension/path/path_text.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
-import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
+import 'package:firestore_builder_devtools_extension/widgets/named_inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:recase/recase.dart';
@@ -60,6 +63,8 @@ class StartCollectionButton extends ConsumerWidget {
 class _StartCollectionDialog extends StatelessWidget {
   const _StartCollectionDialog({required this.collection});
 
+  final Collection? collection;
+
   static Future<void> show({
     required BuildContext context,
     required Collection? collection,
@@ -74,34 +79,15 @@ class _StartCollectionDialog extends StatelessWidget {
     );
   }
 
-  final Collection? collection;
-
   @override
   Widget build(BuildContext context) {
     return CollectionGetterInitializer(
       collection: collection,
-      child: const DevToolsDialog(
-        title: Text('Start a collection'),
-        content: SizedBox(
-          width: 600,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Parent path'),
-              AppGap.regular(),
-              _PathText(),
-              AppGap.semiBig(),
-              _CollectionNameInput(),
-              AppGap.semiBig(),
-              _ModelNameInput(),
-              AppGap.semiBig(),
-              AppDivider.horizontal(),
-            ],
-          ),
-        ),
+      child: const AppDialog(
+        title: 'Start a collection',
+        content: _Content(),
         actions: [
-          _CancelButton(),
+          CancelButton(),
           _SaveButton(),
         ],
       ),
@@ -109,52 +95,25 @@ class _StartCollectionDialog extends StatelessWidget {
   }
 }
 
-class _PathText extends ConsumerWidget {
-  const _PathText();
+class _Content extends ConsumerWidget {
+  const _Content();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final collection = ref.watch(collectionGetter);
-    final collectionPath = (collection != null)
-        ? [
-            ...collection.collectionPath.map((e) => e.name),
-            collection.name,
-          ].join('/')
-        : '';
-
-    return Text('/$collectionPath');
-  }
-}
-
-class _Input extends StatelessWidget {
-  const _Input({
-    required this.title,
-    required this.hintText,
-    required this.onChanged,
-    this.errorText,
-  });
-
-  final String title;
-  final String hintText;
-  final String? errorText;
-  final void Function(String) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title),
+        const Text('Parent path'),
         const AppGap.regular(),
-        FractionallySizedBox(
-          widthFactor: 0.7,
-          child: AppInput(
-            onChanged: onChanged,
-            hintText: hintText,
-            errorText: errorText,
-          ),
-        ),
+        PathText(collection: collection),
+        const AppGap.semiBig(),
+        const _CollectionNameInput(),
+        const AppGap.semiBig(),
+        const _ModelNameInput(),
+        const AppGap.semiBig(),
+        const AppDivider.horizontal(),
       ],
     );
   }
@@ -165,7 +124,7 @@ class _CollectionNameInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _Input(
+    return NamedInput(
       title: 'Collection ID',
       hintText: 'Enter the collection ID',
       onChanged: (value) {
@@ -180,7 +139,7 @@ class _ModelNameInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _Input(
+    return NamedInput(
       title: 'Model class name',
       hintText: 'Enter the name of the model class',
       errorText: ref.watch(_modelClassErrorProvider),
@@ -191,27 +150,13 @@ class _ModelNameInput extends ConsumerWidget {
   }
 }
 
-class _CancelButton extends StatelessWidget {
-  const _CancelButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-      child: const Text('Cancel'),
-    );
-  }
-}
-
 class _SaveButton extends ConsumerWidget {
   const _SaveButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canSave = ref.watch(_canSaveProvider);
-    return ElevatedButton(
+    return SaveButton(
       onPressed: canSave
           ? () {
               final collection = ref.read(configViewModelProvider).startCollection(
@@ -223,7 +168,6 @@ class _SaveButton extends ConsumerWidget {
               Navigator.of(context).pop();
             }
           : null,
-      child: const Text('Save'),
     );
   }
 }
