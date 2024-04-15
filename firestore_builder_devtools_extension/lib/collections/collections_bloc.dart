@@ -12,10 +12,16 @@ class CollectionsBloc extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final cardColor = colors.surface;
+
     final selectedCollection = ref.watch(selectedCollectionProvider);
     final previousCollection = ref.watch(selectedCollectionPathProvider).lastOrNull;
+
     return AppPadding.regular(
       child: Card(
+        color: cardColor,
+        surfaceTintColor: cardColor,
         shape: BeveledRectangleBorder(
           borderRadius: context.borderRadius.regular,
         ),

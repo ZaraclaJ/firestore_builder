@@ -7,6 +7,7 @@ import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -124,14 +125,17 @@ class _SubCollectionList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final collection = ref.watch(collectionGetter);
     final subCollections = ref.watch(subCollectionsProvider(collection));
-    return ListView.builder(
-      itemCount: subCollections.length,
-      itemBuilder: (BuildContext context, int index) {
-        final collection = subCollections[index];
-        return _CollectionItem(
-          collection: collection,
-        );
-      },
+    return Material(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: subCollections.length,
+        itemBuilder: (BuildContext context, int index) {
+          final collection = subCollections[index];
+          return _CollectionItem(
+            collection: collection,
+          );
+        },
+      ),
     );
   }
 }
@@ -143,17 +147,14 @@ class _CollectionItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.colors;
     final isSelected = ref.watch(isCollectionSelectedProvider(collection));
-    return ListTile(
+    return AppListTile(
       onTap: () {
         ref.read(selectedCollectionProvider.notifier).state = collection;
       },
-      title: Text(collection.name),
+      title: collection.name,
       trailing: const Icon(Icons.chevron_right),
-      leading: const SizedBox(),
       selected: isSelected,
-      selectedTileColor: colors.primaryContainer,
     );
   }
 }

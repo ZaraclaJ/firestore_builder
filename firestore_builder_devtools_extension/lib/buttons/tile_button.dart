@@ -1,4 +1,4 @@
-import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class TileButton extends StatelessWidget {
@@ -20,16 +20,10 @@ class TileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-
-    return ListTile(
+    return AppListTile(
       onTap: onTap,
-      title: Text(text),
-      selectedColor: colors.primary,
-      selectedTileColor: colors.primaryContainer,
+      title: text,
       leading: Icon(_icon),
-      textColor: colors.primary,
-      iconColor: colors.primary,
     );
   }
 }
