@@ -6,17 +6,15 @@ import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.d
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class CollectionsBloc extends ConsumerWidget {
+class CollectionsBloc extends StatelessWidget {
   const CollectionsBloc({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final colors = context.colors;
     final cardColor = colors.surface;
-
-    final selectedCollection = ref.watch(selectedCollectionProvider);
-    final previousCollection = ref.watch(selectedCollectionPathProvider).lastOrNull;
 
     return AppPadding.regular(
       child: Card(
@@ -25,32 +23,89 @@ class CollectionsBloc extends ConsumerWidget {
         shape: BeveledRectangleBorder(
           borderRadius: context.borderRadius.regular,
         ),
-        child: Column(
+        child: const Column(
           children: [
-            const PathDetails(),
-            const AppDivider.horizontal(),
+            PathDetails(),
+            AppDivider.horizontal(),
             Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CollectionDetails(
-                      collection: previousCollection,
-                    ),
-                  ),
-                  const AppDivider.vertical(),
-                  Expanded(
-                    child: selectedCollection != null
-                        ? CollectionDetails(
-                            collection: selectedCollection,
-                          )
-                        : const SizedBox(),
-                  ),
-                ],
-              ),
+              child: _CollectionListView(),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CollectionListView extends ConsumerStatefulWidget {
+  const _CollectionListView();
+
+  @override
+  ConsumerState<_CollectionListView> createState() => _PageViewState();
+}
+
+class _PageViewState extends ConsumerState<_CollectionListView> {
+  late ItemScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ItemScrollController();
+  }
+
+  void _scrollToEnd(int index) {
+    _scrollController.scrollTo(
+      index: index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(selectedCollectionProvider, (previous, next) {
+      if (previous != next) {
+        final index = next == null ? 0 : next.collectionPath.length;
+        _scrollToEnd(index);
+      }
+    });
+
+    final selectedCollection = ref.watch(selectedCollectionProvider);
+    final pathCollections = ref.watch(selectedCollectionPathProvider);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = constraints.maxHeight;
+        final childWidth = width / 2;
+        final children = [
+          const CollectionDetails(
+            collection: null,
+          ),
+          ...pathCollections.map((c) => CollectionDetails(collection: c)),
+          if (selectedCollection != null) CollectionDetails(collection: selectedCollection) else const SizedBox(),
+        ]
+            .map(
+              (e) => SizedBox(
+                width: childWidth,
+                height: height,
+                child: e,
+              ),
+            )
+            .toList();
+
+        return ScrollablePositionedList.separated(
+          itemScrollController: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: children.length,
+          physics: const NeverScrollableScrollPhysics(),
+          separatorBuilder: (BuildContext context, int index) {
+            return const AppDivider.vertical();
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return children[index];
+          },
+        );
+      },
     );
   }
 }

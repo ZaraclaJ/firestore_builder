@@ -75,26 +75,30 @@ class _CollectionInfo extends ConsumerWidget {
     final text = collection == null ? 'Root' : '${collection.name} (${collection.modelName})';
     final icon = collection == null ? FontAwesomeIcons.database : Icons.article;
 
+    final colors = context.colors;
+    final backgroundColor = colors.secondaryContainer;
+    final foregroundColor = colors.onSecondaryContainer;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         ColoredBox(
-          color: context.colors.primaryContainer,
+          color: backgroundColor,
           child: AppPadding.regular(
             child: Row(
               children: [
                 Icon(
                   icon,
                   size: _iconSize,
-                  color: context.colors.onPrimaryContainer,
+                  color: foregroundColor,
                 ),
                 const AppGap.regular(),
                 Expanded(
                   child: Text(
                     text,
                     style: context.typos.labelLarge?.copyWith(
-                      color: context.colors.onPrimaryContainer,
+                      color: foregroundColor,
                     ),
                   ),
                 ),
@@ -105,6 +109,7 @@ class _CollectionInfo extends ConsumerWidget {
                     child: Icon(
                       Icons.more_vert,
                       size: _iconSize,
+                      color: foregroundColor,
                     ),
                   ),
                 ],

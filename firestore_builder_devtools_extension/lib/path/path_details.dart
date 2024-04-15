@@ -12,24 +12,31 @@ class PathDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
+    final backgroundColor = colors.secondaryContainer;
+    final foregroundColor = colors.onSecondaryContainer;
 
     final selectedCollection = ref.watch(selectedCollectionProvider);
     final selectedCollectionPath = ref.watch(selectedCollectionPathProvider);
     final children = [
-      const _HomeButton(),
-      ...selectedCollectionPath.map(
-        (collection) => _PathItem(collection: collection),
+      _HomeButton(
+        color: foregroundColor,
       ),
-      if (selectedCollection != null) _PathItem(collection: selectedCollection),
+      ...selectedCollectionPath.map(
+        (collection) => _PathItem(
+          collection: collection,
+          color: foregroundColor,
+        ),
+      ),
+      if (selectedCollection != null) _PathItem(collection: selectedCollection, color: foregroundColor),
     ]
         .joinWidgets(
-          Icon(Icons.chevron_right, color: colors.onPrimaryContainer),
+          Icon(Icons.chevron_right, color: foregroundColor),
         )
         .joinWidgets(const AppGap.small());
 
     return Container(
       decoration: BoxDecoration(
-        color: colors.primaryContainer,
+        color: backgroundColor,
         borderRadius: context.borderRadius.regular.copyWith(
           bottomLeft: Radius.zero,
           bottomRight: Radius.zero,
@@ -49,9 +56,13 @@ class PathDetails extends ConsumerWidget {
 }
 
 class _PathItem extends ConsumerWidget {
-  const _PathItem({required this.collection});
+  const _PathItem({
+    required this.collection,
+    required this.color,
+  });
 
   final Collection collection;
+  final Color color;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,12 +81,16 @@ class _PathItem extends ConsumerWidget {
 }
 
 class _HomeButton extends ConsumerWidget {
-  const _HomeButton();
+  const _HomeButton({
+    required this.color,
+  });
+
+  final Color color;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      child: Icon(Icons.home, color: context.colors.onPrimaryContainer),
+      child: Icon(Icons.home, color: color),
       onTap: () {
         ref.read(selectedCollectionProvider.notifier).state = null;
       },

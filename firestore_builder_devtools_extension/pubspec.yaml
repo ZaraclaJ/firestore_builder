@@ -23,6 +23,7 @@ dependencies:
   gap: ^3.0.1
   json_annotation: ^4.8.1
   recase: ^4.1.0
+  scrollable_positioned_list: ^0.3.8
   yaml: ^3.1.2
 
 dev_dependencies:
