@@ -90,7 +90,7 @@ class _StartCollectionDialog extends StatelessWidget {
             children: [
               Text('Parent path'),
               AppGap.regular(),
-              Text('/'),
+              _PathText(),
               AppGap.semiBig(),
               _CollectionNameInput(),
               AppGap.semiBig(),
@@ -106,6 +106,23 @@ class _StartCollectionDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PathText extends ConsumerWidget {
+  const _PathText();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collection = ref.watch(collectionGetter);
+    final collectionPath = (collection != null)
+        ? [
+            ...collection.collectionPath.map((e) => e.name),
+            collection.name,
+          ].join('/')
+        : '';
+
+    return Text('/$collectionPath');
   }
 }
 
