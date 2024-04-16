@@ -14,7 +14,13 @@ extension ReferenceExtensions on Reference {
 
   Reference get withoutUrl => Reference(symbol);
 
-  String? get symbolName => symbol;
+  String? get symbolName {
+    final ref = this;
+    if (ref is TypeReference) {
+      return ref.symbolName;
+    }
+    return symbol;
+  }
 }
 
 extension TypeReferenceExtensions on TypeReference {
@@ -22,7 +28,8 @@ extension TypeReferenceExtensions on TypeReference {
     final symbol = this.symbol;
     return [
       symbol,
-      ...types.map((t) => t.symbolName),
+      if (types.isNotEmpty) '<${types.map((e) => e.symbolName).join(', ')}>',
+      if (isNullable ?? false) '?',
     ].join();
   }
 }

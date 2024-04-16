@@ -1,7 +1,6 @@
-import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
-import 'package:firestore_builder_devtools_extension/widgets/app_dropdown_menu.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
+import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
 
 class NamedInput extends StatelessWidget {
@@ -20,7 +19,7 @@ class NamedInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Layout(
+    return NamedInputLayout(
       title: title,
       child: FractionallySizedBox(
         widthFactor: 0.7,
@@ -34,34 +33,11 @@ class NamedInput extends StatelessWidget {
   }
 }
 
-class NamedDropdownMenu<T> extends StatelessWidget {
-  const NamedDropdownMenu({
-    required this.title,
-    required this.entries,
-    this.onSelected,
-    super.key,
-  });
-
-  final String title;
-  final List<DropdownMenuEntry<T>> entries;
-  final void Function(T?)? onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return _Layout(
-      title: title,
-      child: AppDropdownMenu<T>(
-        onSelected: onSelected,
-        entries: entries,
-      ),
-    );
-  }
-}
-
-class _Layout extends StatelessWidget {
-  const _Layout({
+class NamedInputLayout extends StatelessWidget {
+  const NamedInputLayout({
     required this.title,
     required this.child,
+    super.key,
   });
 
   final String title;
@@ -73,7 +49,7 @@ class _Layout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title, style: context.typos.titleMedium),
+        SectionText(title),
         const AppGap.regular(),
         child,
       ],
