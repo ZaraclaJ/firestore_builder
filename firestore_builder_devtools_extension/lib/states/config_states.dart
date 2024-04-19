@@ -49,8 +49,20 @@ final subCollectionsProvider = Provider.autoDispose.family<List<Collection>, Col
   },
 );
 
-final selectedCollectionProvider = StateProvider<Collection?>(
-  (ref) => null,
+final selectedCollectionPathNamesProvider = StateProvider<List<String>>(
+  (ref) => [],
+);
+
+final selectedCollectionProvider = Provider<Collection?>(
+  (ref) {
+    final path = ref.watch(selectedCollectionPathNamesProvider);
+    if (path.isEmpty) {
+      return null;
+    }
+
+    final config = ref.watch(configProvider);
+    return config.collectionFromPath(path);
+  },
 );
 
 final isCollectionSelectedProvider = Provider.autoDispose.family<bool, Collection>(
@@ -85,7 +97,24 @@ final selectedCollectionPathProvider = Provider.autoDispose(
   },
 );
 
-extension on YamlConfig {
+extension YamlConfigExtensions on YamlConfig {
+  Collection? collectionFromPath(List<String> collectionPath) {
+    if (collectionPath.isEmpty) {
+      return null;
+    }
+
+    final collection = collections.firstWhereOrNull(
+      (collection) => collection.name == collectionPath.first,
+    );
+
+    if (collection == null) {
+      return null;
+    }
+
+    final nextCollectionPath = collectionPath.sublist(1);
+    return collection.collectionFromPath(nextCollectionPath);
+  }
+
   List<Collection> collectionPathFromNames(List<String> collectionPath) {
     if (collectionPath.isEmpty) {
       return [];
@@ -126,5 +155,22 @@ extension on Collection {
       subCollection,
       ...subCollection.collectionPathFromNames(nextCollectionPath),
     ];
+  }
+
+  Collection? collectionFromPath(List<String> collectionPath) {
+    if (collectionPath.isEmpty) {
+      return this;
+    }
+
+    final collection = subCollections.firstWhereOrNull(
+      (collection) => collection.name == collectionPath.first,
+    );
+
+    if (collection == null) {
+      return null;
+    }
+
+    final nextCollectionPath = collectionPath.sublist(1);
+    return collection.collectionFromPath(nextCollectionPath);
   }
 }

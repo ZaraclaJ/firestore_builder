@@ -2,6 +2,7 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/add_field_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/start_collection_button.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
+import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -155,7 +156,7 @@ class _CollectionItem extends ConsumerWidget {
     final isSelected = ref.watch(isCollectionSelectedProvider(collection));
     return AppListTile(
       onTap: () {
-        ref.read(selectedCollectionProvider.notifier).state = collection;
+        ref.read(configViewModelProvider).selectCollection(collection);
       },
       title: collection.name,
       trailing: const Icon(Icons.chevron_right),
@@ -164,11 +165,36 @@ class _CollectionItem extends ConsumerWidget {
   }
 }
 
-class _FieldList extends StatelessWidget {
-  const _FieldList({super.key});
+class _FieldList extends ConsumerWidget {
+  const _FieldList();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fields = ref.watch(collectionGetter)?.fields ?? [];
+    return Material(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: fields.length,
+        itemBuilder: (BuildContext context, int index) {
+          final field = fields[index];
+          return _FieldItem(
+            field: field,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FieldItem extends StatelessWidget {
+  const _FieldItem({required this.field});
+
+  final CollectionField field;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return AppListTile(
+      title: field.name,
+    );
   }
 }

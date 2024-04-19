@@ -4,6 +4,7 @@ import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
 import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
+import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -316,6 +317,18 @@ class _SaveButton extends ConsumerWidget {
     return SaveButton(
       onPressed: canSave
           ? () {
+              final collection = ref.read(collectionGetter);
+              if (collection == null) {
+                return;
+              }
+
+              ref.read(configViewModelProvider).addField(
+                    inCollection: collection,
+                    fieldName: ref.read(_fieldNameProvider),
+                    type: ref.read(_fieldTypeProvider),
+                    // TODO(Jordan): : implement
+                    acceptFieldValue: false,
+                  );
               Navigator.of(context).pop();
             }
           : null,

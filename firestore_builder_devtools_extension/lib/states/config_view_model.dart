@@ -13,6 +13,18 @@ class ConfigViewModel {
 
   final Ref ref;
 
+  void selectCollection(Collection? collection) {
+    if (collection == null) {
+      ref.read(selectedCollectionPathNamesProvider.notifier).state = [];
+      return;
+    }
+    final path = [
+      ...collection.collectionPath.map((e) => e.name),
+      collection.name,
+    ];
+    ref.read(selectedCollectionPathNamesProvider.notifier).state = path;
+  }
+
   Collection startCollection({
     required Collection? inCollection,
     required String collectionName,
@@ -47,6 +59,31 @@ class ConfigViewModel {
     _replaceCollection(newCollection);
 
     return newCollection;
+  }
+
+  CollectionField addField({
+    required Collection inCollection,
+    required String fieldName,
+    required FieldType type,
+    required bool acceptFieldValue,
+  }) {
+    final newField = CollectionField(
+      name: fieldName,
+      type: type,
+      acceptFieldValue: acceptFieldValue,
+      configLight: ref.read(configLightProvider),
+    );
+
+    _replaceCollection(
+      inCollection.copyWith(
+        fields: [
+          ...inCollection.fields,
+          newField,
+        ],
+      ),
+    );
+
+    return newField;
   }
 
   void _replaceCollection(Collection newCollection) {

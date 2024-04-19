@@ -3,7 +3,6 @@ import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart'
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
-import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -164,12 +163,13 @@ class _SaveButton extends ConsumerWidget {
     return SaveButton(
       onPressed: canSave
           ? () {
-              final collection = ref.read(configViewModelProvider).startCollection(
-                    inCollection: ref.read(collectionGetter),
-                    collectionName: ref.read(_collectionNameProvider),
-                    modelName: ref.read(_modelNameProvider),
-                  );
-              ref.read(selectedCollectionProvider.notifier).state = collection;
+              final viewModel = ref.read(configViewModelProvider);
+              final collection = viewModel.startCollection(
+                inCollection: ref.read(collectionGetter),
+                collectionName: ref.read(_collectionNameProvider),
+                modelName: ref.read(_modelNameProvider),
+              );
+              viewModel.selectCollection(collection);
               Navigator.of(context).pop();
             }
           : null,

@@ -1,6 +1,7 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/extensions/widget_extensions.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
+import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _PathItem extends ConsumerWidget {
           style: context.typos.labelMedium?.copyWith(color: context.colors.onPrimaryContainer),
         ),
         onTap: () {
-          ref.read(selectedCollectionProvider.notifier).state = collection;
+          ref.read(configViewModelProvider).selectCollection(collection);
         },
       ),
     );
@@ -92,7 +93,7 @@ class _HomeButton extends ConsumerWidget {
     return InkWell(
       child: Icon(Icons.home, color: color),
       onTap: () {
-        ref.read(selectedCollectionProvider.notifier).state = null;
+        ref.read(configViewModelProvider).selectCollection(null);
       },
     );
   }
