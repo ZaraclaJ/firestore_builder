@@ -1,13 +1,16 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:flutter/widgets.dart';
 
-class PathText extends StatelessWidget {
-  const PathText({
+class PathBuilder extends StatelessWidget {
+  const PathBuilder({
     required this.collection,
+    required this.builder,
     super.key,
   });
 
   final Collection? collection;
+
+  final Widget Function(String path) builder;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,6 @@ class PathText extends StatelessWidget {
             collection.name,
           ].join('/')
         : '';
-
-    return Text('/$collectionPath');
+    return builder('/$collectionPath');
   }
 }

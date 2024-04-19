@@ -3,7 +3,7 @@ import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart'
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
-import 'package:firestore_builder_devtools_extension/path/path_text.dart';
+import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -125,19 +125,21 @@ class _Content extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(collectionGetter);
     final levels = ref.watch(_levelsProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionText('Parent path'),
+        const _SectionRow(
+          title: 'Collection:',
+          value: _Path(),
+        ),
         const AppGap.regular(),
-        PathText(collection: collection),
-        const SectionText('Type'),
-        const AppGap.regular(),
-        const _DartType(),
+        const _SectionRow(
+          title: 'Type:',
+          value: _DartType(),
+        ),
         const AppGap.regular(),
         const _NameInput(),
         const AppGap.regular(),
@@ -152,17 +154,59 @@ class _Content extends ConsumerWidget {
   }
 }
 
+class _SectionRow extends StatelessWidget {
+  const _SectionRow({
+    required this.title,
+    required this.value,
+  });
+
+  final String title;
+  final Widget value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SectionText(
+          title,
+        ),
+        const AppGap.regular(),
+        Expanded(
+          child: value,
+        ),
+      ],
+    );
+  }
+}
+
+class _Path extends ConsumerWidget {
+  const _Path();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collection = ref.watch(collectionGetter);
+
+    return PathBuilder(
+      collection: collection,
+      builder: (path) {
+        return SectionText(
+          path,
+          color: context.colors.primary,
+        );
+      },
+    );
+  }
+}
+
 class _DartType extends ConsumerWidget {
   const _DartType();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final symbolName = ref.watch(_fieldTypeProvider).typeReference.symbolName;
-    return Text(
+    return SectionText(
       symbolName,
-      style: context.typos.labelLarge?.copyWith(
-        color: context.colors.primary,
-      ),
+      color: context.colors.primary,
     );
   }
 }

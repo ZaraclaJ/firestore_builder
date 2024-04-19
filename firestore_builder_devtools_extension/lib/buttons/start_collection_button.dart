@@ -2,7 +2,7 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
-import 'package:firestore_builder_devtools_extension/path/path_text.dart';
+import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
@@ -107,7 +107,12 @@ class _Content extends ConsumerWidget {
       children: [
         const Text('Parent path'),
         const AppGap.regular(),
-        PathText(collection: collection),
+        PathBuilder(
+          collection: collection,
+          builder: (path) {
+            return Text(path);
+          },
+        ),
         const AppGap.semiBig(),
         const _CollectionNameInput(),
         const AppGap.semiBig(),
