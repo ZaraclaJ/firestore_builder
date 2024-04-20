@@ -1,7 +1,10 @@
 import 'package:firestore_builder/firestore_builder.dart';
+import 'package:firestore_builder_devtools_extension/assets/pubspec_example.dart';
 import 'package:firestore_builder_devtools_extension/extensions/yaml_config_extensions.dart';
+import 'package:firestore_builder_devtools_extension/layouts/code_layout/code_layout.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yaml/yaml.dart';
 
 final configViewModelProvider = Provider<ConfigViewModel>(
   (ref) => ConfigViewModel(
@@ -13,6 +16,22 @@ class ConfigViewModel {
   const ConfigViewModel({required this.ref});
 
   final Ref ref;
+
+  YamlConfig parseCode(String code) {
+    final yamlMap = loadYaml(yamlConfigExample) as YamlMap;
+    return YamlConfig.fromYaml(yamlMap);
+  }
+
+  void updateYamlCode(String code) {
+    try {
+      ref.read(codeErrorProvider.notifier).state = null;
+      final yamlMap = loadYaml(code) as YamlMap;
+      final newConfig = YamlConfig.fromYaml(yamlMap);
+      ref.read(configProvider.notifier).state = newConfig;
+    } catch (e) {
+      ref.read(codeErrorProvider.notifier).state = e.toString();
+    }
+  }
 
   void selectCollection(Collection? collection) {
     if (collection == null) {

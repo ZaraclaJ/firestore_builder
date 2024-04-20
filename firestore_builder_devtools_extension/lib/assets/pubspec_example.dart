@@ -1,39 +1,6 @@
-const pubspecExample = '''
-name: example
-description: "A new Flutter project."
-
-publish_to: "none"
-version: 1.0.0+1
-
-environment:
-  sdk: ">=3.3.0 <4.0.0"
-
-dependencies:
-  cloud_firestore: ^4.15.7
-  cupertino_icons: ^1.0.6
-  firebase_core: ^2.27.0
-  flutter:
-    sdk: flutter
-  flutter_riverpod: ^2.4.10
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
-
-dev_dependencies:
-  build_runner: ^2.4.8
-  custom_lint: ^0.6.2
-  firestore_builder:
-    path: ..
-  flutter_lints: ^3.0.0
-  flutter_test:
-    sdk: flutter
-  freezed: ^2.4.7
-  json_serializable: ^6.7.1
-  very_good_analysis: ^5.1.0
-
-flutter:
-  uses-material-design: true
-
+const yamlConfigExample = '''
 firestore_builder:
+  project_name: example
   output: lib/firestore
   clear: false
   collections:

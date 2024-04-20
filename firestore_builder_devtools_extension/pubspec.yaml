@@ -10,18 +10,19 @@ environment:
 
 dependencies:
   collection: ^1.18.0
-  cupertino_icons: ^1.0.6
   devtools_app_shared: ^0.0.10
   devtools_extensions: ^0.0.14
   firestore_builder:
     path: ../firestore_builder
   flutter:
     sdk: flutter
+  flutter_code_editor: ^0.3.1
   flutter_highlight: ^0.7.0
   flutter_riverpod: ^2.5.1
   font_awesome_flutter: ^10.7.0
   freezed_annotation: ^2.4.1
   gap: ^3.0.1
+  highlight: ^0.7.0
   json_annotation: ^4.8.1
   recase: ^4.1.0
   scrollable_positioned_list: ^0.3.8
@@ -31,6 +32,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.9
   custom_lint: ^0.6.4
+  dependency_validator: ^3.2.3
   flutter_lints: ^3.0.0
   freezed: ^2.5.2
   json_serializable: ^6.7.1

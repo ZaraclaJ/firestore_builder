@@ -22,13 +22,6 @@ class YamlConfig with _$YamlConfig {
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
   ) {
-    final projectName = yamlMap[projectNameKey];
-    if (projectName is! String) {
-      throw Exception('''
-Invalid pubspec.yaml, missing or invalid name key
-''');
-    }
-
     final firestoreBuilderConfig = yamlMap[firestoreBuilderKey];
     if (firestoreBuilderConfig is! YamlMap) {
       throw Exception('''
@@ -36,17 +29,24 @@ The configuration file does not contain a firestore_builder section: $yamlMap
 ''');
     }
 
+    final projectName = firestoreBuilderConfig[projectNameKey];
+    if (projectName is! String) {
+      throw Exception('''
+The configuration file does not contain an $projectNameKey section: $firestoreBuilderConfig
+''');
+    }
+
     final outputPath = firestoreBuilderConfig[outputKey];
     if (outputPath is! String) {
       throw Exception('''
-The configuration file does not contain an output section: $firestoreBuilderConfig
+The configuration file does not contain an $outputKey section: $firestoreBuilderConfig
 ''');
     }
 
     final clear = firestoreBuilderConfig[clearKey];
     if (clear is! bool?) {
       throw Exception('''
-The configuration file does not contain a correct clear section: $firestoreBuilderConfig
+The configuration file does not contain a correct $clearKey section: $firestoreBuilderConfig
 ''');
     }
 
@@ -72,6 +72,7 @@ extension YamlConfigExtensions on YamlConfig {
   Map<String, dynamic> toYaml() {
     return {
       firestoreBuilderKey: {
+        projectNameKey: projectName,
         outputKey: outputPath,
         clearKey: clear,
         collectionsKey: collections.map((e) => e.toYaml()).toList(),

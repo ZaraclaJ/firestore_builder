@@ -1,8 +1,8 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/assets/pubspec_example.dart';
 import 'package:firestore_builder_devtools_extension/extensions/yaml_config_extensions.dart';
+import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yaml/yaml.dart';
 
 const _defaultConfig = YamlConfig(
   projectName: '',
@@ -14,8 +14,7 @@ const _defaultConfig = YamlConfig(
 final initialConfigProvider = FutureProvider<YamlConfig>(
   (ref) async {
     try {
-      final yamlMap = loadYaml(pubspecExample) as YamlMap;
-      return YamlConfig.fromYaml(yamlMap);
+      return ref.watch(configViewModelProvider).parseCode(yamlConfigExample);
     } catch (e) {
       throw Exception('''
 Error parsing the pubspecExample file, $e
