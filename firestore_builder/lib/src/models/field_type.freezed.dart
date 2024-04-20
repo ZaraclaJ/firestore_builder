@@ -26,7 +26,7 @@ mixin _$FieldType {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -43,7 +43,7 @@ mixin _$FieldType {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -58,7 +58,7 @@ mixin _$FieldType {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -222,7 +222,7 @@ class _$FieldTypeStringImpl implements FieldTypeString {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -242,7 +242,7 @@ class _$FieldTypeStringImpl implements FieldTypeString {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -260,7 +260,7 @@ class _$FieldTypeStringImpl implements FieldTypeString {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -415,7 +415,7 @@ class _$FieldTypeIntImpl implements FieldTypeInt {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -435,7 +435,7 @@ class _$FieldTypeIntImpl implements FieldTypeInt {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -453,7 +453,7 @@ class _$FieldTypeIntImpl implements FieldTypeInt {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -609,7 +609,7 @@ class _$FieldTypeDoubleImpl implements FieldTypeDouble {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -629,7 +629,7 @@ class _$FieldTypeDoubleImpl implements FieldTypeDouble {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -647,7 +647,7 @@ class _$FieldTypeDoubleImpl implements FieldTypeDouble {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -802,7 +802,7 @@ class _$FieldTypeBoolImpl implements FieldTypeBool {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -822,7 +822,7 @@ class _$FieldTypeBoolImpl implements FieldTypeBool {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -840,7 +840,7 @@ class _$FieldTypeBoolImpl implements FieldTypeBool {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -996,7 +996,7 @@ class _$FieldTypeTimestampImpl implements FieldTypeTimestamp {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -1016,7 +1016,7 @@ class _$FieldTypeTimestampImpl implements FieldTypeTimestamp {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1034,7 +1034,7 @@ class _$FieldTypeTimestampImpl implements FieldTypeTimestamp {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1190,7 +1190,7 @@ class _$FieldTypeDateTimeImpl implements FieldTypeDateTime {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -1210,7 +1210,7 @@ class _$FieldTypeDateTimeImpl implements FieldTypeDateTime {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1228,7 +1228,7 @@ class _$FieldTypeDateTimeImpl implements FieldTypeDateTime {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1386,7 +1386,7 @@ class _$FieldTypeDocumentReferenceImpl implements FieldTypeDocumentReference {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -1406,7 +1406,7 @@ class _$FieldTypeDocumentReferenceImpl implements FieldTypeDocumentReference {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1424,7 +1424,7 @@ class _$FieldTypeDocumentReferenceImpl implements FieldTypeDocumentReference {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1513,7 +1513,7 @@ abstract class _$$FieldTypeCustomClassImplCopyWith<$Res>
       __$$FieldTypeCustomClassImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String className, String? path, bool isNullable});
+  $Res call({String className, String path, bool isNullable});
 }
 
 /// @nodoc
@@ -1528,7 +1528,7 @@ class __$$FieldTypeCustomClassImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? className = null,
-    Object? path = freezed,
+    Object? path = null,
     Object? isNullable = null,
   }) {
     return _then(_$FieldTypeCustomClassImpl(
@@ -1536,10 +1536,10 @@ class __$$FieldTypeCustomClassImplCopyWithImpl<$Res>
           ? _value.className
           : className // ignore: cast_nullable_to_non_nullable
               as String,
-      path: freezed == path
+      path: null == path
           ? _value.path
           : path // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       isNullable: null == isNullable
           ? _value.isNullable
           : isNullable // ignore: cast_nullable_to_non_nullable
@@ -1557,7 +1557,7 @@ class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
   @override
   final String className;
   @override
-  final String? path;
+  final String path;
   @override
   final bool isNullable;
 
@@ -1599,7 +1599,7 @@ class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -1619,7 +1619,7 @@ class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1637,7 +1637,7 @@ class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1709,11 +1709,11 @@ class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
 abstract class FieldTypeCustomClass implements FieldType {
   const factory FieldTypeCustomClass(
       {required final String className,
-      required final String? path,
+      required final String path,
       required final bool isNullable}) = _$FieldTypeCustomClassImpl;
 
   String get className;
-  String? get path;
+  String get path;
   @override
   bool get isNullable;
   @override
@@ -1823,7 +1823,7 @@ class _$FieldTypeListImpl implements FieldTypeList {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -1843,7 +1843,7 @@ class _$FieldTypeListImpl implements FieldTypeList {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -1861,7 +1861,7 @@ class _$FieldTypeListImpl implements FieldTypeList {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,
@@ -2047,7 +2047,7 @@ class _$FieldTypeMapImpl implements FieldTypeMap {
     required TResult Function(bool isNullable) timestamp,
     required TResult Function(bool isNullable) dateTime,
     required TResult Function(bool isNullable) documentReference,
-    required TResult Function(String className, String? path, bool isNullable)
+    required TResult Function(String className, String path, bool isNullable)
         customClass,
     required TResult Function(FieldType subType, String? path, bool isNullable)
         list,
@@ -2067,7 +2067,7 @@ class _$FieldTypeMapImpl implements FieldTypeMap {
     TResult? Function(bool isNullable)? timestamp,
     TResult? Function(bool isNullable)? dateTime,
     TResult? Function(bool isNullable)? documentReference,
-    TResult? Function(String className, String? path, bool isNullable)?
+    TResult? Function(String className, String path, bool isNullable)?
         customClass,
     TResult? Function(FieldType subType, String? path, bool isNullable)? list,
     TResult? Function(FieldType subType, String? path, bool isNullable)? map,
@@ -2085,7 +2085,7 @@ class _$FieldTypeMapImpl implements FieldTypeMap {
     TResult Function(bool isNullable)? timestamp,
     TResult Function(bool isNullable)? dateTime,
     TResult Function(bool isNullable)? documentReference,
-    TResult Function(String className, String? path, bool isNullable)?
+    TResult Function(String className, String path, bool isNullable)?
         customClass,
     TResult Function(FieldType subType, String? path, bool isNullable)? list,
     TResult Function(FieldType subType, String? path, bool isNullable)? map,

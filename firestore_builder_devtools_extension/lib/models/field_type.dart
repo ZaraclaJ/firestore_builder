@@ -68,7 +68,7 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
       FieldTypeEnum.customClass => FieldType.customClass(
           isNullable: nullable,
           className: 'TODO',
-          path: null,
+          path: 'TODO',
         ),
     };
   }

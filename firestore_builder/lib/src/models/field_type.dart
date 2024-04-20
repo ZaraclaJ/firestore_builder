@@ -39,7 +39,7 @@ class FieldType with _$FieldType {
 
   const factory FieldType.customClass({
     required String className,
-    required String? path,
+    required String path,
     required bool isNullable,
   }) = FieldTypeCustomClass;
 
@@ -98,11 +98,12 @@ class FieldType with _$FieldType {
       BasicSymbols.dateTime => FieldType.dateTime(isNullable: isNullable),
       BasicSymbols.timestamp => FieldType.timestamp(isNullable: isNullable),
       FirestoreSymbols.documentReferenceClass => FieldType.documentReference(isNullable: isNullable),
-      _ => FieldType.customClass(
+      _ when path != null => FieldType.customClass(
           className: pureType,
           isNullable: isNullable,
           path: path,
         ),
+      _ => throw Exception('Type $symbol is not recognized'),
     };
   }
 }

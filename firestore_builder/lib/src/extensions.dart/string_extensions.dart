@@ -30,7 +30,17 @@ extension StringExtensions on String {
   }
 
   String? extractMapType() {
-    return _extractType(BasicSymbols.map);
+    final typesString = _extractType(BasicSymbols.map);
+    if (typesString == null) {
+      return null;
+    }
+
+    final types = typesString.split(',').map((e) => e.trim());
+    if (types.length != 2 || types.first != BasicSymbols.string) {
+      return null;
+    }
+
+    return types.elementAt(1);
   }
 
   String? _extractType(String prefix) {
@@ -39,14 +49,7 @@ extension StringExtensions on String {
     if (match == null) {
       return null;
     }
-
-    final typesString = substring(match.start + 1 + prefix.length, match.end - 1);
-    final types = typesString.split(',').map((e) => e.trim());
-    if (types.length != 2 || types.first != BasicSymbols.string) {
-      return null;
-    }
-
-    return types.elementAt(1);
+    return substring(match.start + 1 + prefix.length, match.end - 1);
   }
 }
 
