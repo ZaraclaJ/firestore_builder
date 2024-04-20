@@ -1,6 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/assets/pubspec_example.dart';
+import 'package:firestore_builder_devtools_extension/extensions/yaml_config_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yaml/yaml.dart';
 
@@ -30,6 +30,11 @@ final configProvider = StateProvider<YamlConfig>(
     return initialConfig ?? _defaultConfig;
   },
 );
+
+final codeProvider = Provider<String>((ref) {
+  final config = ref.watch(configProvider);
+  return config.toCode();
+});
 
 final configLightProvider = Provider<YamlConfig>(
   (ref) {
@@ -96,81 +101,3 @@ final selectedCollectionPathProvider = Provider.autoDispose(
     return ref.watch(_collectionPathFromConfigProvider(selectedCollection));
   },
 );
-
-extension YamlConfigExtensions on YamlConfig {
-  Collection? collectionFromPath(List<String> collectionPath) {
-    if (collectionPath.isEmpty) {
-      return null;
-    }
-
-    final collection = collections.firstWhereOrNull(
-      (collection) => collection.name == collectionPath.first,
-    );
-
-    if (collection == null) {
-      return null;
-    }
-
-    final nextCollectionPath = collectionPath.sublist(1);
-    return collection.collectionFromPath(nextCollectionPath);
-  }
-
-  List<Collection> collectionPathFromNames(List<String> collectionPath) {
-    if (collectionPath.isEmpty) {
-      return [];
-    }
-
-    final subCollection = collections.firstWhereOrNull(
-      (subCollection) => subCollection.name == collectionPath.first,
-    );
-
-    if (subCollection == null) {
-      return [];
-    }
-
-    final nextCollectionPath = collectionPath.sublist(1);
-    return [
-      subCollection,
-      ...subCollection.collectionPathFromNames(nextCollectionPath),
-    ];
-  }
-}
-
-extension on Collection {
-  List<Collection> collectionPathFromNames(List<String> collectionPath) {
-    if (collectionPath.isEmpty) {
-      return [];
-    }
-
-    final subCollection = subCollections.firstWhereOrNull(
-      (subCollection) => subCollection.name == collectionPath.first,
-    );
-
-    if (subCollection == null) {
-      return [];
-    }
-
-    final nextCollectionPath = collectionPath.sublist(1);
-    return [
-      subCollection,
-      ...subCollection.collectionPathFromNames(nextCollectionPath),
-    ];
-  }
-
-  Collection? collectionFromPath(List<String> collectionPath) {
-    if (collectionPath.isEmpty) {
-      return this;
-    }
-
-    final collection = subCollections.firstWhereOrNull(
-      (collection) => collection.name == collectionPath.first,
-    );
-
-    if (collection == null) {
-      return null;
-    }
-
-    final nextCollectionPath = collectionPath.sublist(1);
-    return collection.collectionFromPath(nextCollectionPath);
-  }
-}

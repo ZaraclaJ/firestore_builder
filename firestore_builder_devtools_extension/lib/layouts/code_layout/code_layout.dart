@@ -1,5 +1,5 @@
 import 'package:devtools_app_shared/ui.dart';
-import 'package:firestore_builder_devtools_extension/assets/pubspec_example.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
@@ -7,6 +7,7 @@ import 'package:firestore_builder_devtools_extension/widgets/double_scroll_layou
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CodeLayout extends StatelessWidget {
   const CodeLayout({super.key});
@@ -19,11 +20,12 @@ class CodeLayout extends StatelessWidget {
   }
 }
 
-class _Code extends StatelessWidget {
+class _Code extends ConsumerWidget {
   const _Code();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final code = ref.watch(codeProvider);
     final backgroundColor = codeTheme.backgroundColor;
     return Container(
       decoration: BoxDecoration(
@@ -36,9 +38,10 @@ class _Code extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: HighlightView(
-              pubspecExample,
+              code,
               language: 'yaml',
               theme: codeTheme,
+              textStyle: TextStyle(fontSize: context.typos.bodyMedium?.fontSize),
             ),
           ),
         ),

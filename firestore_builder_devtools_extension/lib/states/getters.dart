@@ -1,4 +1,5 @@
 import 'package:firestore_builder/firestore_builder.dart';
+import 'package:firestore_builder_devtools_extension/extensions/yaml_config_extensions.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
