@@ -1,6 +1,6 @@
 import 'package:devtools_app_shared/ui.dart';
-import 'package:firestore_builder_devtools_extension/collections/collections_bloc.dart';
-import 'package:firestore_builder_devtools_extension/extensions/num_extensions.dart';
+import 'package:firestore_builder_devtools_extension/layouts/code_layout/code_layout.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/firebase_config_layout.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -15,37 +15,9 @@ class HomeLayout extends StatelessWidget {
       minSizes: const [0, 0],
       axis: Axis.horizontal,
       children: const [
-        _FirebaseConfigLayout(),
-        SizedBox(),
+        FirebaseConfigLayout(),
+        CodeLayout(),
       ],
-    );
-  }
-}
-
-class _FirebaseConfigLayout extends StatelessWidget {
-  const _FirebaseConfigLayout();
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth.bounded(minWidth, maxWidth);
-        final height = constraints.maxHeight.bounded(minHeight, maxHeight);
-        return InteractiveViewer(
-          constrained: false,
-          child: Center(
-            child: SizedBox(
-              width: width,
-              height: height,
-              child: const Column(
-                children: [
-                  Expanded(child: CollectionsBloc()),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }

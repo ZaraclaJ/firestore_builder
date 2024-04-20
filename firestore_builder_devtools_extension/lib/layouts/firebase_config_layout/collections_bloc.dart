@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:firestore_builder/firestore_builder.dart';
-import 'package:firestore_builder_devtools_extension/collections/collection_details.dart';
 import 'package:firestore_builder_devtools_extension/extensions/num_extensions.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_details.dart';
 import 'package:firestore_builder_devtools_extension/path/path_details.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
