@@ -40,7 +40,13 @@ extension StringExtensions on String {
       return null;
     }
 
-    return substring(match.start + 1 + prefix.length, match.end - 1);
+    final typesString = substring(match.start + 1 + prefix.length, match.end - 1);
+    final types = typesString.split(',').map((e) => e.trim());
+    if (types.length != 2 || types.first != BasicSymbols.string) {
+      return null;
+    }
+
+    return types.elementAt(1);
   }
 }
 

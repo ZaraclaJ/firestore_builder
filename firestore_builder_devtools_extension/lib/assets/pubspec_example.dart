@@ -19,7 +19,7 @@ firestore_builder:
           - labels: 
               type: List<String>
               accept_field_value: true
-          - presences: Map<bool>?    
+          - presences: Map< bool>?    
           - team_ref: DocumentReference?
           - team_size: 
               type: TeamSize
