@@ -182,8 +182,8 @@ class __$$FieldTypeStringImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeStringImpl extends FieldTypeString {
-  const _$FieldTypeStringImpl({required this.isNullable}) : super._();
+class _$FieldTypeStringImpl implements FieldTypeString {
+  const _$FieldTypeStringImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -329,10 +329,9 @@ class _$FieldTypeStringImpl extends FieldTypeString {
   }
 }
 
-abstract class FieldTypeString extends FieldType {
+abstract class FieldTypeString implements FieldType {
   const factory FieldTypeString({required final bool isNullable}) =
       _$FieldTypeStringImpl;
-  const FieldTypeString._() : super._();
 
   @override
   bool get isNullable;
@@ -377,8 +376,8 @@ class __$$FieldTypeIntImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeIntImpl extends FieldTypeInt {
-  const _$FieldTypeIntImpl({required this.isNullable}) : super._();
+class _$FieldTypeIntImpl implements FieldTypeInt {
+  const _$FieldTypeIntImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -523,10 +522,9 @@ class _$FieldTypeIntImpl extends FieldTypeInt {
   }
 }
 
-abstract class FieldTypeInt extends FieldType {
+abstract class FieldTypeInt implements FieldType {
   const factory FieldTypeInt({required final bool isNullable}) =
       _$FieldTypeIntImpl;
-  const FieldTypeInt._() : super._();
 
   @override
   bool get isNullable;
@@ -571,8 +569,8 @@ class __$$FieldTypeDoubleImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeDoubleImpl extends FieldTypeDouble {
-  const _$FieldTypeDoubleImpl({required this.isNullable}) : super._();
+class _$FieldTypeDoubleImpl implements FieldTypeDouble {
+  const _$FieldTypeDoubleImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -718,10 +716,9 @@ class _$FieldTypeDoubleImpl extends FieldTypeDouble {
   }
 }
 
-abstract class FieldTypeDouble extends FieldType {
+abstract class FieldTypeDouble implements FieldType {
   const factory FieldTypeDouble({required final bool isNullable}) =
       _$FieldTypeDoubleImpl;
-  const FieldTypeDouble._() : super._();
 
   @override
   bool get isNullable;
@@ -766,8 +763,8 @@ class __$$FieldTypeBoolImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeBoolImpl extends FieldTypeBool {
-  const _$FieldTypeBoolImpl({required this.isNullable}) : super._();
+class _$FieldTypeBoolImpl implements FieldTypeBool {
+  const _$FieldTypeBoolImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -912,10 +909,9 @@ class _$FieldTypeBoolImpl extends FieldTypeBool {
   }
 }
 
-abstract class FieldTypeBool extends FieldType {
+abstract class FieldTypeBool implements FieldType {
   const factory FieldTypeBool({required final bool isNullable}) =
       _$FieldTypeBoolImpl;
-  const FieldTypeBool._() : super._();
 
   @override
   bool get isNullable;
@@ -960,8 +956,8 @@ class __$$FieldTypeTimestampImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeTimestampImpl extends FieldTypeTimestamp {
-  const _$FieldTypeTimestampImpl({required this.isNullable}) : super._();
+class _$FieldTypeTimestampImpl implements FieldTypeTimestamp {
+  const _$FieldTypeTimestampImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -1107,10 +1103,9 @@ class _$FieldTypeTimestampImpl extends FieldTypeTimestamp {
   }
 }
 
-abstract class FieldTypeTimestamp extends FieldType {
+abstract class FieldTypeTimestamp implements FieldType {
   const factory FieldTypeTimestamp({required final bool isNullable}) =
       _$FieldTypeTimestampImpl;
-  const FieldTypeTimestamp._() : super._();
 
   @override
   bool get isNullable;
@@ -1155,8 +1150,8 @@ class __$$FieldTypeDateTimeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeDateTimeImpl extends FieldTypeDateTime {
-  const _$FieldTypeDateTimeImpl({required this.isNullable}) : super._();
+class _$FieldTypeDateTimeImpl implements FieldTypeDateTime {
+  const _$FieldTypeDateTimeImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -1302,10 +1297,9 @@ class _$FieldTypeDateTimeImpl extends FieldTypeDateTime {
   }
 }
 
-abstract class FieldTypeDateTime extends FieldType {
+abstract class FieldTypeDateTime implements FieldType {
   const factory FieldTypeDateTime({required final bool isNullable}) =
       _$FieldTypeDateTimeImpl;
-  const FieldTypeDateTime._() : super._();
 
   @override
   bool get isNullable;
@@ -1352,9 +1346,8 @@ class __$$FieldTypeDocumentReferenceImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeDocumentReferenceImpl extends FieldTypeDocumentReference {
-  const _$FieldTypeDocumentReferenceImpl({required this.isNullable})
-      : super._();
+class _$FieldTypeDocumentReferenceImpl implements FieldTypeDocumentReference {
+  const _$FieldTypeDocumentReferenceImpl({required this.isNullable});
 
   @override
   final bool isNullable;
@@ -1500,10 +1493,9 @@ class _$FieldTypeDocumentReferenceImpl extends FieldTypeDocumentReference {
   }
 }
 
-abstract class FieldTypeDocumentReference extends FieldType {
+abstract class FieldTypeDocumentReference implements FieldType {
   const factory FieldTypeDocumentReference({required final bool isNullable}) =
       _$FieldTypeDocumentReferenceImpl;
-  const FieldTypeDocumentReference._() : super._();
 
   @override
   bool get isNullable;
@@ -1558,10 +1550,9 @@ class __$$FieldTypeCustomClassImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeCustomClassImpl extends FieldTypeCustomClass {
+class _$FieldTypeCustomClassImpl implements FieldTypeCustomClass {
   const _$FieldTypeCustomClassImpl(
-      {required this.className, required this.path, required this.isNullable})
-      : super._();
+      {required this.className, required this.path, required this.isNullable});
 
   @override
   final String className;
@@ -1715,12 +1706,11 @@ class _$FieldTypeCustomClassImpl extends FieldTypeCustomClass {
   }
 }
 
-abstract class FieldTypeCustomClass extends FieldType {
+abstract class FieldTypeCustomClass implements FieldType {
   const factory FieldTypeCustomClass(
       {required final String className,
       required final String? path,
       required final bool isNullable}) = _$FieldTypeCustomClassImpl;
-  const FieldTypeCustomClass._() : super._();
 
   String get className;
   String? get path;
@@ -1787,10 +1777,9 @@ class __$$FieldTypeListImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeListImpl extends FieldTypeList {
+class _$FieldTypeListImpl implements FieldTypeList {
   const _$FieldTypeListImpl(
-      {required this.subType, required this.path, required this.isNullable})
-      : super._();
+      {required this.subType, required this.path, required this.isNullable});
 
   @override
   final FieldType subType;
@@ -1941,12 +1930,11 @@ class _$FieldTypeListImpl extends FieldTypeList {
   }
 }
 
-abstract class FieldTypeList extends FieldType {
+abstract class FieldTypeList implements FieldType {
   const factory FieldTypeList(
       {required final FieldType subType,
       required final String? path,
       required final bool isNullable}) = _$FieldTypeListImpl;
-  const FieldTypeList._() : super._();
 
   FieldType get subType;
   String? get path;
@@ -2013,10 +2001,9 @@ class __$$FieldTypeMapImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FieldTypeMapImpl extends FieldTypeMap {
+class _$FieldTypeMapImpl implements FieldTypeMap {
   const _$FieldTypeMapImpl(
-      {required this.subType, required this.path, required this.isNullable})
-      : super._();
+      {required this.subType, required this.path, required this.isNullable});
 
   @override
   final FieldType subType;
@@ -2167,12 +2154,11 @@ class _$FieldTypeMapImpl extends FieldTypeMap {
   }
 }
 
-abstract class FieldTypeMap extends FieldType {
+abstract class FieldTypeMap implements FieldType {
   const factory FieldTypeMap(
       {required final FieldType subType,
       required final String? path,
       required final bool isNullable}) = _$FieldTypeMapImpl;
-  const FieldTypeMap._() : super._();
 
   FieldType get subType;
   String? get path;

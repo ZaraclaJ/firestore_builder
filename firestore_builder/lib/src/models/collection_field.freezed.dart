@@ -156,14 +156,14 @@ class __$$CollectionFieldImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CollectionFieldImpl extends _CollectionField
-    with DiagnosticableTreeMixin {
+class _$CollectionFieldImpl
+    with DiagnosticableTreeMixin
+    implements _CollectionField {
   const _$CollectionFieldImpl(
       {required this.name,
       required this.type,
       required this.acceptFieldValue,
-      required this.configLight})
-      : super._();
+      required this.configLight});
 
   @override
   final String name;
@@ -215,13 +215,12 @@ class _$CollectionFieldImpl extends _CollectionField
           this, _$identity);
 }
 
-abstract class _CollectionField extends CollectionField {
+abstract class _CollectionField implements CollectionField {
   const factory _CollectionField(
       {required final String name,
       required final FieldType type,
       required final bool acceptFieldValue,
       required final YamlConfig configLight}) = _$CollectionFieldImpl;
-  const _CollectionField._() : super._();
 
   @override
   String get name;

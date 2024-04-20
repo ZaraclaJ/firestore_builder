@@ -10,6 +10,7 @@ import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
 Future<void> generateModels({

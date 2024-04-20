@@ -23,7 +23,6 @@ class Collection with _$Collection {
     required YamlConfig configLight,
   }) = _Collection;
 
-  const Collection._();
   factory Collection.fromYaml({
     required YamlMap yamlMap,
     required YamlConfig configLight,
@@ -97,6 +96,19 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
     return collection.copyWith(
       subCollections: subCollections,
     );
+  }
+}
+
+extension CollectionExtensions on Collection {
+  Map<String, dynamic> toYaml() {
+    return {
+      collectionKey: {
+        collectionNameKey: name,
+        modelNameKey: modelName,
+        fieldsKey: fields.map((e) => e.toYaml()).toList(),
+      },
+      subCollectionsKey: subCollections.map((e) => e.toYaml()).toList(),
+    };
   }
 
   List<Collection> get allCollection {

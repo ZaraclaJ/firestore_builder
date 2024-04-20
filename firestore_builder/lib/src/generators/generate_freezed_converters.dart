@@ -4,6 +4,7 @@ import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/generators/generate_library.dart';
+import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
 Future<void> generateFreezedConverters({

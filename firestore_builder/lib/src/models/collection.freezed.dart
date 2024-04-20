@@ -171,7 +171,7 @@ class __$$CollectionImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CollectionImpl extends _Collection with DiagnosticableTreeMixin {
+class _$CollectionImpl with DiagnosticableTreeMixin implements _Collection {
   const _$CollectionImpl(
       {required this.name,
       required this.modelName,
@@ -181,8 +181,7 @@ class _$CollectionImpl extends _Collection with DiagnosticableTreeMixin {
       required this.configLight})
       : _fields = fields,
         _subCollections = subCollections,
-        _collectionPath = collectionPath,
-        super._();
+        _collectionPath = collectionPath;
 
   @override
   final String name;
@@ -267,7 +266,7 @@ class _$CollectionImpl extends _Collection with DiagnosticableTreeMixin {
       __$$CollectionImplCopyWithImpl<_$CollectionImpl>(this, _$identity);
 }
 
-abstract class _Collection extends Collection {
+abstract class _Collection implements Collection {
   const factory _Collection(
       {required final String name,
       required final String modelName,
@@ -275,7 +274,6 @@ abstract class _Collection extends Collection {
       required final List<Collection> subCollections,
       required final List<Collection> collectionPath,
       required final YamlConfig configLight}) = _$CollectionImpl;
-  const _Collection._() : super._();
 
   @override
   String get name;

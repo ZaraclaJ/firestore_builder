@@ -55,8 +55,6 @@ class FieldType with _$FieldType {
     required bool isNullable,
   }) = FieldTypeMap;
 
-  const FieldType._();
-
   /// Accepts a Dart symbol and returns the corresponding [FieldType].
   ///
   /// The following symbols are supported:
@@ -107,7 +105,9 @@ class FieldType with _$FieldType {
         ),
     };
   }
+}
 
+extension FieldTypeExtensions on FieldType {
   TypeReference get typeReference {
     final type = this;
     return TypeReference(

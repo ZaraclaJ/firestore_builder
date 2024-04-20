@@ -14,12 +14,10 @@ part 'yaml_config.freezed.dart';
 class YamlConfig with _$YamlConfig {
   const factory YamlConfig({
     required String outputPath,
-    required String projectName,
     required bool clear,
     required List<Collection> collections,
+    required String projectName,
   }) = _YamlConfig;
-
-  const YamlConfig._();
 
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
@@ -67,6 +65,18 @@ The configuration file does not contain a correct clear section: $firestoreBuild
     return configLight.copyWith(
       collections: collections,
     );
+  }
+}
+
+extension YamlConfigExtensions on YamlConfig {
+  Map<String, dynamic> toYaml() {
+    return {
+      firestoreBuilderKey: {
+        outputKey: outputPath,
+        clearKey: clear,
+        collectionsKey: collections.map((e) => e.toYaml()).toList(),
+      },
+    };
   }
 
   List<Collection> get allCollections {

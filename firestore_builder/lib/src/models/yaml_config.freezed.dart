@@ -17,9 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$YamlConfig {
   String get outputPath => throw _privateConstructorUsedError;
-  String get projectName => throw _privateConstructorUsedError;
   bool get clear => throw _privateConstructorUsedError;
   List<Collection> get collections => throw _privateConstructorUsedError;
+  String get projectName => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $YamlConfigCopyWith<YamlConfig> get copyWith =>
@@ -34,9 +34,9 @@ abstract class $YamlConfigCopyWith<$Res> {
   @useResult
   $Res call(
       {String outputPath,
-      String projectName,
       bool clear,
-      List<Collection> collections});
+      List<Collection> collections,
+      String projectName});
 }
 
 /// @nodoc
@@ -53,18 +53,14 @@ class _$YamlConfigCopyWithImpl<$Res, $Val extends YamlConfig>
   @override
   $Res call({
     Object? outputPath = null,
-    Object? projectName = null,
     Object? clear = null,
     Object? collections = null,
+    Object? projectName = null,
   }) {
     return _then(_value.copyWith(
       outputPath: null == outputPath
           ? _value.outputPath
           : outputPath // ignore: cast_nullable_to_non_nullable
-              as String,
-      projectName: null == projectName
-          ? _value.projectName
-          : projectName // ignore: cast_nullable_to_non_nullable
               as String,
       clear: null == clear
           ? _value.clear
@@ -74,6 +70,10 @@ class _$YamlConfigCopyWithImpl<$Res, $Val extends YamlConfig>
           ? _value.collections
           : collections // ignore: cast_nullable_to_non_nullable
               as List<Collection>,
+      projectName: null == projectName
+          ? _value.projectName
+          : projectName // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -88,9 +88,9 @@ abstract class _$$YamlConfigImplCopyWith<$Res>
   @useResult
   $Res call(
       {String outputPath,
-      String projectName,
       bool clear,
-      List<Collection> collections});
+      List<Collection> collections,
+      String projectName});
 }
 
 /// @nodoc
@@ -105,18 +105,14 @@ class __$$YamlConfigImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? outputPath = null,
-    Object? projectName = null,
     Object? clear = null,
     Object? collections = null,
+    Object? projectName = null,
   }) {
     return _then(_$YamlConfigImpl(
       outputPath: null == outputPath
           ? _value.outputPath
           : outputPath // ignore: cast_nullable_to_non_nullable
-              as String,
-      projectName: null == projectName
-          ? _value.projectName
-          : projectName // ignore: cast_nullable_to_non_nullable
               as String,
       clear: null == clear
           ? _value.clear
@@ -126,25 +122,26 @@ class __$$YamlConfigImplCopyWithImpl<$Res>
           ? _value._collections
           : collections // ignore: cast_nullable_to_non_nullable
               as List<Collection>,
+      projectName: null == projectName
+          ? _value.projectName
+          : projectName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$YamlConfigImpl extends _YamlConfig with DiagnosticableTreeMixin {
+class _$YamlConfigImpl with DiagnosticableTreeMixin implements _YamlConfig {
   const _$YamlConfigImpl(
       {required this.outputPath,
-      required this.projectName,
       required this.clear,
-      required final List<Collection> collections})
-      : _collections = collections,
-        super._();
+      required final List<Collection> collections,
+      required this.projectName})
+      : _collections = collections;
 
   @override
   final String outputPath;
-  @override
-  final String projectName;
   @override
   final bool clear;
   final List<Collection> _collections;
@@ -156,8 +153,11 @@ class _$YamlConfigImpl extends _YamlConfig with DiagnosticableTreeMixin {
   }
 
   @override
+  final String projectName;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'YamlConfig(outputPath: $outputPath, projectName: $projectName, clear: $clear, collections: $collections)';
+    return 'YamlConfig(outputPath: $outputPath, clear: $clear, collections: $collections, projectName: $projectName)';
   }
 
   @override
@@ -166,9 +166,9 @@ class _$YamlConfigImpl extends _YamlConfig with DiagnosticableTreeMixin {
     properties
       ..add(DiagnosticsProperty('type', 'YamlConfig'))
       ..add(DiagnosticsProperty('outputPath', outputPath))
-      ..add(DiagnosticsProperty('projectName', projectName))
       ..add(DiagnosticsProperty('clear', clear))
-      ..add(DiagnosticsProperty('collections', collections));
+      ..add(DiagnosticsProperty('collections', collections))
+      ..add(DiagnosticsProperty('projectName', projectName));
   }
 
   @override
@@ -178,16 +178,16 @@ class _$YamlConfigImpl extends _YamlConfig with DiagnosticableTreeMixin {
             other is _$YamlConfigImpl &&
             (identical(other.outputPath, outputPath) ||
                 other.outputPath == outputPath) &&
-            (identical(other.projectName, projectName) ||
-                other.projectName == projectName) &&
             (identical(other.clear, clear) || other.clear == clear) &&
             const DeepCollectionEquality()
-                .equals(other._collections, _collections));
+                .equals(other._collections, _collections) &&
+            (identical(other.projectName, projectName) ||
+                other.projectName == projectName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, outputPath, projectName, clear,
-      const DeepCollectionEquality().hash(_collections));
+  int get hashCode => Object.hash(runtimeType, outputPath, clear,
+      const DeepCollectionEquality().hash(_collections), projectName);
 
   @JsonKey(ignore: true)
   @override
@@ -196,22 +196,21 @@ class _$YamlConfigImpl extends _YamlConfig with DiagnosticableTreeMixin {
       __$$YamlConfigImplCopyWithImpl<_$YamlConfigImpl>(this, _$identity);
 }
 
-abstract class _YamlConfig extends YamlConfig {
+abstract class _YamlConfig implements YamlConfig {
   const factory _YamlConfig(
       {required final String outputPath,
-      required final String projectName,
       required final bool clear,
-      required final List<Collection> collections}) = _$YamlConfigImpl;
-  const _YamlConfig._() : super._();
+      required final List<Collection> collections,
+      required final String projectName}) = _$YamlConfigImpl;
 
   @override
   String get outputPath;
   @override
-  String get projectName;
-  @override
   bool get clear;
   @override
   List<Collection> get collections;
+  @override
+  String get projectName;
   @override
   @JsonKey(ignore: true)
   _$$YamlConfigImplCopyWith<_$YamlConfigImpl> get copyWith =>

@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
+import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/field_type.dart';
@@ -21,7 +22,6 @@ class CollectionField with _$CollectionField {
     required YamlConfig configLight,
   }) = _CollectionField;
 
-  const CollectionField._();
   factory CollectionField.fromYaml({
     required YamlMap yamlMap,
     required YamlConfig configLight,
@@ -93,6 +93,27 @@ Invalid field definition, invalid field: $yamlMap''',
       acceptFieldValue: acceptFieldValue ?? false,
       configLight: configLight,
     );
+  }
+}
+
+extension CollectionFieldExtensions on CollectionField {
+  Map<String, dynamic> toYaml() {
+    final typeName = type.typeReference.symbolName;
+    final acceptFieldValue = this.acceptFieldValue ? this.acceptFieldValue : null;
+    final path = type.packageUrl;
+    if (acceptFieldValue == null && path == null) {
+      return {
+        name: typeName,
+      };
+    }
+
+    return {
+      name: {
+        typeKey: typeName,
+        if (acceptFieldValue != null) acceptFieldValueKey: acceptFieldValue,
+        if (path != null) pathKey: path,
+      },
+    };
   }
 
   TypeReference get _typeReference {
