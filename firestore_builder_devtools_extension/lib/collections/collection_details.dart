@@ -196,13 +196,16 @@ class _FieldItem extends StatelessWidget {
     return AppListTile(
       title: '${field.name}: ${field.type.typeReference.symbolName}',
       titleWidget: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('${field.name}:'),
           const AppGap.small(),
-          Text(
-            field.type.typeReference.symbolName,
-            style: context.typos.labelLarge?.copyWith(
-              fontStyle: FontStyle.italic,
+          Expanded(
+            child: Text(
+              field.type.typeReference.symbolName,
+              style: context.typos.labelLarge?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
             ),
           ),
         ],
