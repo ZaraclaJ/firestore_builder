@@ -1,3 +1,4 @@
+import 'package:firestore_builder_devtools_extension/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 
 class CancelButton extends StatelessWidget {
@@ -5,11 +6,11 @@ class CancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return AppButton.tertiary(
       onPressed: () {
         Navigator.of(context).pop();
       },
-      child: const Text('Cancel'),
+      text: 'Cancel',
     );
   }
 }

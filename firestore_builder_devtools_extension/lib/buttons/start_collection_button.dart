@@ -2,12 +2,13 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
-import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
+import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
+import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dart';
 import 'package:firestore_builder_devtools_extension/widgets/named_inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -99,26 +100,34 @@ class _Content extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(collectionGetter);
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('Parent path'),
-        const AppGap.regular(),
-        PathBuilder(
-          collection: collection,
-          builder: (path) {
-            return Text(path);
-          },
+        LabelValueRow(
+          label: 'Parent path:',
+          value: _Path(),
         ),
-        const AppGap.semiBig(),
-        const _CollectionNameInput(),
-        const AppGap.semiBig(),
-        const _ModelNameInput(),
-        const AppGap.semiBig(),
-        const AppDivider.horizontal(),
+        AppGap.semiBig(),
+        _CollectionNameInput(),
+        AppGap.semiBig(),
+        _ModelNameInput(),
+        AppGap.semiBig(),
+        AppDivider.horizontal(),
       ],
+    );
+  }
+}
+
+class _Path extends ConsumerWidget {
+  const _Path();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collection = ref.watch(collectionGetter);
+
+    return PathValue(
+      collection: collection,
     );
   }
 }
@@ -129,7 +138,7 @@ class _CollectionNameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NamedInput(
-      title: 'Collection ID',
+      label: 'Collection ID',
       hintText: 'Enter the collection ID',
       onChanged: (value) {
         ref.read(_collectionNameProvider.notifier).state = value;
@@ -144,7 +153,7 @@ class _ModelNameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NamedInput(
-      title: 'Model class name',
+      label: 'Model class name',
       hintText: 'Enter the name of the model class',
       errorText: ref.watch(_modelClassErrorProvider),
       onChanged: (value) {

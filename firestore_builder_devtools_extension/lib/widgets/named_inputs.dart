@@ -5,29 +5,27 @@ import 'package:flutter/material.dart';
 
 class NamedInput extends StatelessWidget {
   const NamedInput({
-    required this.title,
+    required this.label,
     required this.hintText,
     required this.onChanged,
     this.errorText,
     super.key,
   });
 
-  final String title;
+  final String label;
   final String hintText;
   final String? errorText;
   final void Function(String) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return NamedInputLayout(
-      title: title,
-      child: FractionallySizedBox(
-        widthFactor: 0.7,
-        child: AppInput(
-          onChanged: onChanged,
-          hintText: hintText,
-          errorText: errorText,
-        ),
+    return FractionallySizedBox(
+      widthFactor: 0.7,
+      child: AppInput(
+        onChanged: onChanged,
+        hintText: hintText,
+        errorText: errorText,
+        labelText: label,
       ),
     );
   }

@@ -1,28 +1,30 @@
+import 'package:devtools_app_shared/ui.dart';
 import 'package:flutter/material.dart';
 
 class AppSwitch extends StatelessWidget {
   const AppSwitch({
+    required this.label,
     required this.value,
+    this.message,
     this.onChanged,
     super.key,
   });
 
+  final String label;
   final bool value;
   final void Function(bool)? onChanged;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
-    return Switch(
-      value: value,
-      thumbIcon: MaterialStateProperty.resolveWith<Icon?>(
-        (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
-            return const Icon(Icons.check);
-          }
-          return const Icon(Icons.close);
-        },
-      ),
-      onChanged: onChanged,
+    return DevToolsToggleButton(
+      isSelected: value,
+      message: message ?? '',
+      icon: value ? Icons.check : Icons.close,
+      label: label,
+      onPressed: () {
+        onChanged?.call(!value);
+      },
     );
   }
 }

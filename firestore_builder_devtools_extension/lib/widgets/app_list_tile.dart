@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class AppListTile extends StatelessWidget {
   const AppListTile({
-    required this.title,
+    this.title,
+    this.titleWidget,
     this.selected = false,
     this.onTap,
     this.leading,
@@ -12,7 +13,8 @@ class AppListTile extends StatelessWidget {
   });
 
   final void Function()? onTap;
-  final String title;
+  final String? title;
+  final Widget? titleWidget;
   final bool selected;
   final Widget? leading;
   final Widget? trailing;
@@ -24,7 +26,7 @@ class AppListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       selected: selected,
-      title: Text(title),
+      title: titleWidget ?? Text(title ?? ''),
       leading: leading,
       trailing: trailing,
       textColor: colors.primary,

@@ -20,8 +20,11 @@ class CollectionsBloc extends StatelessWidget {
       child: Card(
         color: cardColor,
         surfaceTintColor: cardColor,
-        shape: BeveledRectangleBorder(
-          borderRadius: context.borderRadius.regular,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(
+            color: context.theme.dividerColor,
+          ),
         ),
         child: const Column(
           children: [

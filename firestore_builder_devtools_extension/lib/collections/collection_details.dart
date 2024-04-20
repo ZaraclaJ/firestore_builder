@@ -194,7 +194,19 @@ class _FieldItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppListTile(
-      title: field.name,
+      title: '${field.name}: ${field.type.typeReference.symbolName}',
+      titleWidget: Row(
+        children: [
+          Text('${field.name}:'),
+          const AppGap.small(),
+          Text(
+            field.type.typeReference.symbolName,
+            style: context.typos.labelLarge?.copyWith(
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:firestore_builder_devtools_extension/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 
 class SaveButton extends StatelessWidget {
@@ -10,9 +11,9 @@ class SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return AppButton.primary(
       onPressed: onPressed,
-      child: const Text('Save'),
+      text: 'Save',
     );
   }
 }

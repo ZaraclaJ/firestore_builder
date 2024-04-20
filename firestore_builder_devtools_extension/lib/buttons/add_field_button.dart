@@ -3,7 +3,7 @@ import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart'
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
-import 'package:firestore_builder_devtools_extension/path/path_builder.dart';
+import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
@@ -12,6 +12,7 @@ import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dropdown_menu.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_switch.dart';
 import 'package:firestore_builder_devtools_extension/widgets/dashed_line.dart';
+import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dart';
 import 'package:firestore_builder_devtools_extension/widgets/named_inputs.dart';
 import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
@@ -132,13 +133,13 @@ class _Content extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const _SectionRow(
-          title: 'Collection:',
+        const LabelValueRow(
+          label: 'Collection:',
           value: _Path(),
         ),
         const AppGap.regular(),
-        const _SectionRow(
-          title: 'Type:',
+        const LabelValueRow(
+          label: 'Type:',
           value: _DartType(),
         ),
         const AppGap.regular(),
@@ -155,31 +156,6 @@ class _Content extends ConsumerWidget {
   }
 }
 
-class _SectionRow extends StatelessWidget {
-  const _SectionRow({
-    required this.title,
-    required this.value,
-  });
-
-  final String title;
-  final Widget value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SectionText(
-          title,
-        ),
-        const AppGap.regular(),
-        Expanded(
-          child: value,
-        ),
-      ],
-    );
-  }
-}
-
 class _Path extends ConsumerWidget {
   const _Path();
 
@@ -187,14 +163,8 @@ class _Path extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final collection = ref.watch(collectionGetter);
 
-    return PathBuilder(
+    return PathValue(
       collection: collection,
-      builder: (path) {
-        return SectionText(
-          path,
-          color: context.colors.primary,
-        );
-      },
     );
   }
 }
@@ -218,7 +188,7 @@ class _NameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NamedInput(
-      title: 'Field name',
+      label: 'Field name',
       hintText: 'Enter the field name',
       onChanged: (value) {
         ref.read(_fieldNameProvider.notifier).state = value;
@@ -283,9 +253,8 @@ class _TypeInput extends ConsumerWidget {
             },
           ),
           const AppGap.regular(),
-          const Text('Nullable :'),
-          const AppGap.small(),
           AppSwitch(
+            label: 'Nullable',
             value: isNullable,
             onChanged: (bool value) {
               ref.read(_typeMapProvider.notifier).update((map) {

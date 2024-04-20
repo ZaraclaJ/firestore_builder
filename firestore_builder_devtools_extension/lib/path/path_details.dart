@@ -13,8 +13,8 @@ class PathDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
-    final backgroundColor = colors.secondaryContainer;
-    final foregroundColor = colors.onSecondaryContainer;
+    final backgroundColor = colors.background;
+    final foregroundColor = colors.onBackground;
 
     final selectedCollection = ref.watch(selectedCollectionProvider);
     final selectedCollectionPath = ref.watch(selectedCollectionPathProvider);

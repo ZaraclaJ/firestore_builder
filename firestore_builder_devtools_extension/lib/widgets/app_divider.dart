@@ -1,3 +1,4 @@
+import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:flutter/material.dart';
 
 enum _AppDividerType {
@@ -24,6 +25,7 @@ class AppDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = this.color ?? context.theme.dividerColor;
     return switch (_type) {
       _AppDividerType.horizontal => Divider(
           height: size,
