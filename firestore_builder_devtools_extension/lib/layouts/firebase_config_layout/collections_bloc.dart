@@ -120,6 +120,10 @@ class _PageViewState extends ConsumerState<_CollectionListView> {
         )
         .toList();
 
+    for (var i = children.length; i < widget.columnCount; i++) {
+      children.add(SizedBox(width: widget.columnWidth));
+    }
+
     return ScrollablePositionedList.separated(
       itemScrollController: _scrollController,
       scrollDirection: Axis.horizontal,
