@@ -179,7 +179,7 @@ extension CollectionExtensions on Collection {
     );
 
     if (collection == null) {
-      return null;
+      return this;
     }
 
     final nextCollectionPath = collectionPath.sublist(1);
