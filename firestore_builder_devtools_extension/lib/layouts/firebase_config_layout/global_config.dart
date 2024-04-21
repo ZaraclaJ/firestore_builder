@@ -12,7 +12,7 @@ class GlobalConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppPadding.regular(
+    return const AppPadding.semiBig(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

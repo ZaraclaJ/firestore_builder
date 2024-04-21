@@ -90,7 +90,7 @@ class _Code extends ConsumerWidget {
         borderRadius: defaultBorderRadius,
       ),
       child: const SingleChildScrollView(
-        child: AppPadding.semiBig(
+        child: AppPadding.regular(
           child: Align(
             alignment: Alignment.centerLeft,
             child: _CodeWithCodeEditor(),
@@ -153,6 +153,10 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
         },
         controller: _controller,
         textStyle: context.typos.bodySmall,
+        gutterStyle: const GutterStyle(
+          margin: 0,
+          width: 60,
+        ),
       ),
     );
   }
