@@ -1,3 +1,4 @@
+import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
@@ -32,11 +33,6 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
 
   @override
   Widget build(BuildContext context) {
-    final collection = ref.watch(collectionGetter);
-    if (collection == null) {
-      return const SizedBox();
-    }
-
     return CompositedTransformTarget(
       link: _link,
       child: OverlayPortal(
@@ -66,11 +62,11 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
   }
 }
 
-class _Overlay extends StatelessWidget {
+class _Overlay extends ConsumerWidget {
   const _Overlay();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return IntrinsicWidth(
       child: AppCard(
         child: Column(
@@ -82,7 +78,14 @@ class _Overlay extends StatelessWidget {
                 size: 16,
               ),
               title: 'Delete Collection',
-              onTap: () {},
+              onTap: () {
+                final collection = ref.read(collectionGetter);
+                if (collection == null) {
+                  return;
+                }
+
+                ref.read(configViewModelProvider).removeCollection(collection);
+              },
             ),
           ],
         ),

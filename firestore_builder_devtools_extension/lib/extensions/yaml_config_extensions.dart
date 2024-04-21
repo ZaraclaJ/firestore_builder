@@ -11,24 +11,64 @@ extension YamlConfigExtensions on YamlConfig {
   YamlConfig replaceCollection(
     Collection collection,
   ) {
-    final collectionPath = collection.collectionPathNames;
+    return updateCollection(
+      replace: (_) => collection,
+      collectionPath: [
+        ...collection.collectionPathNames,
+        collection.name,
+      ],
+    );
+  }
 
+  YamlConfig removeCollection(
+    Collection collection,
+  ) {
+    return updateCollection(
+      replace: (_) => null,
+      collectionPath: [
+        ...collection.collectionPathNames,
+        collection.name,
+      ],
+    );
+  }
+
+  YamlConfig updateCollection({
+    required Collection? Function(Collection?) replace,
+    required List<String> collectionPath,
+  }) {
     if (collectionPath.isEmpty) {
-      final newSubCollections = collections.toList()
-        ..removeWhere((element) => element.name == collection.name)
-        ..add(collection);
-      return copyWith(collections: newSubCollections);
+      final newCollection = replace(null);
+      return copyWith(
+        collections: [
+          if (newCollection != null) newCollection,
+          ...collections,
+        ],
+      );
     }
 
     final firstPathName = collectionPath.first;
+    final nextCollectionPath = collectionPath.sublist(1);
+
+    if (nextCollectionPath.isEmpty) {
+      final currentCollection = collections.firstWhereOrNull(
+        (c) => c.name == firstPathName,
+      );
+      final newCollection = replace(currentCollection);
+      return copyWith(
+        collections: [
+          if (newCollection != null) newCollection,
+          ...collections.where((c) => c.name != firstPathName),
+        ],
+      );
+    }
 
     return copyWith(
       collections: collections.map(
         (c) {
           if (c.name == firstPathName) {
-            return c.replaceCollection(
-              collection: collection,
-              collectionPath: collectionPath.sublist(1),
+            return c.updateCollection(
+              replace: replace,
+              collectionPath: nextCollectionPath,
             );
           }
           return c;
@@ -84,25 +124,43 @@ extension CollectionExtensions on Collection {
     return collectionPath.map((c) => c.name).toList();
   }
 
-  Collection replaceCollection({
-    required Collection collection,
+  Collection updateCollection({
+    required Collection? Function(Collection?) replace,
     required List<String> collectionPath,
   }) {
     if (collectionPath.isEmpty) {
-      final newSubCollections = subCollections.toList()
-        ..removeWhere((element) => element.name == collection.name)
-        ..add(collection);
-      return copyWith(subCollections: newSubCollections);
+      final newCollection = replace(null);
+      return copyWith(
+        subCollections: [
+          if (newCollection != null) newCollection,
+          ...subCollections,
+        ],
+      );
     }
 
     final firstPathName = collectionPath.first;
+    final nextCollectionPath = collectionPath.sublist(1);
+
+    if (nextCollectionPath.isEmpty) {
+      final currentCollection = subCollections.firstWhereOrNull(
+        (c) => c.name == firstPathName,
+      );
+      final newCollection = replace(currentCollection);
+      return copyWith(
+        subCollections: [
+          if (newCollection != null) newCollection,
+          ...subCollections.where((c) => c.name != firstPathName),
+        ],
+      );
+    }
+
     return copyWith(
       subCollections: subCollections.map(
         (c) {
           if (c.name == firstPathName) {
-            return c.replaceCollection(
-              collection: collection,
-              collectionPath: collectionPath.sublist(1),
+            return c.updateCollection(
+              replace: replace,
+              collectionPath: nextCollectionPath,
             );
           }
           return c;

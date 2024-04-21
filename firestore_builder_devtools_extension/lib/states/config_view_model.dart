@@ -81,21 +81,17 @@ class ConfigViewModel {
       configLight: ref.read(configLightProvider),
     );
 
-    final lastPathCollection = newCollection.collectionPath.lastOrNull;
-    if (lastPathCollection != null) {
-      _replaceCollection(
-        lastPathCollection.copyWith(
-          subCollections: [
-            ...lastPathCollection.subCollections,
-            newCollection,
-          ],
-        ),
-      );
-    }
-
     _replaceCollection(newCollection);
 
     return newCollection;
+  }
+
+  void removeCollection(Collection collection) {
+    ref.read(configProvider.notifier).update(
+      (config) {
+        return config.removeCollection(collection);
+      },
+    );
   }
 
   CollectionField addField({
