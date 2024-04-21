@@ -24,6 +24,7 @@ class AppListTile extends StatelessWidget {
     final colors = context.colors;
 
     return Material(
+      color: Colors.transparent,
       child: ListTile(
         onTap: onTap,
         dense: true,
@@ -36,6 +37,9 @@ class AppListTile extends StatelessWidget {
         selectedTileColor: colors.primaryContainer,
         iconColor: colors.primary,
         tileColor: colors.surface,
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        hoverColor: colors.primaryContainer.withOpacity(0.1),
       ),
     );
   }
