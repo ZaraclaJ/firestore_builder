@@ -36,10 +36,10 @@ class _CollectionListView extends ConsumerStatefulWidget {
   final double columnWidth;
 
   @override
-  ConsumerState<_CollectionListView> createState() => _PageViewState();
+  ConsumerState<_CollectionListView> createState() => _CollectionListViewState();
 }
 
-class _PageViewState extends ConsumerState<_CollectionListView> {
+class _CollectionListViewState extends ConsumerState<_CollectionListView> {
   late ItemScrollController _scrollController;
 
   @override
@@ -53,14 +53,17 @@ class _PageViewState extends ConsumerState<_CollectionListView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.columnCount != widget.columnCount || oldWidget.columnWidth != widget.columnWidth) {
       scrollToCollection(ref.read(selectedCollectionProvider));
-      setState(() {});
     }
   }
 
-  void scrollToCollection(Collection? collection) {
+  Future<void> scrollToCollection(Collection? collection) async {
     final columnIndex = collection == null ? 0 : collection.collectionPath.length + 1;
     final indexToScroll = max(columnIndex - widget.columnCount + 1, 0);
-    _scrollController.scrollTo(
+
+    // Wait for the next frame to scroll
+    await Future<void>.delayed(Duration.zero);
+
+    await _scrollController.scrollTo(
       index: indexToScroll,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
