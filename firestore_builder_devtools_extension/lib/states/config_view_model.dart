@@ -119,6 +119,17 @@ class ConfigViewModel {
     return newField;
   }
 
+  void removeField({
+    required Collection inCollection,
+    required CollectionField field,
+  }) {
+    _replaceCollection(
+      inCollection.copyWith(
+        fields: inCollection.fields.where((f) => f != field).toList(),
+      ),
+    );
+  }
+
   void _replaceCollection(Collection newCollection) {
     ref.read(configProvider.notifier).update(
       (config) {

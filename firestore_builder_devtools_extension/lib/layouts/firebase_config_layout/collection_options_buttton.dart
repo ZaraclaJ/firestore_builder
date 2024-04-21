@@ -2,6 +2,7 @@ import 'package:firestore_builder_devtools_extension/states/config_view_model.da
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
+import 'package:firestore_builder_devtools_extension/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -78,13 +79,24 @@ class _Overlay extends ConsumerWidget {
                 size: 16,
               ),
               title: 'Delete Collection',
-              onTap: () {
+              onTap: () async {
                 final collection = ref.read(collectionGetter);
                 if (collection == null) {
                   return;
                 }
 
-                ref.read(configViewModelProvider).removeCollection(collection);
+                final viewModel = ref.read(configViewModelProvider);
+                final confirm = await ConfirmationDialog.show(
+                  context: context,
+                  title: 'Delete Collection',
+                  description: 'Are you sure you want to delete this collection?',
+                  validateLabel: 'Delete',
+                  isDestructive: true,
+                );
+
+                if (confirm != null && confirm) {
+                  viewModel.removeCollection(collection);
+                }
               },
             ),
           ],

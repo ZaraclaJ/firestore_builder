@@ -10,6 +10,7 @@ import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart'
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
+import 'package:firestore_builder_devtools_extension/widgets/confirmation_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/on_hover_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -211,9 +212,13 @@ class _FieldItem extends StatelessWidget {
               ),
               if (onHover) ...[
                 const AppGap.regular(),
-                const _EditButton(),
+                _EditButton(
+                  field: field,
+                ),
                 const AppGap.regular(),
-                const _DeleteButton(),
+                _DeleteButton(
+                  field: field,
+                ),
               ] else
                 const SizedBox(
                   height: _Button.iconSize,
@@ -227,7 +232,11 @@ class _FieldItem extends StatelessWidget {
 }
 
 class _EditButton extends StatelessWidget {
-  const _EditButton();
+  const _EditButton({
+    required this.field,
+  });
+
+  final CollectionField field;
 
   @override
   Widget build(BuildContext context) {
@@ -239,16 +248,41 @@ class _EditButton extends StatelessWidget {
   }
 }
 
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton();
+class _DeleteButton extends ConsumerWidget {
+  const _DeleteButton({
+    required this.field,
+  });
+
+  final CollectionField field;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return _Button(
       icon: Icons.delete,
       tooltip: 'Delete field',
       color: context.colors.error,
-      onTap: () {},
+      onTap: () async {
+        final collection = ref.read(collectionGetter);
+        if (collection == null) {
+          return;
+        }
+
+        final viewModel = ref.read(configViewModelProvider);
+        final confirm = await ConfirmationDialog.show(
+          context: context,
+          title: 'Delete field',
+          description: 'Are you sure you want to delete this field?',
+          validateLabel: 'Delete',
+          isDestructive: true,
+        );
+
+        if (confirm != null && confirm) {
+          viewModel.removeField(
+            inCollection: collection,
+            field: field,
+          );
+        }
+      },
     );
   }
 }

@@ -6,18 +6,26 @@ class AppDialog extends StatelessWidget {
   const AppDialog({
     required this.title,
     required this.content,
+    this.titleColor,
     super.key,
     this.actions,
   });
 
   final String title;
+  final Color? titleColor;
   final Widget content;
   final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return DevToolsDialog(
-      title: Text(title, style: context.typos.titleLarge),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: context.typos.titleLarge?.copyWith(color: titleColor),
+        ),
+      ),
       content: SizedBox(
         width: 600,
         child: content,
