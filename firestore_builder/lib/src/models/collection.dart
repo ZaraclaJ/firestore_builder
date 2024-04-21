@@ -5,23 +5,18 @@ import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-part 'collection.freezed.dart';
-
-@freezed
-class Collection with _$Collection {
-  const factory Collection({
-    required String name,
-    required String modelName,
-    required List<CollectionField> fields,
-    required List<Collection> subCollections,
-    required List<Collection> collectionPath,
-    required YamlConfig configLight,
-  }) = _Collection;
+class Collection {
+  const Collection({
+    required this.name,
+    required this.modelName,
+    required this.fields,
+    required this.subCollections,
+    required this.collectionPath,
+    required this.configLight,
+  });
 
   factory Collection.fromYaml({
     required YamlMap yamlMap,
@@ -97,9 +92,34 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
       subCollections: subCollections,
     );
   }
+
+  final String name;
+  final String modelName;
+  final List<CollectionField> fields;
+  final List<Collection> subCollections;
+  final List<Collection> collectionPath;
+  final YamlConfig configLight;
 }
 
 extension CollectionExtensions on Collection {
+  Collection copyWith({
+    String? name,
+    String? modelName,
+    List<CollectionField>? fields,
+    List<Collection>? subCollections,
+    List<Collection>? collectionPath,
+    YamlConfig? configLight,
+  }) {
+    return Collection(
+      name: name ?? this.name,
+      modelName: modelName ?? this.modelName,
+      fields: fields ?? this.fields,
+      subCollections: subCollections ?? this.subCollections,
+      collectionPath: collectionPath ?? this.collectionPath,
+      configLight: configLight ?? this.configLight,
+    );
+  }
+
   Map<String, dynamic> toYaml() {
     return {
       collectionKey: {

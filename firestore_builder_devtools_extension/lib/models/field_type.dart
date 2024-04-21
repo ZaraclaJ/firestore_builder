@@ -34,38 +34,38 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
     final nullable = typeNullable.nullable;
 
     return switch (type) {
-      FieldTypeEnum.string => FieldType.string(
+      FieldTypeEnum.string => FieldTypeString(
           isNullable: nullable,
         ),
-      FieldTypeEnum.int => FieldType.int(
+      FieldTypeEnum.int => FieldTypeInt(
           isNullable: nullable,
         ),
-      FieldTypeEnum.double => FieldType.double(
+      FieldTypeEnum.double => FieldTypeDouble(
           isNullable: nullable,
         ),
-      FieldTypeEnum.bool => FieldType.bool(
+      FieldTypeEnum.bool => FieldTypeBool(
           isNullable: nullable,
         ),
-      FieldTypeEnum.timestamp => FieldType.timestamp(
+      FieldTypeEnum.timestamp => FieldTypeTimestamp(
           isNullable: nullable,
         ),
-      FieldTypeEnum.dateTime => FieldType.dateTime(
+      FieldTypeEnum.dateTime => FieldTypeDateTime(
           isNullable: nullable,
         ),
-      FieldTypeEnum.documentReference => FieldType.documentReference(
+      FieldTypeEnum.documentReference => FieldTypeDocumentReference(
           isNullable: nullable,
         ),
-      FieldTypeEnum.list => FieldType.list(
-          isNullable: nullable,
-          subType: getFieldType(level + 1),
-          path: null,
-        ),
-      FieldTypeEnum.map => FieldType.map(
+      FieldTypeEnum.list => FieldTypeList(
           isNullable: nullable,
           subType: getFieldType(level + 1),
           path: null,
         ),
-      FieldTypeEnum.customClass => FieldType.customClass(
+      FieldTypeEnum.map => FieldTypeMap(
+          isNullable: nullable,
+          subType: getFieldType(level + 1),
+          path: null,
+        ),
+      FieldTypeEnum.customClass => FieldTypeCustomClass(
           isNullable: nullable,
           className: 'TODO',
           path: 'TODO',

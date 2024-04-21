@@ -3,57 +3,11 @@ import 'package:firestore_builder/src/easy_gen/basic_packages.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'field_type.freezed.dart';
-
-@freezed
-class FieldType with _$FieldType {
-  const factory FieldType.string({
-    required bool isNullable,
-  }) = FieldTypeString;
-
-  const factory FieldType.int({
-    required bool isNullable,
-  }) = FieldTypeInt;
-
-  const factory FieldType.double({
-    required bool isNullable,
-  }) = FieldTypeDouble;
-
-  const factory FieldType.bool({
-    required bool isNullable,
-  }) = FieldTypeBool;
-
-  const factory FieldType.timestamp({
-    required bool isNullable,
-  }) = FieldTypeTimestamp;
-
-  const factory FieldType.dateTime({
-    required bool isNullable,
-  }) = FieldTypeDateTime;
-
-  const factory FieldType.documentReference({
-    required bool isNullable,
-  }) = FieldTypeDocumentReference;
-
-  const factory FieldType.customClass({
-    required String className,
-    required String path,
-    required bool isNullable,
-  }) = FieldTypeCustomClass;
-
-  const factory FieldType.list({
-    required FieldType subType,
-    required String? path,
-    required bool isNullable,
-  }) = FieldTypeList;
-
-  const factory FieldType.map({
-    required FieldType subType,
-    required String? path,
-    required bool isNullable,
-  }) = FieldTypeMap;
+sealed class FieldType {
+  const FieldType({
+    required this.isNullable,
+  });
 
   /// Accepts a Dart symbol and returns the corresponding [FieldType].
   ///
@@ -75,7 +29,7 @@ class FieldType with _$FieldType {
     final pureType = symbol.withoutQuestionMark;
 
     return switch (pureType) {
-      final a when a.extractListType() != null => FieldType.list(
+      final a when a.extractListType() != null => FieldTypeList(
           subType: FieldType.fromDartSymbol(
             symbol: a.extractListType()!,
             path: path,
@@ -83,7 +37,7 @@ class FieldType with _$FieldType {
           isNullable: isNullable,
           path: path,
         ),
-      final a when a.extractMapType() != null => FieldType.map(
+      final a when a.extractMapType() != null => FieldTypeMap(
           subType: FieldType.fromDartSymbol(
             symbol: a.extractMapType()!,
             path: path,
@@ -91,14 +45,14 @@ class FieldType with _$FieldType {
           isNullable: isNullable,
           path: path,
         ),
-      BasicSymbols.string => FieldType.string(isNullable: isNullable),
-      BasicSymbols.int => FieldType.int(isNullable: isNullable),
-      BasicSymbols.double => FieldType.double(isNullable: isNullable),
-      BasicSymbols.bool => FieldType.bool(isNullable: isNullable),
-      BasicSymbols.dateTime => FieldType.dateTime(isNullable: isNullable),
-      BasicSymbols.timestamp => FieldType.timestamp(isNullable: isNullable),
-      FirestoreSymbols.documentReferenceClass => FieldType.documentReference(isNullable: isNullable),
-      _ when path != null => FieldType.customClass(
+      BasicSymbols.string => FieldTypeString(isNullable: isNullable),
+      BasicSymbols.int => FieldTypeInt(isNullable: isNullable),
+      BasicSymbols.double => FieldTypeDouble(isNullable: isNullable),
+      BasicSymbols.bool => FieldTypeBool(isNullable: isNullable),
+      BasicSymbols.dateTime => FieldTypeDateTime(isNullable: isNullable),
+      BasicSymbols.timestamp => FieldTypeTimestamp(isNullable: isNullable),
+      FirestoreSymbols.documentReferenceClass => FieldTypeDocumentReference(isNullable: isNullable),
+      _ when path != null => FieldTypeCustomClass(
           className: pureType,
           isNullable: isNullable,
           path: path,
@@ -106,6 +60,83 @@ class FieldType with _$FieldType {
       _ => throw Exception('Type $symbol is not recognized'),
     };
   }
+
+  final bool isNullable;
+}
+
+class FieldTypeString extends FieldType {
+  const FieldTypeString({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeInt extends FieldType {
+  const FieldTypeInt({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeDouble extends FieldType {
+  const FieldTypeDouble({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeBool extends FieldType {
+  const FieldTypeBool({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeTimestamp extends FieldType {
+  const FieldTypeTimestamp({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeDateTime extends FieldType {
+  const FieldTypeDateTime({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeDocumentReference extends FieldType {
+  const FieldTypeDocumentReference({
+    required super.isNullable,
+  });
+}
+
+class FieldTypeCustomClass extends FieldType {
+  const FieldTypeCustomClass({
+    required this.className,
+    required this.path,
+    required super.isNullable,
+  });
+
+  final String className;
+  final String path;
+}
+
+class FieldTypeList extends FieldType {
+  const FieldTypeList({
+    required this.subType,
+    required this.path,
+    required super.isNullable,
+  });
+
+  final FieldType subType;
+  final String? path;
+}
+
+class FieldTypeMap extends FieldType {
+  const FieldTypeMap({
+    required this.subType,
+    required this.path,
+    required super.isNullable,
+  });
+
+  final FieldType subType;
+  final String? path;
 }
 
 extension FieldTypeExtensions on FieldType {
@@ -127,18 +158,19 @@ extension FieldTypeExtensions on FieldType {
   }
 
   String get dartSymbol {
-    return map(
-      string: (_) => BasicSymbols.string,
-      int: (_) => BasicSymbols.int,
-      double: (_) => BasicSymbols.double,
-      bool: (_) => BasicSymbols.bool,
-      timestamp: (_) => BasicSymbols.timestamp,
-      dateTime: (_) => BasicSymbols.dateTime,
-      documentReference: (_) => FirestoreSymbols.documentReferenceClass,
-      list: (field) => BasicSymbols.list,
-      map: (field) => BasicSymbols.map,
-      customClass: (field) => field.className,
-    );
+    final fieldType = this;
+    return switch (fieldType) {
+      FieldTypeString() => BasicSymbols.string,
+      FieldTypeInt() => BasicSymbols.int,
+      FieldTypeDouble() => BasicSymbols.double,
+      FieldTypeBool() => BasicSymbols.bool,
+      FieldTypeTimestamp() => BasicSymbols.timestamp,
+      FieldTypeDateTime() => BasicSymbols.dateTime,
+      FieldTypeDocumentReference() => FirestoreSymbols.documentReferenceClass,
+      FieldTypeList() => BasicSymbols.list,
+      FieldTypeMap() => BasicSymbols.map,
+      final FieldTypeCustomClass fieldType => fieldType.className,
+    };
   }
 
   String? get packageUrl {

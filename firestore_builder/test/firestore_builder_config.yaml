@@ -1,4 +1,5 @@
 firestore_builder:
+  project_name: firestore_builder
   output: test/output
   clear: True
   collections:
@@ -9,17 +10,17 @@ firestore_builder:
           - name: String
           - description: String?
           - user_count: int
-          - created_at: 
+          - created_at:
               type: DateTime
               accept_field_value: true
           - dates: List<Timestamp?>?
           - bytes: List<List<int>>?
-          - labels: 
+          - labels:
               type: List<String>
               accept_field_value: true
-          - presences: Map<bool>?
+          - presences: Map<String, bool>?
           - team_ref: DocumentReference?
-          - team_size: 
+          - team_size:
               type: TeamSize
               path: models/enums/team_size.dart
       sub_collections:

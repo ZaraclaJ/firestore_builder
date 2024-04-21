@@ -3,21 +3,16 @@ import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-part 'yaml_config.freezed.dart';
-
-@freezed
-class YamlConfig with _$YamlConfig {
-  const factory YamlConfig({
-    required String outputPath,
-    required bool clear,
-    required List<Collection> collections,
-    required String projectName,
-  }) = _YamlConfig;
+class YamlConfig {
+  const YamlConfig({
+    required this.outputPath,
+    required this.clear,
+    required this.collections,
+    required this.projectName,
+  });
 
   factory YamlConfig.fromYaml(
     YamlMap yamlMap,
@@ -66,9 +61,28 @@ The configuration file does not contain a correct $clearKey section: $firestoreB
       collections: collections,
     );
   }
+
+  final String outputPath;
+  final bool clear;
+  final List<Collection> collections;
+  final String projectName;
 }
 
 extension YamlConfigExtensions on YamlConfig {
+  YamlConfig copyWith({
+    String? outputPath,
+    bool? clear,
+    List<Collection>? collections,
+    String? projectName,
+  }) {
+    return YamlConfig(
+      outputPath: outputPath ?? this.outputPath,
+      clear: clear ?? this.clear,
+      collections: collections ?? this.collections,
+      projectName: projectName ?? this.projectName,
+    );
+  }
+
   Map<String, dynamic> toYaml() {
     return {
       firestoreBuilderKey: {

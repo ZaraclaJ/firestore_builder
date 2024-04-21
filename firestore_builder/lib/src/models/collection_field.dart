@@ -6,21 +6,16 @@ import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/field_type.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:recase/recase.dart';
 import 'package:yaml/yaml.dart';
 
-part 'collection_field.freezed.dart';
-
-@freezed
-class CollectionField with _$CollectionField {
-  const factory CollectionField({
-    required String name,
-    required FieldType type,
-    required bool acceptFieldValue,
-    required YamlConfig configLight,
-  }) = _CollectionField;
+class CollectionField {
+  const CollectionField({
+    required this.name,
+    required this.type,
+    required this.acceptFieldValue,
+    required this.configLight,
+  });
 
   factory CollectionField.fromYaml({
     required YamlMap yamlMap,
@@ -94,6 +89,10 @@ Invalid field definition, invalid field: $yamlMap''',
       configLight: configLight,
     );
   }
+  final String name;
+  final FieldType type;
+  final bool acceptFieldValue;
+  final YamlConfig configLight;
 }
 
 extension CollectionFieldExtensions on CollectionField {

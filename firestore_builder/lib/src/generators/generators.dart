@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firestore_builder/src/extensions.dart/map_entry_extensions.dart';
 import 'package:firestore_builder/src/generators/clear_files.dart';
 import 'package:firestore_builder/src/generators/generate_freezed_converters.dart';
 import 'package:firestore_builder/src/generators/generate_models.dart';
@@ -56,42 +55,14 @@ Future<YamlConfig> _parseConfigFileToGetYamlConfig({
 }) async {
   final yamlString = await file.readAsString();
 
-  YamlMap yamlMap;
   try {
-    yamlMap = loadYaml(yamlString) as YamlMap;
+    final yamlMap = loadYaml(yamlString) as YamlMap;
+    return YamlConfig.fromYaml(
+      yamlMap,
+    );
   } catch (e) {
     throw Exception('''
 Error parsing the configuration file: ${file.path}, $e
 ''');
   }
-
-  if (file.path != pubspecPath) {
-    final pubspecFile = File(pubspecPath);
-    final exist = pubspecFile.existsSync();
-    if (!exist) {
-      throw Exception('''
-pubspec.yaml not found: $pubspecPath
-''');
-    }
-
-    final pubspecYamlString = await pubspecFile.readAsString();
-
-    YamlMap pubspecYamlMap;
-    try {
-      pubspecYamlMap = loadYaml(pubspecYamlString) as YamlMap;
-    } catch (e) {
-      throw Exception('''
-Error parsing the pubspec.yaml file, $e
-''');
-    }
-
-    yamlMap = YamlMap.wrap({
-      ...yamlMap.entries.toMap(),
-      ...pubspecYamlMap.entries.toMap(),
-    });
-  }
-
-  return YamlConfig.fromYaml(
-    yamlMap,
-  );
 }
