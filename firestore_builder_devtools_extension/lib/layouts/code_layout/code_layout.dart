@@ -1,4 +1,5 @@
 import 'package:devtools_app_shared/ui.dart';
+import 'package:firestore_builder_devtools_extension/extensions/num_extensions.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
@@ -20,20 +21,31 @@ class CodeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppPadding.regular(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: _Code(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth.bounded(codeLayoutMinWidth, double.infinity);
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: width,
+            child: const AppPadding.regular(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: _Code(),
+                  ),
+                  Positioned(
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: _ErrorBanner(),
+                  ),
+                ],
+              ),
+            ),
           ),
-          Positioned(
-            right: 0,
-            left: 0,
-            bottom: 0,
-            child: _ErrorBanner(),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

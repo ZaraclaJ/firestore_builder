@@ -16,8 +16,8 @@ class FirebaseConfigLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth.bounded(minWidth, maxWidth);
-        final height = constraints.maxHeight.bounded(minHeight, maxHeight);
+        final width = constraints.maxWidth.bounded(firebaseConfigMinWidth, firebaseConfigMaxWidth);
+        final height = constraints.maxHeight.bounded(firebaseConfigMinHeight, firebaseConfigMaxHeight);
         return DoubleScrollLayout(
           child: SizedBox(
             width: width,
