@@ -3,8 +3,8 @@ import 'package:firestore_builder_devtools_extension/layouts/firebase_config_lay
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/global_config.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/path_details.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
-import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/double_scroll_layout.dart';
 import 'package:flutter/material.dart';
@@ -35,44 +35,20 @@ class _Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _CardContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GlobalConfig(),
-          AppDivider.horizontal(),
-          PathDetails(),
-          AppDivider.horizontal(),
-          Expanded(
-            child: CollectionsBloc(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CardContainer extends StatelessWidget {
-  const _CardContainer({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final cardColor = colors.surface;
-
-    return AppPadding.regular(
-      child: Card(
-        color: cardColor,
-        surfaceTintColor: cardColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
-            color: context.theme.dividerColor,
-          ),
+    return const AppPadding.regular(
+      child: AppCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GlobalConfig(),
+            AppDivider.horizontal(),
+            PathDetails(),
+            AppDivider.horizontal(),
+            Expanded(
+              child: CollectionsBloc(),
+            ),
+          ],
         ),
-        child: child,
       ),
     );
   }

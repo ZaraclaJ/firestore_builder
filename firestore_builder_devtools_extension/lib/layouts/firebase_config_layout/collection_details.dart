@@ -1,6 +1,7 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/add_field_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/start_collection_button.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_buttton.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
@@ -105,13 +106,9 @@ class _CollectionInfo extends ConsumerWidget {
                 ),
                 if (collection != null) ...[
                   const AppGap.regular(),
-                  InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.more_vert,
-                      size: _iconSize,
-                      color: foregroundColor,
-                    ),
+                  CollectionOptionsButton(
+                    foregroundColor: foregroundColor,
+                    size: _iconSize,
                   ),
                 ],
               ],

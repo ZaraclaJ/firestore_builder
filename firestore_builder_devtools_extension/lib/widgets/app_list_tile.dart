@@ -23,17 +23,20 @@ class AppListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return ListTile(
-      onTap: onTap,
-      selected: selected,
-      title: titleWidget ?? Text(title ?? ''),
-      leading: leading,
-      trailing: trailing,
-      textColor: colors.primary,
-      selectedColor: colors.primary,
-      selectedTileColor: colors.primaryContainer,
-      iconColor: colors.primary,
-      tileColor: colors.surface,
+    return Material(
+      child: ListTile(
+        onTap: onTap,
+        dense: true,
+        selected: selected,
+        title: titleWidget ?? Text(title ?? ''),
+        leading: leading,
+        trailing: trailing,
+        textColor: colors.primary,
+        selectedColor: colors.primary,
+        selectedTileColor: colors.primaryContainer,
+        iconColor: colors.primary,
+        tileColor: colors.surface,
+      ),
     );
   }
 }

@@ -18,7 +18,7 @@ import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _fieldNameProvider = StateProvider<String>(
+final _fieldNameProvider = StateProvider.autoDispose<String>(
   (ref) => '',
 );
 
