@@ -3,11 +3,8 @@ import 'dart:math';
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/extensions/num_extensions.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_details.dart';
-import 'package:firestore_builder_devtools_extension/path/path_details.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
-import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
-import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,36 +15,13 @@ class CollectionsBloc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final cardColor = colors.surface;
-
-    return AppPadding.regular(
-      child: Card(
-        color: cardColor,
-        surfaceTintColor: cardColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
-            color: context.theme.dividerColor,
-          ),
-        ),
-        child: Column(
-          children: [
-            const PathDetails(),
-            const AppDivider.horizontal(),
-            Expanded(
-              child: _ConstraintsBuilder(
-                builder: (columnCount, columnWidth) {
-                  return _CollectionListView(
-                    columnCount: columnCount,
-                    columnWidth: columnWidth,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+    return _ConstraintsBuilder(
+      builder: (columnCount, columnWidth) {
+        return _CollectionListView(
+          columnCount: columnCount,
+          columnWidth: columnWidth,
+        );
+      },
     );
   }
 }

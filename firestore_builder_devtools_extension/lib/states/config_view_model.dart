@@ -26,6 +26,30 @@ class ConfigViewModel {
     }
   }
 
+  void updateProjectName(String projectName) {
+    ref.read(configProvider.notifier).update(
+      (config) {
+        return config.copyWith(projectName: projectName);
+      },
+    );
+  }
+
+  void updateOutputPath(String outputPath) {
+    ref.read(configProvider.notifier).update(
+      (config) {
+        return config.copyWith(outputPath: outputPath);
+      },
+    );
+  }
+
+  void updateClear(bool clear) {
+    ref.read(configProvider.notifier).update(
+      (config) {
+        return config.copyWith(clear: clear);
+      },
+    );
+  }
+
   void selectCollection(Collection? collection) {
     if (collection == null) {
       ref.read(selectedCollectionPathNamesProvider.notifier).state = [];

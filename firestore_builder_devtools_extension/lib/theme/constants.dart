@@ -4,7 +4,7 @@ import 'package:flutter_highlight/themes/dracula.dart';
 const int minColumnCount = 1;
 const int maxColumnCount = 3;
 const double minTableWidth = 250;
-const double codeFraction = 1 / 3;
+const double codeFraction = 1 / 2;
 
 const double minWidth = minTableWidth;
 const double maxWidth = 1350;

@@ -104,20 +104,17 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
     super.initState();
     _controller = CodeController(
       language: yaml,
+      text: ref.read(codeProvider),
     );
+  }
 
-    ref.listenManual(
-      codeProvider,
-      (previous, newCode) {
-        if (previous != newCode && newCode != _controller.fullText) {
-          final currentSelection = _controller.selection;
-          _controller
-            ..text = newCode
-            ..selection = currentSelection;
-        }
-      },
-      fireImmediately: true,
-    );
+  void _updateCode(String newCode) {
+    final currentSelection = _controller.selection;
+    _controller
+      // Fix issue with bad text update
+      ..clear()
+      ..text = newCode
+      ..selection = currentSelection;
   }
 
   @override
@@ -128,6 +125,14 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      codeProvider,
+      (previous, newCode) {
+        if (previous != newCode && newCode != _controller.fullText) {
+          _updateCode(newCode);
+        }
+      },
+    );
     return CodeTheme(
       data: CodeThemeData(styles: codeTheme),
       child: CodeField(
@@ -135,6 +140,7 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
           ref.read(configViewModelProvider).updateYamlCode(newCode);
         },
         controller: _controller,
+        textStyle: context.typos.bodySmall,
       ),
     );
   }

@@ -10,10 +10,10 @@ import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dropdown_menu.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_switch.dart';
 import 'package:firestore_builder_devtools_extension/widgets/dashed_line.dart';
 import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dart';
-import 'package:firestore_builder_devtools_extension/widgets/named_inputs.dart';
 import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -187,7 +187,7 @@ class _NameInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return NamedInput(
+    return AppInput(
       label: 'Field name',
       hintText: 'Enter the field name',
       onChanged: (value) {

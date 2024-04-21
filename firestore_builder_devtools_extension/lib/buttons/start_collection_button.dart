@@ -8,8 +8,8 @@ import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_input.dart';
 import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dart';
-import 'package:firestore_builder_devtools_extension/widgets/named_inputs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:recase/recase.dart';
@@ -137,7 +137,7 @@ class _CollectionNameInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return NamedInput(
+    return AppInput(
       label: 'Collection ID',
       hintText: 'Enter the collection ID',
       onChanged: (value) {
@@ -152,7 +152,7 @@ class _ModelNameInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return NamedInput(
+    return AppInput(
       label: 'Model class name',
       hintText: 'Enter the name of the model class',
       errorText: ref.watch(_modelClassErrorProvider),
