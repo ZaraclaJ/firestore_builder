@@ -1,6 +1,7 @@
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
+import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
 import 'package:firestore_builder_devtools_extension/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,17 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
       child: OverlayPortal(
         controller: _controller,
         overlayChildBuilder: (context) {
-          return CompositedTransformFollower(
-            link: _link,
-            targetAnchor: Alignment.bottomLeft,
-            child: const Align(
-              alignment: AlignmentDirectional.topStart,
-              child: _Overlay(),
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              _controller.toggle();
+            },
+            child: CompositedTransformFollower(
+              link: _link,
+              child: const Align(
+                alignment: AlignmentDirectional.topStart,
+                child: _Overlay(),
+              ),
             ),
           );
         },
@@ -73,11 +79,19 @@ class _Overlay extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppListTile(
-              leading: const Icon(
-                FontAwesomeIcons.trash,
-                size: 16,
-              ),
+            _Action(
+              icon: Icons.edit,
+              title: 'Edit Collection',
+              onTap: () async {
+                final collection = ref.read(collectionGetter);
+                if (collection == null) {
+                  return;
+                }
+              },
+            ),
+            const AppDivider.horizontal(),
+            _Action(
+              icon: FontAwesomeIcons.trash,
               title: 'Delete Collection',
               onTap: () async {
                 final collection = ref.read(collectionGetter);
@@ -102,6 +116,30 @@ class _Overlay extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Action extends StatelessWidget {
+  const _Action({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppListTile(
+      leading: Icon(
+        icon,
+        size: 16,
+      ),
+      title: title,
+      onTap: onTap,
     );
   }
 }
