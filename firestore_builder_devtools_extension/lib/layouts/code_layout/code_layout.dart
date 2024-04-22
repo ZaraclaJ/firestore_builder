@@ -152,7 +152,7 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
           ref.read(configViewModelProvider).updateYamlCode(newCode);
         },
         controller: _controller,
-        textStyle: context.typos.bodySmall,
+        textStyle: context.typos.bodySmall?.copyWith(color: codeTheme.textColor),
         gutterStyle: const GutterStyle(
           margin: 0,
           width: 60,
@@ -163,8 +163,16 @@ class _CodeWithCodeEditorState extends ConsumerState<_CodeWithCodeEditor> {
 }
 
 extension on Map<String, TextStyle> {
-  Color get backgroundColor {
+  TextStyle get _rootTextStyle {
     final theme = this;
-    return theme['root']!.backgroundColor!;
+    return theme['root']!;
+  }
+
+  Color get backgroundColor {
+    return _rootTextStyle.backgroundColor!;
+  }
+
+  Color get textColor {
+    return _rootTextStyle.color!;
   }
 }
