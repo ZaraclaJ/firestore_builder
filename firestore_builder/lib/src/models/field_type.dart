@@ -182,14 +182,14 @@ extension FieldTypeExtensions on FieldType {
     };
   }
 
-  bool get hasDateTime => this is FieldTypeDateTime || (_subtypeNullable != null && _subtypeNullable!.hasDateTime);
-  bool get hasTimestamp => this is FieldTypeTimestamp || (_subtypeNullable != null && _subtypeNullable!.hasTimestamp);
+  bool get hasDateTime => this is FieldTypeDateTime || (subTypeNullable != null && subTypeNullable!.hasDateTime);
+  bool get hasTimestamp => this is FieldTypeTimestamp || (subTypeNullable != null && subTypeNullable!.hasTimestamp);
   bool get hasDocumentReference =>
-      this is FieldTypeDocumentReference || (_subtypeNullable != null && _subtypeNullable!.hasDocumentReference);
+      this is FieldTypeDocumentReference || (subTypeNullable != null && subTypeNullable!.hasDocumentReference);
   bool get hasCustomClass =>
-      this is FieldTypeCustomClass || (_subtypeNullable != null && _subtypeNullable!.hasCustomClass);
+      this is FieldTypeCustomClass || (subTypeNullable != null && subTypeNullable!.hasCustomClass);
 
-  FieldType? get _subtypeNullable {
+  FieldType? get subTypeNullable {
     return switch (this) {
       final FieldTypeList type => type.subType,
       final FieldTypeMap type => type.subType,

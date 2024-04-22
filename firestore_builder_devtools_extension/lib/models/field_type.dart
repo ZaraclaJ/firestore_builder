@@ -27,6 +27,29 @@ typedef FieldTypeNullable = ({
   bool nullable,
 });
 
+extension FieldTypeExtensions on FieldType {
+  Map<int, FieldTypeNullable> getFieldTypeEnumMap(int level) {
+    final fieldType = this;
+    final isNullable = fieldType.isNullable;
+    final subType = fieldType.subTypeNullable;
+    return {
+      level: switch (fieldType) {
+        FieldTypeString() => (fieldType: FieldTypeEnum.string, nullable: isNullable),
+        FieldTypeInt() => (fieldType: FieldTypeEnum.int, nullable: isNullable),
+        FieldTypeDouble() => (fieldType: FieldTypeEnum.double, nullable: isNullable),
+        FieldTypeBool() => (fieldType: FieldTypeEnum.bool, nullable: isNullable),
+        FieldTypeTimestamp() => (fieldType: FieldTypeEnum.timestamp, nullable: isNullable),
+        FieldTypeDateTime() => (fieldType: FieldTypeEnum.dateTime, nullable: isNullable),
+        FieldTypeDocumentReference() => (fieldType: FieldTypeEnum.documentReference, nullable: isNullable),
+        FieldTypeList() => (fieldType: FieldTypeEnum.list, nullable: isNullable),
+        FieldTypeMap() => (fieldType: FieldTypeEnum.map, nullable: isNullable),
+        FieldTypeCustomClass() => (fieldType: FieldTypeEnum.customClass, nullable: isNullable),
+      },
+      if (subType != null) ...subType.getFieldTypeEnumMap(level + 1),
+    };
+  }
+}
+
 extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
   FieldType getFieldType(int level) {
     final typeNullable = this[level] ?? defaultFieldTypeNullable;

@@ -110,7 +110,7 @@ class ConfigViewModel {
     _replaceCollection(
       inCollection.copyWith(
         fields: [
-          ...inCollection.fields,
+          ...inCollection.fields.where((f) => f.name != newField.name),
           newField,
         ],
       ),

@@ -1,7 +1,6 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
-import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
@@ -19,19 +18,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final _fieldNameProvider = StateProvider.autoDispose<String>(
-  (ref) => '',
+  (ref) => throw UnimplementedError(),
 );
 
 final _typeMapProvider = StateProvider.autoDispose<Map<int, FieldTypeNullable>>(
-  (ref) => {
-    0: defaultFieldTypeNullable,
-  },
+  (ref) => throw UnimplementedError(),
 );
 
 final _fieldTypeProvider = Provider.autoDispose<FieldType>(
   (ref) {
     return ref.watch(_typeMapProvider).getFieldType(0);
   },
+  dependencies: [_typeMapProvider],
 );
 
 final _levelsProvider = Provider.autoDispose<List<int>>(
@@ -39,6 +37,7 @@ final _levelsProvider = Provider.autoDispose<List<int>>(
     final map = ref.watch(_typeMapProvider);
     return map.keys.toList();
   },
+  dependencies: [_typeMapProvider],
 );
 
 final _typeProvider = Provider.autoDispose.family<FieldTypeNullable?, int>(
@@ -46,6 +45,7 @@ final _typeProvider = Provider.autoDispose.family<FieldTypeNullable?, int>(
     final map = ref.watch(_typeMapProvider);
     return map[level];
   },
+  dependencies: [_typeMapProvider],
 );
 
 final _fieldTypeEnumProvider = Provider.autoDispose.family<FieldTypeEnum?, int>(
@@ -53,6 +53,7 @@ final _fieldTypeEnumProvider = Provider.autoDispose.family<FieldTypeEnum?, int>(
     final type = ref.watch(_typeProvider(level));
     return type?.fieldType;
   },
+  dependencies: [_typeProvider],
 );
 
 final _isNullableProvider = Provider.autoDispose.family<bool, int>(
@@ -60,6 +61,7 @@ final _isNullableProvider = Provider.autoDispose.family<bool, int>(
     final type = ref.watch(_typeProvider(level));
     return type?.nullable ?? false;
   },
+  dependencies: [_typeProvider],
 );
 
 final _canSaveProvider = Provider.autoDispose<bool>(
@@ -67,40 +69,54 @@ final _canSaveProvider = Provider.autoDispose<bool>(
     final hasName = ref.watch(_fieldNameProvider).isNotEmpty;
     return hasName;
   },
+  dependencies: [_fieldNameProvider],
 );
 
-class AddFieldButton extends ConsumerWidget {
-  const AddFieldButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return TileButton.add(
-      text: 'Add field',
-      onTap: () async {
-        final collection = ref.read(collectionGetter);
-        await _CreateFieldDialog.show(
-          context: context,
-          collection: collection,
-        );
-      },
-    );
-  }
+enum _Mode {
+  create,
+  edit,
 }
 
-class _CreateFieldDialog extends StatelessWidget {
-  const _CreateFieldDialog({required this.collection});
+class FieldDialog extends StatelessWidget {
+  const FieldDialog({
+    required this.collection,
+    required this.field,
+    super.key,
+  });
 
   final Collection? collection;
+  final CollectionField? field;
 
-  static Future<void> show({
+  _Mode get _mode {
+    return field == null ? _Mode.create : _Mode.edit;
+  }
+
+  static Future<void> showCreate({
     required BuildContext context,
     required Collection? collection,
   }) async {
     await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return _CreateFieldDialog(
+        return FieldDialog(
           collection: collection,
+          field: null,
+        );
+      },
+    );
+  }
+
+  static Future<void> showEdit({
+    required BuildContext context,
+    required Collection? collection,
+    required CollectionField field,
+  }) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return FieldDialog(
+          collection: collection,
+          field: field,
         );
       },
     );
@@ -108,15 +124,28 @@ class _CreateFieldDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CollectionGetterInitializer(
-      collection: collection,
-      child: const AppDialog(
-        title: 'Add a field',
-        content: _Content(),
-        actions: [
-          CancelButton(),
-          _SaveButton(),
-        ],
+    return ProviderScope(
+      overrides: [
+        _fieldNameProvider.overrideWith(
+          (ref) => field?.name ?? '',
+        ),
+        _typeMapProvider.overrideWith(
+          (ref) => field?.type.getFieldTypeEnumMap(0) ?? {0: defaultFieldTypeNullable},
+        ),
+      ],
+      child: CollectionGetterInitializer(
+        collection: collection,
+        child: AppDialog(
+          title: switch (_mode) {
+            _Mode.create => 'Add a field',
+            _Mode.edit => 'Edit a field',
+          },
+          content: const _Content(),
+          actions: const [
+            CancelButton(),
+            _SaveButton(),
+          ],
+        ),
       ),
     );
   }
@@ -188,6 +217,7 @@ class _NameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppInput(
+      initialText: ref.watch(_fieldNameProvider),
       label: 'Field name',
       hintText: 'Enter the field name',
       onChanged: (value) {
@@ -197,7 +227,7 @@ class _NameInput extends ConsumerWidget {
   }
 }
 
-class _TypeInput extends ConsumerWidget {
+class _TypeInput extends StatelessWidget {
   const _TypeInput({
     required this.level,
   });
@@ -205,8 +235,7 @@ class _TypeInput extends ConsumerWidget {
   final int level;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isNullable = ref.watch(_isNullableProvider(level));
+  Widget build(BuildContext context) {
     final spacings = context.spacings;
 
     return IntrinsicHeight(
@@ -219,60 +248,91 @@ class _TypeInput extends ConsumerWidget {
                 dots: 10 * (level + 1),
               ),
             ),
-          AppDropdownMenu(
-            initialSelection: ref.watch(_fieldTypeEnumProvider(level)),
-            entries: FieldTypeEnum.values.map((e) {
-              return DropdownMenuEntry(
-                value: e,
-                label: e.name,
-              );
-            }).toList(),
-            onSelected: (type) {
-              if (type == null) {
-                return;
-              }
-
-              ref.read(_typeMapProvider.notifier).update((map) {
-                final newMap = Map<int, FieldTypeNullable>.from(map);
-
-                final hasSubType = type.hasSubType;
-                newMap[level] = (
-                  fieldType: type,
-                  nullable: isNullable,
-                );
-                if (hasSubType) {
-                  newMap[level + 1] = defaultFieldTypeNullable;
-                } else {
-                  newMap.removeWhere(
-                    (key, value) => key > level,
-                  );
-                }
-
-                return newMap;
-              });
-            },
+          _DropDownMenu(
+            level: level,
           ),
           const AppGap.regular(),
-          AppSwitch(
-            label: 'Nullable',
-            value: isNullable,
-            onChanged: (bool value) {
-              ref.read(_typeMapProvider.notifier).update((map) {
-                final newMap = Map<int, FieldTypeNullable>.from(map)
-                  ..update(
-                    level,
-                    (fieldTypeNullable) => (
-                      fieldType: fieldTypeNullable.fieldType,
-                      nullable: value,
-                    ),
-                    // ifAbsent: () => (fieldType: null, nullable: value),
-                  );
-                return newMap;
-              });
-            },
-          ),
+          _NullableSwitch(level: level),
         ],
       ),
+    );
+  }
+}
+
+class _NullableSwitch extends ConsumerWidget {
+  const _NullableSwitch({required this.level});
+
+  final int level;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isNullable = ref.watch(_isNullableProvider(level));
+
+    return AppSwitch(
+      label: 'Nullable',
+      value: isNullable,
+      onChanged: (bool value) {
+        ref.read(_typeMapProvider.notifier).update((map) {
+          final newMap = Map<int, FieldTypeNullable>.from(map)
+            ..update(
+              level,
+              (fieldTypeNullable) => (
+                fieldType: fieldTypeNullable.fieldType,
+                nullable: value,
+              ),
+              // ifAbsent: () => (fieldType: null, nullable: value),
+            );
+          return newMap;
+        });
+      },
+    );
+  }
+}
+
+class _DropDownMenu extends ConsumerWidget {
+  const _DropDownMenu({
+    required this.level,
+  });
+
+  final int level;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isNullable = ref.watch(_isNullableProvider(level));
+    final initialSelection = ref.watch(_fieldTypeEnumProvider(level));
+
+    return AppDropdownMenu(
+      initialSelection: initialSelection,
+      entries: FieldTypeEnum.values.map((e) {
+        return DropdownMenuEntry(
+          value: e,
+          label: e.name,
+        );
+      }).toList(),
+      onSelected: (type) {
+        if (type == null) {
+          return;
+        }
+
+        ref.read(_typeMapProvider.notifier).update((map) {
+          final newMap = Map<int, FieldTypeNullable>.from(map);
+
+          final hasSubType = type.hasSubType;
+          newMap[level] = (
+            fieldType: type,
+            nullable: isNullable,
+          );
+          if (hasSubType) {
+            newMap[level + 1] = defaultFieldTypeNullable;
+          } else {
+            newMap.removeWhere(
+              (key, value) => key > level,
+            );
+          }
+
+          return newMap;
+        });
+      },
     );
   }
 }
