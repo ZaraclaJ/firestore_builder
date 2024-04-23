@@ -48,11 +48,6 @@ final _canSaveProvider = Provider.autoDispose<bool>(
   ],
 );
 
-enum _CollectionDialogMode {
-  create,
-  edit,
-}
-
 class CollectionDialog extends StatelessWidget {
   const CollectionDialog({
     required this.inCollection,
@@ -62,10 +57,6 @@ class CollectionDialog extends StatelessWidget {
 
   final Collection? inCollection;
   final Collection? collection;
-
-  _CollectionDialogMode get _mode {
-    return collection == null ? _CollectionDialogMode.create : _CollectionDialogMode.edit;
-  }
 
   static Future<void> showStart({
     required BuildContext context,
@@ -99,6 +90,7 @@ class CollectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final collection = this.collection;
     return ProviderScope(
       overrides: [
         _collectionNameProvider.overrideWith((ref) => collection?.name ?? ''),
@@ -107,10 +99,7 @@ class CollectionDialog extends StatelessWidget {
       child: CollectionGetterInitializer(
         collection: inCollection,
         child: AppDialog(
-          title: switch (_mode) {
-            _CollectionDialogMode.create => 'Start a collection',
-            _CollectionDialogMode.edit => 'Edit a collection',
-          },
+          title: collection == null ? 'Start a collection' : 'Edit ${collection.name} collection',
           content: const _Content(),
           actions: const [
             CancelButton(),

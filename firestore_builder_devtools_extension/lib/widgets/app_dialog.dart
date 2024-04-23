@@ -23,7 +23,7 @@ class AppDialog extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           title,
-          style: context.typos.titleLarge?.copyWith(color: titleColor),
+          style: context.typos.titleLarge?.copyWith(color: titleColor ?? context.colors.primary),
         ),
       ),
       content: SizedBox(

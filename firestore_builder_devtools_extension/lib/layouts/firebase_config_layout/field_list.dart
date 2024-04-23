@@ -4,10 +4,10 @@ import 'package:firestore_builder_devtools_extension/states/config_view_model.da
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
-import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
 import 'package:firestore_builder_devtools_extension/widgets/confirmation_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/on_hover_builder.dart';
+import 'package:firestore_builder_devtools_extension/widgets/tile_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,7 +45,6 @@ class _FieldItem extends StatelessWidget {
           onTap: () {},
           title: '${field.name}: ${field.type.typeReference.symbolName}',
           titleWidget: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('${field.name}:'),
               const AppGap.small(),
@@ -70,7 +69,7 @@ class _FieldItem extends StatelessWidget {
                 ),
               ] else
                 const SizedBox(
-                  height: _Button.iconSize,
+                  height: TileButton.iconSize,
                 ),
             ],
           ),
@@ -89,7 +88,7 @@ class _EditButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _Button(
+    return TileButton(
       icon: Icons.edit,
       tooltip: 'Edit field',
       onTap: () {
@@ -117,7 +116,7 @@ class _DeleteButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return _Button(
+    return TileButton(
       icon: Icons.delete,
       tooltip: 'Delete field',
       color: context.colors.error,
@@ -143,44 +142,6 @@ class _DeleteButton extends ConsumerWidget {
           );
         }
       },
-    );
-  }
-}
-
-class _Button extends StatelessWidget {
-  const _Button({
-    required this.icon,
-    required this.onTap,
-    this.tooltip,
-    this.color,
-  });
-
-  final IconData icon;
-  final void Function() onTap;
-  final String? tooltip;
-  final Color? color;
-
-  static const double iconSize = 24;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: SizedBox.square(
-          dimension: iconSize,
-          child: AppPadding.small(
-            child: FittedBox(
-              child: Icon(
-                icon,
-                color: color,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

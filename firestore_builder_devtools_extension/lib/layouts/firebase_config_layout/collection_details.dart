@@ -4,14 +4,12 @@ import 'package:firestore_builder_devtools_extension/dialogs/collection_dialog.d
 import 'package:firestore_builder_devtools_extension/dialogs/field_dialog.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_buttton.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/field_list.dart';
-import 'package:firestore_builder_devtools_extension/states/config_states.dart';
-import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/sub_collection_list.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
-import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -52,7 +50,7 @@ class _Layout extends ConsumerWidget {
         const _StartCollectionButton(),
         const AppDivider.horizontal(),
         const Expanded(
-          child: _SubCollectionList(),
+          child: SubCollectionList(),
         ),
         if (isCollection) ...[
           const AppDivider.horizontal(),
@@ -122,11 +120,14 @@ class _CollectionInfo extends ConsumerWidget {
                     style: context.typos.labelLarge?.copyWith(
                       color: foregroundColor,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 if (collection != null) ...[
                   const AppGap.regular(),
                   CollectionOptionsButton(
+                    collection: collection,
                     foregroundColor: foregroundColor,
                     size: _iconSize,
                   ),
@@ -137,47 +138,6 @@ class _CollectionInfo extends ConsumerWidget {
         ),
         const AppDivider.horizontal(),
       ],
-    );
-  }
-}
-
-class _SubCollectionList extends ConsumerWidget {
-  const _SubCollectionList();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(collectionGetter);
-    final subCollections = ref.watch(subCollectionsProvider(collection));
-    return Material(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: subCollections.length,
-        itemBuilder: (BuildContext context, int index) {
-          final collection = subCollections[index];
-          return _CollectionItem(
-            collection: collection,
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _CollectionItem extends ConsumerWidget {
-  const _CollectionItem({required this.collection});
-
-  final Collection collection;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isSelected = ref.watch(isCollectionSelectedProvider(collection));
-    return AppListTile(
-      onTap: () {
-        ref.read(configViewModelProvider).selectCollection(collection);
-      },
-      title: collection.name,
-      trailing: const Icon(Icons.chevron_right),
-      selected: isSelected,
     );
   }
 }

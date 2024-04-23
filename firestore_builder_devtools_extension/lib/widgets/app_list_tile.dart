@@ -9,6 +9,7 @@ class AppListTile extends StatelessWidget {
     this.onTap,
     this.leading,
     this.trailing,
+    this.titleColor,
     super.key,
   });
 
@@ -18,6 +19,7 @@ class AppListTile extends StatelessWidget {
   final bool selected;
   final Widget? leading;
   final Widget? trailing;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,11 @@ class AppListTile extends StatelessWidget {
         onTap: onTap,
         dense: true,
         selected: selected,
-        title: titleWidget ?? Text(title ?? ''),
+        title: titleWidget ??
+            AppListTileTitleText(
+              title ?? '',
+              color: titleColor,
+            ),
         leading: leading,
         trailing: trailing,
         textColor: colors.primary,
@@ -41,6 +47,27 @@ class AppListTile extends StatelessWidget {
         focusColor: Colors.transparent,
         hoverColor: colors.primaryContainer.withOpacity(0.1),
       ),
+    );
+  }
+}
+
+class AppListTileTitleText extends StatelessWidget {
+  const AppListTileTitleText(
+    this.title, {
+    this.color,
+    super.key,
+  });
+
+  final String title;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: context.typos.bodyLarge?.copyWith(color: color ?? context.colors.primary),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

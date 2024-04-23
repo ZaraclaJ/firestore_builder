@@ -1,6 +1,7 @@
+import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/dialogs/collection_dialog.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
-import 'package:firestore_builder_devtools_extension/states/getters.dart';
+import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart';
@@ -9,21 +10,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CollectionOptionsButton extends ConsumerStatefulWidget {
+class CollectionOptionsButton extends StatefulWidget {
   const CollectionOptionsButton({
+    required this.collection,
     required this.size,
     required this.foregroundColor,
+    this.isDisplayed = true,
     super.key,
   });
 
   final double size;
   final Color foregroundColor;
+  final bool isDisplayed;
+  final Collection collection;
 
   @override
-  ConsumerState<CollectionOptionsButton> createState() => _CollectionOptionsButtonState();
+  State<CollectionOptionsButton> createState() => _CollectionOptionsButtonState();
 }
 
-class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButton> {
+class _CollectionOptionsButtonState extends State<CollectionOptionsButton> {
   late final OverlayPortalController _controller;
   late final LayerLink _link;
 
@@ -50,21 +55,29 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
               link: _link,
               child: Align(
                 alignment: AlignmentDirectional.topStart,
-                child: _Overlay(controller: _controller),
+                child: _Overlay(
+                  controller: _controller,
+                  collection: widget.collection,
+                ),
               ),
             ),
           );
         },
-        child: InkWell(
-          onTap: () {
-            _controller.toggle();
-          },
-          child: Icon(
-            Icons.more_vert,
-            size: widget.size,
-            color: widget.foregroundColor,
-          ),
-        ),
+        child: widget.isDisplayed
+            ? InkWell(
+                customBorder: const CircleBorder(),
+                onTap: () {
+                  _controller.toggle();
+                },
+                child: Icon(
+                  Icons.more_vert,
+                  size: widget.size,
+                  color: widget.foregroundColor,
+                ),
+              )
+            : SizedBox.square(
+                dimension: widget.size,
+              ),
       ),
     );
   }
@@ -72,10 +85,12 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
 
 class _Overlay extends ConsumerWidget {
   const _Overlay({
+    required this.collection,
     required this.controller,
   });
 
   final OverlayPortalController controller;
+  final Collection collection;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -88,10 +103,6 @@ class _Overlay extends ConsumerWidget {
               icon: Icons.edit,
               title: 'Edit Collection',
               onTap: () {
-                final collection = ref.read(collectionGetter);
-                if (collection == null) {
-                  return;
-                }
                 controller.hide();
 
                 CollectionDialog.showEdit(
@@ -104,17 +115,14 @@ class _Overlay extends ConsumerWidget {
             _Action(
               icon: FontAwesomeIcons.trash,
               title: 'Delete Collection',
+              color: context.colors.error,
               onTap: () async {
-                final collection = ref.read(collectionGetter);
-                if (collection == null) {
-                  return;
-                }
                 controller.hide();
 
                 final viewModel = ref.read(configViewModelProvider);
                 final confirm = await ConfirmationDialog.show(
                   context: context,
-                  title: 'Delete Collection',
+                  title: 'Delete ${collection.name} collection',
                   description: 'Are you sure you want to delete this collection?',
                   validateLabel: 'Delete',
                   isDestructive: true,
@@ -137,11 +145,13 @@ class _Action extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.color,
   });
 
   final IconData icon;
   final String title;
   final void Function() onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +159,10 @@ class _Action extends StatelessWidget {
       leading: Icon(
         icon,
         size: 16,
+        color: color,
       ),
       title: title,
+      titleColor: color,
       onTap: onTap,
     );
   }
