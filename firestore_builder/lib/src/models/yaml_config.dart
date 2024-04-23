@@ -25,14 +25,14 @@ The configuration file does not contain a firestore_builder section: $yamlMap
     }
 
     final projectName = firestoreBuilderConfig[projectNameKey];
-    if (projectName is! String) {
+    if (projectName is! String || projectName.trim().isEmpty) {
       throw Exception('''
 The configuration file does not contain an $projectNameKey section: $firestoreBuilderConfig
 ''');
     }
 
     final outputPath = firestoreBuilderConfig[outputKey];
-    if (outputPath is! String) {
+    if (outputPath is! String || outputPath.trim().isEmpty) {
       throw Exception('''
 The configuration file does not contain an $outputKey section: $firestoreBuilderConfig
 ''');
@@ -62,10 +62,23 @@ The configuration file does not contain a correct $clearKey section: $firestoreB
     );
   }
 
-  final String outputPath;
-  final bool clear;
-  final List<Collection> collections;
+  /// The name of the project
+  ///
+  /// It is the name indicates in the pubspec.yaml file
   final String projectName;
+
+  /// The path where the files will be generated
+  ///
+  /// ex: lib/firestore
+  final String outputPath;
+
+  /// Whether to clear the output directory before generating the files
+  ///
+  /// Default is false
+  final bool clear;
+
+  /// The firebase collections and subCollections to generate
+  final List<Collection> collections;
 }
 
 extension YamlConfigExtensions on YamlConfig {
@@ -84,12 +97,14 @@ extension YamlConfigExtensions on YamlConfig {
   }
 
   Map<String, dynamic> toYaml() {
+    final collections = this.collections.map((e) => e.toYaml()).toList();
+
     return {
       firestoreBuilderKey: {
         projectNameKey: projectName,
         outputKey: outputPath,
-        clearKey: clear,
-        collectionsKey: collections.map((e) => e.toYaml()).toList(),
+        if (clear) clearKey: clear,
+        if (collections.isNotEmpty) collectionsKey: collections,
       },
     };
   }

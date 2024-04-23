@@ -89,9 +89,24 @@ Invalid field definition, invalid field: $yamlMap''',
       configLight: configLight,
     );
   }
+
+  /// The name of the field
   final String name;
+
+  /// The type of the field
+  ///
+  /// It can be a basic type or a custom class
+  ///
+  /// e.g. String, int, double, bool, DateTime, Timestamp, DocumentReference, CustomClass
   final FieldType type;
+
+  /// If the field should accept a field value
+  ///
+  /// e.g. `FieldValue.serverTimestamp()`, `FieldValue.arrayUnion()`,
+  /// `FieldValue.arrayRemove()` , `FieldValue.delete()`
   final bool acceptFieldValue;
+
+  /// The configuration of the project
   final YamlConfig configLight;
 }
 

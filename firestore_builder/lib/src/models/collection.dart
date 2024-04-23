@@ -93,11 +93,26 @@ Invalid collection definition, missing or invalid fields key: $collectionMap
     );
   }
 
+  /// The name of the collection
+  ///
+  /// It is the firestore ID of the collection
   final String name;
+
+  /// The name of the generated model for items in this collection
+  ///
+  /// This should be a valid dart class name and should be unique
   final String modelName;
+
+  /// The fields of the collection
   final List<CollectionField> fields;
+
+  /// The sub-collections of the collection
   final List<Collection> subCollections;
+
+  /// The path of the collection
   final List<Collection> collectionPath;
+
+  /// The configuration of the project
   final YamlConfig configLight;
 }
 
@@ -121,13 +136,15 @@ extension CollectionExtensions on Collection {
   }
 
   Map<String, dynamic> toYaml() {
+    final fields = this.fields.map((e) => e.toYaml()).toList();
+    final subCollections = this.subCollections.map((e) => e.toYaml()).toList();
     return {
       collectionKey: {
         collectionNameKey: name,
         modelNameKey: modelName,
-        fieldsKey: fields.map((e) => e.toYaml()).toList(),
+        if (fields.isNotEmpty) fieldsKey: fields,
       },
-      subCollectionsKey: subCollections.map((e) => e.toYaml()).toList(),
+      if (subCollections.isNotEmpty) subCollectionsKey: subCollections,
     };
   }
 
