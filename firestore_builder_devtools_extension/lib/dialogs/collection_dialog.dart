@@ -1,7 +1,11 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
+import 'package:firestore_builder_devtools_extension/extensions/string_extensions.dart';
+import 'package:firestore_builder_devtools_extension/models/collection_name_error.dart';
+import 'package:firestore_builder_devtools_extension/models/model_name_error.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
@@ -28,30 +32,75 @@ final _modelNameProvider = StateProvider.autoDispose<String>(
   (ref) => throw UnimplementedError(),
 );
 
-final _modelClassValidProvider = Provider.autoDispose<bool>(
+final _collectionNameErrorProvider = Provider.autoDispose<CollectionNameError?>(
   (ref) {
-    final modelName = ref.watch(_modelNameProvider);
-    return modelName == modelName.pascalCase;
+    final collectionName = ref.watch(_collectionNameProvider);
+    final isEmpty = collectionName.isTrimmedEmpty;
+    if (isEmpty) {
+      return CollectionNameErrorEmpty(collectionName);
+    }
+
+    final onlyLetters = collectionName.isOnlyLetters;
+    if (!onlyLetters) {
+      return CollectionNameErrorInvalid(collectionName);
+    }
+
+    final inCollection = ref.watch(_inCollectionGetter);
+    final collection = ref.watch(_collectionGetter);
+    final config = ref.watch(configProvider);
+    final subCollections = inCollection == null ? config.collections : inCollection.subCollections;
+    final otherCollections = subCollections.where((c) => c != collection).toList();
+    final alreadyExist = otherCollections.any((c) => c.name.toLowerCase() == collectionName.toLowerCase());
+    if (alreadyExist) {
+      return CollectionNameErrorAlreadyExists(collectionName);
+    }
+    return null;
   },
-  dependencies: [_modelNameProvider],
+  dependencies: [
+    _collectionNameProvider,
+    _inCollectionGetter,
+    _collectionGetter,
+    configProvider,
+  ],
 );
 
-final _modelClassErrorProvider = Provider.autoDispose<String?>(
-  (ref) => ref.watch(_modelClassValidProvider) ? null : 'Model class name must be in PascalCase.',
-  dependencies: [_modelClassValidProvider],
+final _modelClassErrorProvider = Provider.autoDispose<ModelNameError?>(
+  (ref) {
+    final modelName = ref.watch(_modelNameProvider);
+    final isEmpty = modelName.isTrimmedEmpty;
+    if (isEmpty) {
+      return ModelNameErrorEmpty(modelName);
+    }
+
+    final onlyLetters = modelName.isOnlyLetters;
+    if (!onlyLetters) {
+      return ModelNameErrorInvalid(modelName);
+    }
+    final collection = ref.watch(_collectionGetter);
+    final otherCollections = ref.watch(configProvider).allCollections.where((c) => c != collection).toList();
+    final alreadyExist = otherCollections.any((c) => c.modelName.toLowerCase() == modelName.toLowerCase());
+    if (alreadyExist) {
+      return ModelNameErrorAlreadyExists(modelName);
+    }
+
+    return null;
+  },
+  dependencies: [
+    _modelNameProvider,
+    _collectionGetter,
+    configProvider,
+  ],
 );
 
 final _canSaveProvider = Provider.autoDispose<bool>(
   (ref) {
-    final collectionName = ref.watch(_collectionNameProvider);
-    final modelName = ref.watch(_modelNameProvider);
-    final modelClassValid = ref.watch(_modelClassValidProvider);
-    return collectionName.isNotEmpty && modelName.isNotEmpty && modelClassValid;
+    final modelClassError = ref.watch(_modelClassErrorProvider);
+    final collectionNameError = ref.watch(_collectionNameErrorProvider);
+    return collectionNameError == null && modelClassError == null;
   },
   dependencies: [
-    _collectionNameProvider,
-    _modelNameProvider,
-    _modelClassValidProvider,
+    _modelClassErrorProvider,
+    _collectionNameErrorProvider,
   ],
 );
 
@@ -172,6 +221,8 @@ class _CollectionNameInput extends ConsumerWidget {
       initialText: ref.watch(_collectionNameProvider),
       label: 'Collection ID',
       hintText: 'Enter the collection ID',
+      errorText: ref.watch(_collectionNameErrorProvider.select((value) => value?.error)),
+      withError: true,
       onChanged: (value) {
         ref.read(_collectionNameProvider.notifier).state = value;
       },
@@ -188,7 +239,8 @@ class _ModelNameInput extends ConsumerWidget {
       initialText: ref.watch(_modelNameProvider),
       label: 'Model class name',
       hintText: 'Enter the name of the model class',
-      errorText: ref.watch(_modelClassErrorProvider),
+      errorText: ref.watch(_modelClassErrorProvider.select((value) => value?.error)),
+      withError: true,
       onChanged: (value) {
         ref.read(_modelNameProvider.notifier).state = value;
       },
@@ -208,7 +260,7 @@ class _SaveButton extends ConsumerWidget {
               final collection = ref.read(_collectionGetter);
               final viewModel = ref.read(configViewModelProvider);
               final collectionName = ref.read(_collectionNameProvider);
-              final modelName = ref.read(_modelNameProvider);
+              final modelName = ref.read(_modelNameProvider).pascalCase;
 
               final Collection newCollection;
 

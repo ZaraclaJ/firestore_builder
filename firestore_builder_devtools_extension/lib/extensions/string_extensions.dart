@@ -6,4 +6,11 @@ extension StringExtensions on String {
     final yamlMap = loadYaml(this) as YamlMap;
     return YamlConfig.fromYaml(yamlMap);
   }
+
+  bool get isTrimmedEmpty => trim().isEmpty;
+
+  bool get isOnlyLetters {
+    final regex = RegExp(r'^[a-zA-Z]+$');
+    return regex.hasMatch(trim());
+  }
 }

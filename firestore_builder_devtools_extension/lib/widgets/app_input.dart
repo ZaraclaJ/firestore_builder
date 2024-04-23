@@ -10,6 +10,7 @@ class AppInput extends StatelessWidget {
     this.errorText,
     this.widthFactor = 0.7,
     this.isDense = false,
+    this.withError = false,
     this.initialText,
     super.key,
   });
@@ -21,6 +22,10 @@ class AppInput extends StatelessWidget {
   final double widthFactor;
   final bool isDense;
   final String? initialText;
+  final bool withError;
+
+  static const double denseHeightWithError = 48;
+  static const double heightWithError = 72;
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +37,29 @@ class AppInput extends StatelessWidget {
       child: _ControllerBuilder(
         initialText: initialText,
         builder: (controller) {
-          return TextField(
-            controller: controller,
-            onChanged: onChanged,
-            style: textStyle,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(denseSpacing),
-              isDense: isDense,
-              border: const OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 0.5, color: theme.focusColor),
+          return SizedBox(
+            height: switch ((isDense, withError)) {
+              (_, false) => null,
+              (true, true) => denseHeightWithError,
+              (false, true) => heightWithError,
+            },
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              style: textStyle,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(denseSpacing),
+                isDense: isDense,
+                border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 0.5, color: theme.focusColor),
+                ),
+                labelText: label,
+                labelStyle: textStyle,
+                hintText: hintText,
+                hintStyle: textStyle,
+                errorText: errorText,
               ),
-              labelText: label,
-              labelStyle: textStyle,
-              hintText: hintText,
-              hintStyle: textStyle,
-              errorText: errorText,
             ),
           );
         },
