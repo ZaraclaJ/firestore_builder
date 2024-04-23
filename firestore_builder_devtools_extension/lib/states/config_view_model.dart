@@ -62,26 +62,90 @@ class ConfigViewModel {
     ref.read(selectedCollectionPathNamesProvider.notifier).state = path;
   }
 
+  Collection editCollection({
+    required Collection collection,
+    required String collectionName,
+    required String modelName,
+  }) {
+    return _updateCollection(
+      oldCollectionName: collection.name,
+      collectionPath: collection.collectionPath,
+      newCollectionName: collectionName,
+      modelName: modelName,
+    );
+  }
+
   Collection startCollection({
     required Collection? inCollection,
     required String collectionName,
     required String modelName,
   }) {
-    final newCollection = Collection(
-      name: collectionName,
-      modelName: modelName,
-      fields: [],
-      subCollections: [],
+    return _updateCollection(
+      oldCollectionName: null,
       collectionPath: [
         if (inCollection != null) ...[
           ...inCollection.collectionPath,
           inCollection,
         ],
       ],
-      configLight: ref.read(configLightProvider),
+      newCollectionName: collectionName,
+      modelName: modelName,
+    );
+  }
+
+  Collection _updateCollection({
+    required List<Collection> collectionPath,
+    required String? oldCollectionName,
+    required String newCollectionName,
+    required String modelName,
+  }) {
+    final config = ref.read(configProvider.notifier).update(
+      (config) {
+        return config.updateCollection(
+          collectionPath: [
+            ...collectionPath.collectionNames,
+            oldCollectionName ?? newCollectionName,
+          ],
+          replace: (collection) {
+            if (collection == null) {
+              return Collection(
+                name: newCollectionName,
+                modelName: modelName,
+                fields: [],
+                subCollections: [],
+                collectionPath: collectionPath,
+                configLight: ref.read(configLightProvider),
+              );
+            }
+
+            final newCollection = collection.copyWith(
+              name: newCollectionName,
+              modelName: modelName,
+            );
+
+            return newCollection.copyWith(
+              subCollections: newCollection.subCollections
+                  .map(
+                    (e) => e.updatePathAtIndex(
+                      collection: newCollection,
+                      index: collectionPath.length,
+                    ),
+                  )
+                  .toList(),
+            );
+          },
+        );
+      },
     );
 
-    _replaceCollection(newCollection);
+    final newCollection = config.collectionFromPath([
+      ...collectionPath.collectionNames,
+      newCollectionName,
+    ]);
+
+    if (newCollection == null) {
+      throw Exception('Collection not found after update');
+    }
 
     return newCollection;
   }

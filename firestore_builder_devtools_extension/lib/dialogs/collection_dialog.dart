@@ -3,7 +3,6 @@ import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart'
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
-import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
@@ -12,6 +11,14 @@ import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:recase/recase.dart';
+
+final _inCollectionGetter = Provider<Collection?>(
+  (ref) => throw Exception('_inCollectionGetter not found'),
+);
+
+final _collectionGetter = Provider<Collection?>(
+  (ref) => throw Exception('_collectionGetter not found'),
+);
 
 final _collectionNameProvider = StateProvider.autoDispose<String>(
   (ref) => throw UnimplementedError(),
@@ -93,20 +100,29 @@ class CollectionDialog extends StatelessWidget {
     final collection = this.collection;
     return ProviderScope(
       overrides: [
+        _inCollectionGetter.overrideWithValue(inCollection),
+        _collectionGetter.overrideWithValue(collection),
         _collectionNameProvider.overrideWith((ref) => collection?.name ?? ''),
         _modelNameProvider.overrideWith((ref) => collection?.modelName ?? ''),
       ],
-      child: CollectionGetterInitializer(
-        collection: inCollection,
-        child: AppDialog(
-          title: collection == null ? 'Start a collection' : 'Edit ${collection.name} collection',
-          content: const _Content(),
-          actions: const [
-            CancelButton(),
-            _SaveButton(),
-          ],
-        ),
-      ),
+      child: const _Layout(),
+    );
+  }
+}
+
+class _Layout extends ConsumerWidget {
+  const _Layout();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final collection = ref.watch(_collectionGetter);
+    return AppDialog(
+      title: collection == null ? 'Start a collection' : 'Edit ${collection.name} collection',
+      content: const _Content(),
+      actions: const [
+        CancelButton(),
+        _SaveButton(),
+      ],
     );
   }
 }
@@ -140,8 +156,7 @@ class _Path extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(collectionGetter);
-
+    final collection = ref.watch(_inCollectionGetter);
     return PathValue(
       collection: collection,
     );
@@ -190,13 +205,31 @@ class _SaveButton extends ConsumerWidget {
     return SaveButton(
       onPressed: canSave
           ? () {
+              final collection = ref.read(_collectionGetter);
               final viewModel = ref.read(configViewModelProvider);
-              final collection = viewModel.startCollection(
-                inCollection: ref.read(collectionGetter),
-                collectionName: ref.read(_collectionNameProvider),
-                modelName: ref.read(_modelNameProvider),
-              );
-              viewModel.selectCollection(collection);
+              final collectionName = ref.read(_collectionNameProvider);
+              final modelName = ref.read(_modelNameProvider);
+
+              final Collection newCollection;
+
+              if (collection != null) {
+                // Edit collection
+                newCollection = viewModel.editCollection(
+                  collection: collection,
+                  collectionName: collectionName,
+                  modelName: modelName,
+                );
+              } else {
+                // Start collection
+                final inCollection = ref.read(_inCollectionGetter);
+                newCollection = viewModel.startCollection(
+                  inCollection: inCollection,
+                  collectionName: collectionName,
+                  modelName: modelName,
+                );
+              }
+
+              viewModel.selectCollection(newCollection);
               Navigator.of(context).pop();
             }
           : null,

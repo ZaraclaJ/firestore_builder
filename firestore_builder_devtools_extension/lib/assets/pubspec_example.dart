@@ -6,7 +6,7 @@ firestore_builder:
   collections:
     - collection:
         collection_name: teams
-        model_name: team
+        model_name: Team
         fields:
           - name: String
           - description: String?
@@ -27,7 +27,7 @@ firestore_builder:
       sub_collections:
         - collection:
             collection_name: users
-            model_name: user
+            model_name: User
             fields:
               - name: String
               - current_job: String?
@@ -35,12 +35,12 @@ firestore_builder:
           sub_collections:
             - collection:
                 collection_name: items
-                model_name: item
+                model_name: Item
                 fields:
                   - name: String
         - collection:
             collection_name: messages
-            model_name: message
+            model_name: Message
             fields:
               - content: String
               - date: Timestamp?

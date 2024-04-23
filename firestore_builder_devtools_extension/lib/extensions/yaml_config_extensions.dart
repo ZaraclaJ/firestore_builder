@@ -33,7 +33,7 @@ extension YamlConfigExtensions on YamlConfig {
   }
 
   YamlConfig updateCollection({
-    required Collection? Function(Collection?) replace,
+    required Collection? Function(Collection? collection) replace,
     required List<String> collectionPath,
   }) {
     if (collectionPath.isEmpty) {
@@ -121,7 +121,7 @@ extension CollectionExtensions on Collection {
   }
 
   List<String> get collectionPathNames {
-    return collectionPath.map((c) => c.name).toList();
+    return collectionPath.collectionNames;
   }
 
   Collection updateCollection({
@@ -169,6 +169,24 @@ extension CollectionExtensions on Collection {
     );
   }
 
+  Collection updatePathAtIndex({
+    required int index,
+    required Collection collection,
+  }) {
+    return copyWith(
+      collectionPath: [
+        ...collectionPath.sublist(0, index),
+        collection,
+        if (collectionPath.length > index + 1) ...collectionPath.sublist(index + 1),
+      ],
+      subCollections: subCollections
+          .map(
+            (e) => e.updatePathAtIndex(index: index, collection: collection),
+          )
+          .toList(),
+    );
+  }
+
   Collection? collectionFromPath(List<String> collectionPath) {
     if (collectionPath.isEmpty) {
       return this;
@@ -204,5 +222,11 @@ extension CollectionExtensions on Collection {
       subCollection,
       ...subCollection.collectionPathFromNames(nextCollectionPath),
     ];
+  }
+}
+
+extension CollectionListExtensions on List<Collection> {
+  List<String> get collectionNames {
+    return map((c) => c.name).toList();
   }
 }
