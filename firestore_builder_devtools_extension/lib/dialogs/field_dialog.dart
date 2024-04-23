@@ -72,7 +72,7 @@ final _canSaveProvider = Provider.autoDispose<bool>(
   dependencies: [_fieldNameProvider],
 );
 
-enum _Mode {
+enum _FieldDialogMode {
   create,
   edit,
 }
@@ -87,8 +87,8 @@ class FieldDialog extends StatelessWidget {
   final Collection? collection;
   final CollectionField? field;
 
-  _Mode get _mode {
-    return field == null ? _Mode.create : _Mode.edit;
+  _FieldDialogMode get _mode {
+    return field == null ? _FieldDialogMode.create : _FieldDialogMode.edit;
   }
 
   static Future<void> showCreate({
@@ -137,8 +137,8 @@ class FieldDialog extends StatelessWidget {
         collection: collection,
         child: AppDialog(
           title: switch (_mode) {
-            _Mode.create => 'Add a field',
-            _Mode.edit => 'Edit a field',
+            _FieldDialogMode.create => 'Add a field',
+            _FieldDialogMode.edit => 'Edit a field',
           },
           content: const _Content(),
           actions: const [

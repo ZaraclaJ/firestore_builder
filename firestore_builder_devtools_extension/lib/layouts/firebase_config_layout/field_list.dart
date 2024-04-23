@@ -1,5 +1,5 @@
 import 'package:firestore_builder/firestore_builder.dart';
-import 'package:firestore_builder_devtools_extension/buttons/field_dialog.dart';
+import 'package:firestore_builder_devtools_extension/dialogs/field_dialog.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';

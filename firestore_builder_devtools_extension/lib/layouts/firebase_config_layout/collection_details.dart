@@ -1,7 +1,7 @@
 import 'package:firestore_builder/firestore_builder.dart';
-import 'package:firestore_builder_devtools_extension/buttons/field_dialog.dart';
-import 'package:firestore_builder_devtools_extension/buttons/start_collection_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
+import 'package:firestore_builder_devtools_extension/dialogs/collection_dialog.dart';
+import 'package:firestore_builder_devtools_extension/dialogs/field_dialog.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_buttton.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/field_list.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
@@ -49,14 +49,14 @@ class _Layout extends ConsumerWidget {
     return Column(
       children: [
         const _CollectionInfo(),
-        const StartCollectionButton(),
+        const _StartCollectionButton(),
         const AppDivider.horizontal(),
         const Expanded(
           child: _SubCollectionList(),
         ),
         if (isCollection) ...[
           const AppDivider.horizontal(),
-          const AddFieldButton(),
+          const _AddFieldButton(),
           const AppDivider.horizontal(),
           const Expanded(
             flex: 2,
@@ -64,6 +64,24 @@ class _Layout extends ConsumerWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+class _StartCollectionButton extends ConsumerWidget {
+  const _StartCollectionButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return TileButton.add(
+      text: 'Start collection',
+      onTap: () async {
+        final collection = ref.read(collectionGetter);
+        await CollectionDialog.showStart(
+          context: context,
+          inCollection: collection,
+        );
+      },
     );
   }
 }
@@ -164,8 +182,8 @@ class _CollectionItem extends ConsumerWidget {
   }
 }
 
-class AddFieldButton extends ConsumerWidget {
-  const AddFieldButton({super.key});
+class _AddFieldButton extends ConsumerWidget {
+  const _AddFieldButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

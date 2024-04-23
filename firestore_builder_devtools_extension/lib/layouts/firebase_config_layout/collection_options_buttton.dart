@@ -1,3 +1,4 @@
+import 'package:firestore_builder_devtools_extension/dialogs/collection_dialog.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
@@ -47,9 +48,9 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
             },
             child: CompositedTransformFollower(
               link: _link,
-              child: const Align(
+              child: Align(
                 alignment: AlignmentDirectional.topStart,
-                child: _Overlay(),
+                child: _Overlay(controller: _controller),
               ),
             ),
           );
@@ -70,7 +71,11 @@ class _CollectionOptionsButtonState extends ConsumerState<CollectionOptionsButto
 }
 
 class _Overlay extends ConsumerWidget {
-  const _Overlay();
+  const _Overlay({
+    required this.controller,
+  });
+
+  final OverlayPortalController controller;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,11 +87,17 @@ class _Overlay extends ConsumerWidget {
             _Action(
               icon: Icons.edit,
               title: 'Edit Collection',
-              onTap: () async {
+              onTap: () {
                 final collection = ref.read(collectionGetter);
                 if (collection == null) {
                   return;
                 }
+                controller.hide();
+
+                CollectionDialog.showEdit(
+                  context: context,
+                  collection: collection,
+                );
               },
             ),
             const AppDivider.horizontal(),
@@ -98,6 +109,7 @@ class _Overlay extends ConsumerWidget {
                 if (collection == null) {
                   return;
                 }
+                controller.hide();
 
                 final viewModel = ref.read(configViewModelProvider);
                 final confirm = await ConfirmationDialog.show(

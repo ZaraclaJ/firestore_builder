@@ -1,7 +1,6 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
-import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
@@ -15,11 +14,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:recase/recase.dart';
 
 final _collectionNameProvider = StateProvider.autoDispose<String>(
-  (ref) => '',
+  (ref) => throw UnimplementedError(),
 );
 
 final _modelNameProvider = StateProvider.autoDispose<String>(
-  (ref) => '',
+  (ref) => throw UnimplementedError(),
 );
 
 final _modelClassValidProvider = Provider.autoDispose<bool>(
@@ -27,10 +26,12 @@ final _modelClassValidProvider = Provider.autoDispose<bool>(
     final modelName = ref.watch(_modelNameProvider);
     return modelName == modelName.pascalCase;
   },
+  dependencies: [_modelNameProvider],
 );
 
 final _modelClassErrorProvider = Provider.autoDispose<String?>(
   (ref) => ref.watch(_modelClassValidProvider) ? null : 'Model class name must be in PascalCase.',
+  dependencies: [_modelClassValidProvider],
 );
 
 final _canSaveProvider = Provider.autoDispose<bool>(
@@ -40,39 +41,56 @@ final _canSaveProvider = Provider.autoDispose<bool>(
     final modelClassValid = ref.watch(_modelClassValidProvider);
     return collectionName.isNotEmpty && modelName.isNotEmpty && modelClassValid;
   },
+  dependencies: [
+    _collectionNameProvider,
+    _modelNameProvider,
+    _modelClassValidProvider,
+  ],
 );
 
-class StartCollectionButton extends ConsumerWidget {
-  const StartCollectionButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return TileButton.add(
-      text: 'Start collection',
-      onTap: () async {
-        final collection = ref.read(collectionGetter);
-        await _StartCollectionDialog.show(
-          context: context,
-          collection: collection,
-        );
-      },
-    );
-  }
+enum _CollectionDialogMode {
+  create,
+  edit,
 }
 
-class _StartCollectionDialog extends StatelessWidget {
-  const _StartCollectionDialog({required this.collection});
+class CollectionDialog extends StatelessWidget {
+  const CollectionDialog({
+    required this.inCollection,
+    required this.collection,
+    super.key,
+  });
 
+  final Collection? inCollection;
   final Collection? collection;
 
-  static Future<void> show({
+  _CollectionDialogMode get _mode {
+    return collection == null ? _CollectionDialogMode.create : _CollectionDialogMode.edit;
+  }
+
+  static Future<void> showStart({
     required BuildContext context,
-    required Collection? collection,
+    required Collection? inCollection,
   }) async {
     await showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return _StartCollectionDialog(
+        return CollectionDialog(
+          inCollection: inCollection,
+          collection: null,
+        );
+      },
+    );
+  }
+
+  static Future<void> showEdit({
+    required BuildContext context,
+    required Collection collection,
+  }) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return CollectionDialog(
+          inCollection: collection.collectionPath.lastOrNull,
           collection: collection,
         );
       },
@@ -81,15 +99,24 @@ class _StartCollectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CollectionGetterInitializer(
-      collection: collection,
-      child: const AppDialog(
-        title: 'Start a collection',
-        content: _Content(),
-        actions: [
-          CancelButton(),
-          _SaveButton(),
-        ],
+    return ProviderScope(
+      overrides: [
+        _collectionNameProvider.overrideWith((ref) => collection?.name ?? ''),
+        _modelNameProvider.overrideWith((ref) => collection?.modelName ?? ''),
+      ],
+      child: CollectionGetterInitializer(
+        collection: inCollection,
+        child: AppDialog(
+          title: switch (_mode) {
+            _CollectionDialogMode.create => 'Start a collection',
+            _CollectionDialogMode.edit => 'Edit a collection',
+          },
+          content: const _Content(),
+          actions: const [
+            CancelButton(),
+            _SaveButton(),
+          ],
+        ),
       ),
     );
   }
@@ -138,6 +165,7 @@ class _CollectionNameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppInput(
+      initialText: ref.watch(_collectionNameProvider),
       label: 'Collection ID',
       hintText: 'Enter the collection ID',
       onChanged: (value) {
@@ -153,6 +181,7 @@ class _ModelNameInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppInput(
+      initialText: ref.watch(_modelNameProvider),
       label: 'Model class name',
       hintText: 'Enter the name of the model class',
       errorText: ref.watch(_modelClassErrorProvider),
