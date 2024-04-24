@@ -151,6 +151,9 @@ class _AddFieldButton extends ConsumerWidget {
       text: 'Add field',
       onTap: () async {
         final collection = ref.read(collectionGetter);
+        if (collection == null) {
+          return;
+        }
         await FieldDialog.showCreate(
           context: context,
           collection: collection,

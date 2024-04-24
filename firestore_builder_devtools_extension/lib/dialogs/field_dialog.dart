@@ -1,10 +1,11 @@
 import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
+import 'package:firestore_builder_devtools_extension/extensions/string_extensions.dart';
+import 'package:firestore_builder_devtools_extension/models/field_name_error.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
-import 'package:firestore_builder_devtools_extension/states/getters.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_dialog.dart';
@@ -17,8 +18,46 @@ import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final _collectionGetter = Provider<Collection>(
+  (ref) => throw Exception('_collectionGetter not found'),
+);
+
+final _fieldGetter = Provider<CollectionField?>(
+  (ref) => throw Exception('_fieldGetter not found'),
+);
+
 final _fieldNameProvider = StateProvider.autoDispose<String>(
   (ref) => throw UnimplementedError(),
+);
+
+final _fieldNameErrorProvider = Provider.autoDispose<FieldNameError?>(
+  (ref) {
+    final fieldName = ref.watch(_fieldNameProvider);
+    final isEmpty = fieldName.isTrimmedEmpty;
+    if (isEmpty) {
+      return FieldNameErrorEmpty(fieldName);
+    }
+
+    final onlyLetters = fieldName.isOnlyLetters;
+    if (!onlyLetters) {
+      return FieldNameErrorInvalid(fieldName);
+    }
+
+    final collection = ref.watch(_collectionGetter);
+    final field = ref.watch(_fieldGetter);
+    final otherFields = collection.fields.where((c) => c != field).toList();
+    final alreadyExist = otherFields.any((c) => c.fieldName.toLowerCase() == fieldName.toLowerCase());
+    if (alreadyExist) {
+      return FieldNameErrorAlreadyExists(fieldName);
+    }
+
+    return null;
+  },
+  dependencies: [
+    _fieldNameProvider,
+    _collectionGetter,
+    _fieldGetter,
+  ],
 );
 
 final _typeMapProvider = StateProvider.autoDispose<Map<int, FieldTypeNullable>>(
@@ -66,10 +105,10 @@ final _isNullableProvider = Provider.autoDispose.family<bool, int>(
 
 final _canSaveProvider = Provider.autoDispose<bool>(
   (ref) {
-    final hasName = ref.watch(_fieldNameProvider).isNotEmpty;
-    return hasName;
+    final fieldError = ref.watch(_fieldNameErrorProvider);
+    return fieldError == null;
   },
-  dependencies: [_fieldNameProvider],
+  dependencies: [_fieldNameErrorProvider],
 );
 
 enum _Mode {
@@ -84,7 +123,7 @@ class FieldDialog extends StatelessWidget {
     super.key,
   });
 
-  final Collection? collection;
+  final Collection collection;
   final CollectionField? field;
 
   _Mode get _mode {
@@ -93,7 +132,7 @@ class FieldDialog extends StatelessWidget {
 
   static Future<void> showCreate({
     required BuildContext context,
-    required Collection? collection,
+    required Collection collection,
   }) async {
     await showDialog<void>(
       context: context,
@@ -108,7 +147,7 @@ class FieldDialog extends StatelessWidget {
 
   static Future<void> showEdit({
     required BuildContext context,
-    required Collection? collection,
+    required Collection collection,
     required CollectionField field,
   }) async {
     await showDialog<void>(
@@ -126,6 +165,8 @@ class FieldDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
+        _fieldGetter.overrideWithValue(field),
+        _collectionGetter.overrideWithValue(collection),
         _fieldNameProvider.overrideWith(
           (ref) => field?.name ?? '',
         ),
@@ -133,19 +174,16 @@ class FieldDialog extends StatelessWidget {
           (ref) => field?.type.getFieldTypeEnumMap(0) ?? {0: defaultFieldTypeNullable},
         ),
       ],
-      child: CollectionGetterInitializer(
-        collection: collection,
-        child: AppDialog(
-          title: switch (_mode) {
-            _Mode.create => 'Add a field',
-            _Mode.edit => 'Edit a field',
-          },
-          content: const _Content(),
-          actions: const [
-            CancelButton(),
-            _SaveButton(),
-          ],
-        ),
+      child: AppDialog(
+        title: switch (_mode) {
+          _Mode.create => 'Add a field',
+          _Mode.edit => 'Edit a field',
+        },
+        content: const _Content(),
+        actions: const [
+          CancelButton(),
+          _SaveButton(),
+        ],
       ),
     );
   }
@@ -171,7 +209,7 @@ class _Content extends ConsumerWidget {
           label: 'Type:',
           value: _DartType(),
         ),
-        const AppGap.regular(),
+        const AppGap.semiBig(),
         const _NameInput(),
         const AppGap.regular(),
         const SectionText('Field type'),
@@ -190,7 +228,7 @@ class _Path extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collection = ref.watch(collectionGetter);
+    final collection = ref.watch(_collectionGetter);
 
     return PathValue(
       collection: collection,
@@ -220,6 +258,8 @@ class _NameInput extends ConsumerWidget {
       initialText: ref.watch(_fieldNameProvider),
       label: 'Field name',
       hintText: 'Enter the field name',
+      errorText: ref.watch(_fieldNameErrorProvider.select((value) => value?.error)),
+      withError: true,
       onChanged: (value) {
         ref.read(_fieldNameProvider.notifier).state = value;
       },
@@ -346,14 +386,11 @@ class _SaveButton extends ConsumerWidget {
     return SaveButton(
       onPressed: canSave
           ? () {
-              final collection = ref.read(collectionGetter);
-              if (collection == null) {
-                return;
-              }
+              final collection = ref.read(_collectionGetter);
 
               ref.read(configViewModelProvider).addField(
                     inCollection: collection,
-                    fieldName: ref.read(_fieldNameProvider),
+                    fieldName: ref.read(_fieldNameProvider).trim(),
                     type: ref.read(_fieldTypeProvider),
                     // TODO(Jordan): : implement
                     acceptFieldValue: false,
