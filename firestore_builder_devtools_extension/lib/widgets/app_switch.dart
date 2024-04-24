@@ -12,7 +12,7 @@ class AppSwitch extends StatelessWidget {
 
   final String label;
   final bool value;
-  final void Function(bool)? onChanged;
+  final void Function(bool value)? onChanged;
   final String? message;
 
   @override

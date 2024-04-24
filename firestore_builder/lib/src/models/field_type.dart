@@ -35,7 +35,6 @@ sealed class FieldType {
             path: path,
           ),
           isNullable: isNullable,
-          path: path,
         ),
       final a when a.extractMapType() != null => FieldTypeMap(
           subType: FieldType.fromDartSymbol(
@@ -43,7 +42,6 @@ sealed class FieldType {
             path: path,
           ),
           isNullable: isNullable,
-          path: path,
         ),
       BasicSymbols.string => FieldTypeString(isNullable: isNullable),
       BasicSymbols.int => FieldTypeInt(isNullable: isNullable),
@@ -120,23 +118,19 @@ class FieldTypeCustomClass extends FieldType {
 class FieldTypeList extends FieldType {
   const FieldTypeList({
     required this.subType,
-    required this.path,
     required super.isNullable,
   });
 
   final FieldType subType;
-  final String? path;
 }
 
 class FieldTypeMap extends FieldType {
   const FieldTypeMap({
     required this.subType,
-    required this.path,
     required super.isNullable,
   });
 
   final FieldType subType;
-  final String? path;
 }
 
 extension FieldTypeExtensions on FieldType {
@@ -177,6 +171,20 @@ extension FieldTypeExtensions on FieldType {
     return switch (this) {
       FieldTypeTimestamp() => BasicPackages.cloudFirestore,
       FieldTypeDocumentReference() => BasicPackages.cloudFirestore,
+      final FieldTypeCustomClass type => type.path,
+      _ => null,
+    };
+  }
+
+  String? get customClassName {
+    return switch (this) {
+      final FieldTypeCustomClass type => type.className,
+      _ => null,
+    };
+  }
+
+  String? get customClassPath {
+    return switch (this) {
       final FieldTypeCustomClass type => type.path,
       _ => null,
     };

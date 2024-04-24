@@ -35,7 +35,7 @@ class _ProjectName extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final projectName = ref.watch(configProvider.select((value) => value.projectName));
     return AppInput(
-      label: 'Project name',
+      label: 'Project name *',
       hintText: 'Enter the name of the project',
       onChanged: (value) {
         ref.read(configViewModelProvider).updateProjectName(value);
@@ -54,7 +54,7 @@ class _OutputPath extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final outputPath = ref.watch(configProvider.select((value) => value.outputPath));
     return AppInput(
-      label: 'Output path',
+      label: 'Output path *',
       hintText: 'Where the code will be generated',
       onChanged: (value) {
         ref.read(configViewModelProvider).updateOutputPath(value);

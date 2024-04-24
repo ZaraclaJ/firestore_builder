@@ -114,7 +114,7 @@ extension CollectionFieldExtensions on CollectionField {
   Map<String, dynamic> toYaml() {
     final typeName = type.typeReference.symbolName;
     final acceptFieldValue = this.acceptFieldValue ? this.acceptFieldValue : null;
-    final path = type.packageUrl;
+    final path = type.customClassPath;
     if (acceptFieldValue == null && path == null) {
       return {
         name: typeName,

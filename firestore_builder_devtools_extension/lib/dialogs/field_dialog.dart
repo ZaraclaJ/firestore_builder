@@ -2,9 +2,11 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/cancel_button.dart';
 import 'package:firestore_builder_devtools_extension/buttons/save_button.dart';
 import 'package:firestore_builder_devtools_extension/extensions/string_extensions.dart';
+import 'package:firestore_builder_devtools_extension/models/custom_class_error.dart';
 import 'package:firestore_builder_devtools_extension/models/field_name_error.dart';
 import 'package:firestore_builder_devtools_extension/models/field_type.dart';
 import 'package:firestore_builder_devtools_extension/path/path_value.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
@@ -17,6 +19,7 @@ import 'package:firestore_builder_devtools_extension/widgets/label_value_row.dar
 import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:recase/recase.dart';
 
 final _collectionGetter = Provider<Collection>(
   (ref) => throw Exception('_collectionGetter not found'),
@@ -38,7 +41,7 @@ final _fieldNameErrorProvider = Provider.autoDispose<FieldNameError?>(
       return FieldNameErrorEmpty(fieldName);
     }
 
-    final onlyLetters = fieldName.isOnlyLetters;
+    final onlyLetters = fieldName.isOnlyLettersWithUnderscore;
     if (!onlyLetters) {
       return FieldNameErrorInvalid(fieldName);
     }
@@ -60,15 +63,97 @@ final _fieldNameErrorProvider = Provider.autoDispose<FieldNameError?>(
   ],
 );
 
+final _acceptFieldValueProvider = StateProvider.autoDispose<bool>(
+  (ref) => throw UnimplementedError(),
+);
+
+final _customClassNameProvider = StateProvider.autoDispose<String>(
+  (ref) => throw UnimplementedError(),
+);
+
+final _customClassNameErrorProvider = Provider.autoDispose<CustomClassNameError?>(
+  (ref) {
+    final typeMap = ref.watch(_typeMapProvider);
+    final hasCustomClass = typeMap.values.any((element) => element.fieldType == FieldTypeEnum.customClass);
+    if (!hasCustomClass) {
+      return null;
+    }
+
+    final customClassName = ref.watch(_customClassNameProvider);
+    final isEmpty = customClassName.isTrimmedEmpty;
+    if (isEmpty) {
+      return CustomClassNameErrorEmpty(customClassName);
+    }
+
+    final onlyLetters = customClassName.isOnlyLettersWithUnderscore;
+    if (!onlyLetters) {
+      return CustomClassNameErrorInvalid(customClassName);
+    }
+
+    final field = ref.watch(_fieldGetter);
+    final config = ref.watch(configProvider);
+    final otherFields = config.allFields.where((f) => f != field).toList();
+    final alreadyExist = otherFields.any((f) => f.type.customClassName?.toLowerCase() == customClassName.toLowerCase());
+    if (alreadyExist) {
+      return CustomClassNameErrorAlreadyExists(customClassName);
+    }
+
+    return null;
+  },
+  dependencies: [
+    _typeMapProvider,
+    _customClassNameProvider,
+    _fieldGetter,
+    configProvider,
+  ],
+);
+
+final _customClassPathProvider = StateProvider.autoDispose<String>(
+  (ref) => throw UnimplementedError(),
+);
+
+final _customClassPathErrorProvider = Provider.autoDispose<CustomClassPathError?>(
+  (ref) {
+    final typeMap = ref.watch(_typeMapProvider);
+    final hasCustomClass = typeMap.values.any((element) => element.fieldType == FieldTypeEnum.customClass);
+    if (!hasCustomClass) {
+      return null;
+    }
+
+    final customClassPath = ref.watch(_customClassPathProvider);
+    final isEmpty = customClassPath.isTrimmedEmpty;
+    if (isEmpty) {
+      return CustomClassPathErrorEmpty(customClassPath);
+    }
+
+    return null;
+  },
+  dependencies: [
+    _typeMapProvider,
+    _customClassPathProvider,
+  ],
+);
+
 final _typeMapProvider = StateProvider.autoDispose<Map<int, FieldTypeNullable>>(
   (ref) => throw UnimplementedError(),
 );
 
 final _fieldTypeProvider = Provider.autoDispose<FieldType>(
   (ref) {
-    return ref.watch(_typeMapProvider).getFieldType(0);
+    final typeMap = ref.watch(_typeMapProvider);
+    final customClassName = ref.watch(_customClassNameProvider);
+    final customClassPath = ref.watch(_customClassPathProvider);
+    return typeMap.getFieldType(
+      level: 0,
+      customClassName: customClassName.pascalCase,
+      customClassPath: customClassPath,
+    );
   },
-  dependencies: [_typeMapProvider],
+  dependencies: [
+    _typeMapProvider,
+    _customClassNameProvider,
+    _customClassPathProvider,
+  ],
 );
 
 final _levelsProvider = Provider.autoDispose<List<int>>(
@@ -79,18 +164,18 @@ final _levelsProvider = Provider.autoDispose<List<int>>(
   dependencies: [_typeMapProvider],
 );
 
-final _typeProvider = Provider.autoDispose.family<FieldTypeNullable?, int>(
+final _typeProvider = Provider.autoDispose.family<FieldTypeNullable, int>(
   (ref, level) {
     final map = ref.watch(_typeMapProvider);
-    return map[level];
+    return map[level]!;
   },
   dependencies: [_typeMapProvider],
 );
 
-final _fieldTypeEnumProvider = Provider.autoDispose.family<FieldTypeEnum?, int>(
+final _fieldTypeEnumProvider = Provider.autoDispose.family<FieldTypeEnum, int>(
   (ref, level) {
     final type = ref.watch(_typeProvider(level));
-    return type?.fieldType;
+    return type.fieldType;
   },
   dependencies: [_typeProvider],
 );
@@ -98,7 +183,7 @@ final _fieldTypeEnumProvider = Provider.autoDispose.family<FieldTypeEnum?, int>(
 final _isNullableProvider = Provider.autoDispose.family<bool, int>(
   (ref, level) {
     final type = ref.watch(_typeProvider(level));
-    return type?.nullable ?? false;
+    return type.nullable;
   },
   dependencies: [_typeProvider],
 );
@@ -106,9 +191,15 @@ final _isNullableProvider = Provider.autoDispose.family<bool, int>(
 final _canSaveProvider = Provider.autoDispose<bool>(
   (ref) {
     final fieldError = ref.watch(_fieldNameErrorProvider);
-    return fieldError == null;
+    final customClassNameError = ref.watch(_customClassNameErrorProvider);
+    final customClassPathError = ref.watch(_customClassPathErrorProvider);
+    return fieldError == null && customClassNameError == null && customClassPathError == null;
   },
-  dependencies: [_fieldNameErrorProvider],
+  dependencies: [
+    _fieldNameErrorProvider,
+    _customClassNameErrorProvider,
+    _customClassPathErrorProvider,
+  ],
 );
 
 enum _Mode {
@@ -167,8 +258,17 @@ class FieldDialog extends StatelessWidget {
       overrides: [
         _fieldGetter.overrideWithValue(field),
         _collectionGetter.overrideWithValue(collection),
+        _acceptFieldValueProvider.overrideWith(
+          (ref) => field?.acceptFieldValue ?? false,
+        ),
         _fieldNameProvider.overrideWith(
           (ref) => field?.name ?? '',
+        ),
+        _customClassNameProvider.overrideWith(
+          (ref) => field?.type.customClassName ?? '',
+        ),
+        _customClassPathProvider.overrideWith(
+          (ref) => field?.type.customClassPath ?? '',
         ),
         _typeMapProvider.overrideWith(
           (ref) => field?.type.getFieldTypeEnumMap(0) ?? {0: defaultFieldTypeNullable},
@@ -205,6 +305,8 @@ class _Content extends ConsumerWidget {
           value: _Path(),
         ),
         const AppGap.regular(),
+        const _AcceptFieldValue(),
+        const AppGap.regular(),
         const LabelValueRow(
           label: 'Type:',
           value: _DartType(),
@@ -232,6 +334,22 @@ class _Path extends ConsumerWidget {
 
     return PathValue(
       collection: collection,
+    );
+  }
+}
+
+class _AcceptFieldValue extends ConsumerWidget {
+  const _AcceptFieldValue();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final acceptFieldValue = ref.watch(_acceptFieldValueProvider);
+    return AppSwitch(
+      label: 'Accept field value',
+      value: acceptFieldValue,
+      onChanged: (value) {
+        ref.read(_acceptFieldValueProvider.notifier).state = value;
+      },
     );
   }
 }
@@ -280,19 +398,20 @@ class _TypeInput extends StatelessWidget {
 
     return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (level != 0)
-            SizedBox(
-              width: spacings.regular + level * spacings.extraBig,
-              child: DashedLine(
-                dots: 10 * (level + 1),
+            _DropdownMenuSizeContainer(
+              child: SizedBox(
+                width: spacings.regular + level * spacings.extraBig,
+                child: DashedLine(
+                  dots: 10 * (level + 1),
+                ),
               ),
             ),
           _DropDownMenu(
             level: level,
           ),
-          const AppGap.regular(),
-          _NullableSwitch(level: level),
         ],
       ),
     );
@@ -320,11 +439,26 @@ class _NullableSwitch extends ConsumerWidget {
                 fieldType: fieldTypeNullable.fieldType,
                 nullable: value,
               ),
-              // ifAbsent: () => (fieldType: null, nullable: value),
             );
           return newMap;
         });
       },
+    );
+  }
+}
+
+class _DropdownMenuSizeContainer extends StatelessWidget {
+  const _DropdownMenuSizeContainer({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: AppDropdownMenu.height,
+      child: Center(
+        child: child,
+      ),
     );
   }
 }
@@ -340,39 +474,92 @@ class _DropDownMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isNullable = ref.watch(_isNullableProvider(level));
     final initialSelection = ref.watch(_fieldTypeEnumProvider(level));
+    final showCustomClassPath = initialSelection == FieldTypeEnum.customClass;
 
-    return AppDropdownMenu(
-      initialSelection: initialSelection,
-      entries: FieldTypeEnum.values.map((e) {
-        return DropdownMenuEntry(
-          value: e,
-          label: e.name,
-        );
-      }).toList(),
-      onSelected: (type) {
-        if (type == null) {
-          return;
-        }
+    return IntrinsicWidth(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppDropdownMenu(
+                initialSelection: initialSelection,
+                entries: FieldTypeEnum.values.map((e) {
+                  return DropdownMenuEntry(
+                    value: e,
+                    label: e.name,
+                  );
+                }).toList(),
+                onSelected: (type) {
+                  if (type == null) {
+                    return;
+                  }
 
-        ref.read(_typeMapProvider.notifier).update((map) {
-          final newMap = Map<int, FieldTypeNullable>.from(map);
+                  ref.read(_typeMapProvider.notifier).update((map) {
+                    final newMap = Map<int, FieldTypeNullable>.from(map);
 
-          final hasSubType = type.hasSubType;
-          newMap[level] = (
-            fieldType: type,
-            nullable: isNullable,
-          );
-          if (hasSubType) {
-            newMap[level + 1] = defaultFieldTypeNullable;
-          } else {
-            newMap.removeWhere(
-              (key, value) => key > level,
-            );
-          }
+                    final hasSubType = type.hasSubType;
+                    newMap[level] = (
+                      fieldType: type,
+                      nullable: isNullable,
+                    );
+                    if (hasSubType) {
+                      newMap[level + 1] = defaultFieldTypeNullable;
+                    } else {
+                      newMap.removeWhere(
+                        (key, value) => key > level,
+                      );
+                    }
 
-          return newMap;
-        });
-      },
+                    return newMap;
+                  });
+                },
+              ),
+              const AppGap.regular(),
+              _DropdownMenuSizeContainer(
+                child: _NullableSwitch(level: level),
+              ),
+            ],
+          ),
+          if (showCustomClassPath) ...[
+            const AppGap.regular(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AppInput(
+                    initialText: ref.watch(_customClassNameProvider),
+                    label: 'Custom class name *',
+                    hintText: 'Enter the custom class name',
+                    isDense: true,
+                    widthFactor: 1,
+                    errorText: ref.watch(_customClassNameErrorProvider.select((value) => value?.error)),
+                    withError: true,
+                    onChanged: (value) {
+                      ref.read(_customClassNameProvider.notifier).state = value;
+                    },
+                  ),
+                ),
+                const AppGap.small(),
+                Expanded(
+                  child: AppInput(
+                    initialText: ref.watch(_customClassPathProvider),
+                    label: 'Custom class path *',
+                    hintText: 'Enter the custom class path',
+                    isDense: true,
+                    widthFactor: 1,
+                    onChanged: (value) {
+                      ref.read(_customClassPathProvider.notifier).state = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -392,8 +579,7 @@ class _SaveButton extends ConsumerWidget {
                     inCollection: collection,
                     fieldName: ref.read(_fieldNameProvider).trim(),
                     type: ref.read(_fieldTypeProvider),
-                    // TODO(Jordan): : implement
-                    acceptFieldValue: false,
+                    acceptFieldValue: ref.read(_acceptFieldValueProvider),
                   );
               Navigator.of(context).pop();
             }

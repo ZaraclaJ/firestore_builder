@@ -40,7 +40,7 @@ final _collectionNameErrorProvider = Provider.autoDispose<CollectionNameError?>(
       return CollectionNameErrorEmpty(collectionName);
     }
 
-    final onlyLetters = collectionName.isOnlyLetters;
+    final onlyLetters = collectionName.isOnlyLettersWithUnderscore;
     if (!onlyLetters) {
       return CollectionNameErrorInvalid(collectionName);
     }
@@ -72,7 +72,7 @@ final _modelClassErrorProvider = Provider.autoDispose<ModelNameError?>(
       return ModelNameErrorEmpty(modelName);
     }
 
-    final onlyLetters = modelName.isOnlyLetters;
+    final onlyLetters = modelName.isOnlyLettersWithUnderscore;
     if (!onlyLetters) {
       return ModelNameErrorInvalid(modelName);
     }
@@ -219,7 +219,7 @@ class _CollectionNameInput extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppInput(
       initialText: ref.watch(_collectionNameProvider),
-      label: 'Collection ID',
+      label: 'Collection ID *',
       hintText: 'Enter the collection ID',
       errorText: ref.watch(_collectionNameErrorProvider.select((value) => value?.error)),
       withError: true,
@@ -237,7 +237,7 @@ class _ModelNameInput extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppInput(
       initialText: ref.watch(_modelNameProvider),
-      label: 'Model class name',
+      label: 'Model class name *',
       hintText: 'Enter the name of the model class',
       errorText: ref.watch(_modelClassErrorProvider.select((value) => value?.error)),
       withError: true,

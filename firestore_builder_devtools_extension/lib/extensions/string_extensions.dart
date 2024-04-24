@@ -9,7 +9,7 @@ extension StringExtensions on String {
 
   bool get isTrimmedEmpty => trim().isEmpty;
 
-  bool get isOnlyLetters {
+  bool get isOnlyLettersWithUnderscore {
     final regex = RegExp(r'^[a-zA-Z_]+$');
     return regex.hasMatch(trim());
   }

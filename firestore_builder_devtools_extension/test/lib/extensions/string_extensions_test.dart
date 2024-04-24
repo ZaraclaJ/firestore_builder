@@ -2,33 +2,33 @@ import 'package:firestore_builder_devtools_extension/extensions/string_extension
 import 'package:test/test.dart';
 
 void main() {
-  group('Testing isOnlyLetters method', () {
+  group('Testing isOnlyLettersWithUnderscore method', () {
     test('valid input string', () {
-      expect('HelloWorld'.isOnlyLetters, true);
+      expect('HelloWorld'.isOnlyLettersWithUnderscore, true);
     });
 
     test('invalid input string', () {
-      expect('Hello World'.isOnlyLetters, false);
+      expect('Hello World'.isOnlyLettersWithUnderscore, false);
     });
 
     test('empty input string', () {
-      expect(''.isOnlyLetters, false);
+      expect(''.isOnlyLettersWithUnderscore, false);
     });
 
     test('special characters input string', () {
-      expect('Hello-World'.isOnlyLetters, false);
+      expect('Hello-World'.isOnlyLettersWithUnderscore, false);
     });
 
     test('numbers input string', () {
-      expect('Hello123World'.isOnlyLetters, false);
+      expect('Hello123World'.isOnlyLettersWithUnderscore, false);
     });
 
     test('underscore input string', () {
-      expect('Hello_World'.isOnlyLetters, true);
+      expect('Hello_World'.isOnlyLettersWithUnderscore, true);
     });
 
     test('underscore and numbers input string', () {
-      expect('Hello_123_World'.isOnlyLetters, false);
+      expect('Hello_123_World'.isOnlyLettersWithUnderscore, false);
     });
   });
 }

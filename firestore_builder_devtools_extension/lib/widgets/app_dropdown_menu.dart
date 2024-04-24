@@ -12,6 +12,8 @@ class AppDropdownMenu<T> extends StatelessWidget {
   final void Function(T?)? onSelected;
   final T? initialSelection;
 
+  static double height = 56;
+
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<T>(

@@ -51,7 +51,11 @@ extension FieldTypeExtensions on FieldType {
 }
 
 extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
-  FieldType getFieldType(int level) {
+  FieldType getFieldType({
+    required int level,
+    required String customClassName,
+    required String customClassPath,
+  }) {
     final typeNullable = this[level] ?? defaultFieldTypeNullable;
     final type = typeNullable.fieldType;
     final nullable = typeNullable.nullable;
@@ -80,18 +84,24 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
         ),
       FieldTypeEnum.list => FieldTypeList(
           isNullable: nullable,
-          subType: getFieldType(level + 1),
-          path: null,
+          subType: getFieldType(
+            level: level + 1,
+            customClassName: customClassName,
+            customClassPath: customClassPath,
+          ),
         ),
       FieldTypeEnum.map => FieldTypeMap(
           isNullable: nullable,
-          subType: getFieldType(level + 1),
-          path: null,
+          subType: getFieldType(
+            level: level + 1,
+            customClassName: customClassName,
+            customClassPath: customClassPath,
+          ),
         ),
       FieldTypeEnum.customClass => FieldTypeCustomClass(
           isNullable: nullable,
-          className: 'TODO',
-          path: 'TODO',
+          className: customClassName,
+          path: customClassPath,
         ),
     };
   }
