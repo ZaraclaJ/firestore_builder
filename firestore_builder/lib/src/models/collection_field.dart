@@ -79,7 +79,7 @@ Invalid field definition, invalid field: $yamlMap''',
 
     final fieldType = FieldType.fromDartSymbol(
       symbol: type,
-      path: path?.toPackageUrl(projectName: configLight.projectName),
+      path: path,
     );
 
     return CollectionField(

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:firestore_builder/firestore_builder.dart';
+import 'package:firestore_builder_devtools_extension/extensions/list_extensions.dart';
 import 'package:yaml_edit/yaml_edit.dart';
 
 extension YamlConfigExtensions on YamlConfig {
@@ -40,8 +41,8 @@ extension YamlConfigExtensions on YamlConfig {
       final newCollection = replace(null);
       return copyWith(
         collections: [
-          if (newCollection != null) newCollection,
           ...collections,
+          if (newCollection != null) newCollection,
         ],
       );
     }
@@ -50,15 +51,11 @@ extension YamlConfigExtensions on YamlConfig {
     final nextCollectionPath = collectionPath.sublist(1);
 
     if (nextCollectionPath.isEmpty) {
-      final currentCollection = collections.firstWhereOrNull(
-        (c) => c.name == firstPathName,
-      );
-      final newCollection = replace(currentCollection);
       return copyWith(
-        collections: [
-          if (newCollection != null) newCollection,
-          ...collections.where((c) => c.name != firstPathName),
-        ],
+        collections: collections.addOrReplaceWhere(
+          where: (c) => c.name == firstPathName,
+          replace: replace,
+        ),
       );
     }
 
@@ -132,8 +129,8 @@ extension CollectionExtensions on Collection {
       final newCollection = replace(null);
       return copyWith(
         subCollections: [
-          if (newCollection != null) newCollection,
           ...subCollections,
+          if (newCollection != null) newCollection,
         ],
       );
     }
@@ -142,15 +139,11 @@ extension CollectionExtensions on Collection {
     final nextCollectionPath = collectionPath.sublist(1);
 
     if (nextCollectionPath.isEmpty) {
-      final currentCollection = subCollections.firstWhereOrNull(
-        (c) => c.name == firstPathName,
-      );
-      final newCollection = replace(currentCollection);
       return copyWith(
-        subCollections: [
-          if (newCollection != null) newCollection,
-          ...subCollections.where((c) => c.name != firstPathName),
-        ],
+        subCollections: subCollections.addOrReplaceWhere(
+          where: (c) => c.name == firstPathName,
+          replace: replace,
+        ),
       );
     }
 

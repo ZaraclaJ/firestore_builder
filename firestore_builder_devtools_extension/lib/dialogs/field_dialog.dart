@@ -409,8 +409,10 @@ class _TypeInput extends StatelessWidget {
                 ),
               ),
             ),
-          _DropDownMenu(
-            level: level,
+          Expanded(
+            child: _DropDownMenu(
+              level: level,
+            ),
           ),
         ],
       ),
@@ -476,90 +478,88 @@ class _DropDownMenu extends ConsumerWidget {
     final initialSelection = ref.watch(_fieldTypeEnumProvider(level));
     final showCustomClassPath = initialSelection == FieldTypeEnum.customClass;
 
-    return IntrinsicWidth(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppDropdownMenu(
-                initialSelection: initialSelection,
-                entries: FieldTypeEnum.values.map((e) {
-                  return DropdownMenuEntry(
-                    value: e,
-                    label: e.name,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppDropdownMenu(
+              initialSelection: initialSelection,
+              entries: FieldTypeEnum.values.map((e) {
+                return DropdownMenuEntry(
+                  value: e,
+                  label: e.name,
+                );
+              }).toList(),
+              onSelected: (type) {
+                if (type == null) {
+                  return;
+                }
+
+                ref.read(_typeMapProvider.notifier).update((map) {
+                  final newMap = Map<int, FieldTypeNullable>.from(map);
+
+                  final hasSubType = type.hasSubType;
+                  newMap[level] = (
+                    fieldType: type,
+                    nullable: isNullable,
                   );
-                }).toList(),
-                onSelected: (type) {
-                  if (type == null) {
-                    return;
+                  if (hasSubType) {
+                    newMap[level + 1] = defaultFieldTypeNullable;
+                  } else {
+                    newMap.removeWhere(
+                      (key, value) => key > level,
+                    );
                   }
 
-                  ref.read(_typeMapProvider.notifier).update((map) {
-                    final newMap = Map<int, FieldTypeNullable>.from(map);
-
-                    final hasSubType = type.hasSubType;
-                    newMap[level] = (
-                      fieldType: type,
-                      nullable: isNullable,
-                    );
-                    if (hasSubType) {
-                      newMap[level + 1] = defaultFieldTypeNullable;
-                    } else {
-                      newMap.removeWhere(
-                        (key, value) => key > level,
-                      );
-                    }
-
-                    return newMap;
-                  });
-                },
+                  return newMap;
+                });
+              },
+            ),
+            const AppGap.regular(),
+            _DropdownMenuSizeContainer(
+              child: _NullableSwitch(level: level),
+            ),
+          ],
+        ),
+        if (showCustomClassPath) ...[
+          const AppGap.regular(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: AppInput(
+                  initialText: ref.watch(_customClassNameProvider),
+                  label: 'Custom class name *',
+                  hintText: 'Enter the custom class name',
+                  isDense: true,
+                  widthFactor: 1,
+                  errorText: ref.watch(_customClassNameErrorProvider.select((value) => value?.error)),
+                  withError: true,
+                  onChanged: (value) {
+                    ref.read(_customClassNameProvider.notifier).state = value;
+                  },
+                ),
               ),
-              const AppGap.regular(),
-              _DropdownMenuSizeContainer(
-                child: _NullableSwitch(level: level),
+              const AppGap.small(),
+              Expanded(
+                child: AppInput(
+                  initialText: ref.watch(_customClassPathProvider),
+                  label: 'Custom class path *',
+                  hintText: 'Enter the custom class path',
+                  isDense: true,
+                  widthFactor: 1,
+                  onChanged: (value) {
+                    ref.read(_customClassPathProvider.notifier).state = value;
+                  },
+                ),
               ),
             ],
           ),
-          if (showCustomClassPath) ...[
-            const AppGap.regular(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AppInput(
-                    initialText: ref.watch(_customClassNameProvider),
-                    label: 'Custom class name *',
-                    hintText: 'Enter the custom class name',
-                    isDense: true,
-                    widthFactor: 1,
-                    errorText: ref.watch(_customClassNameErrorProvider.select((value) => value?.error)),
-                    withError: true,
-                    onChanged: (value) {
-                      ref.read(_customClassNameProvider.notifier).state = value;
-                    },
-                  ),
-                ),
-                const AppGap.small(),
-                Expanded(
-                  child: AppInput(
-                    initialText: ref.watch(_customClassPathProvider),
-                    label: 'Custom class path *',
-                    hintText: 'Enter the custom class path',
-                    isDense: true,
-                    widthFactor: 1,
-                    onChanged: (value) {
-                      ref.read(_customClassPathProvider.notifier).state = value;
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 }
