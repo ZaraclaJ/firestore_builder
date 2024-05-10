@@ -30,7 +30,7 @@ Library _queryServiceLibrary({
   return Library(
     (library) {
       library.body.addAll([
-        _queryServiceProvider(config: config),
+        if (config.useRiverpod) _queryServiceProvider(config: config),
         _queryServiceClass(config: config),
       ]);
     },

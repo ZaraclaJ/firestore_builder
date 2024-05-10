@@ -7,7 +7,8 @@ const String collectionKeyName = 'collectionKey';
 // yaml keys
 const String firestoreBuilderKey = 'firestore_builder';
 const String outputKey = 'output';
-const String clearKey = 'clear';
+const String clearOutputFolderKey = 'clear_output_folder';
+const String useRiverpodKey = 'use_riverpod';
 const String projectNameKey = 'project_name';
 const String collectionKey = 'collection';
 const String collectionsKey = 'collections';

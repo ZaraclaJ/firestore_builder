@@ -35,7 +35,7 @@ You can also indicate the path of your configuration file:
     file: file,
   );
 
-  if (config.clear) {
+  if (config.clearOutputFolder) {
     await clearFiles(path: config.outputPath);
   }
 

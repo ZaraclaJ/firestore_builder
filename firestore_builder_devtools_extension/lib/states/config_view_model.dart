@@ -42,10 +42,22 @@ class ConfigViewModel {
     );
   }
 
-  void updateClear(bool clear) {
+  void updateClearOutputFolder(bool clearOutputFolder) {
     ref.read(configProvider.notifier).update(
       (config) {
-        return config.copyWith(clear: clear);
+        return config.copyWith(
+          clearOutputFolder: clearOutputFolder,
+        );
+      },
+    );
+  }
+
+  void updateUseRiverpod(bool useRiverpod) {
+    ref.read(configProvider.notifier).update(
+      (config) {
+        return config.copyWith(
+          useRiverpod: useRiverpod,
+        );
       },
     );
   }

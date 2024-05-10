@@ -2,7 +2,6 @@ import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/field_type.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -80,6 +79,7 @@ Invalid field definition, invalid field: $yamlMap''',
     final fieldType = FieldType.fromDartSymbol(
       symbol: type,
       path: path,
+      config: configLight,
     );
 
     return CollectionField(

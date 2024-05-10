@@ -10,6 +10,10 @@ import 'package:firestore_builder/src/models/yaml_config.dart';
 Future<void> generateStates({
   required YamlConfig config,
 }) async {
+  if (!config.useRiverpod) {
+    return;
+  }
+
   final collections = config.allCollections;
 
   final futures = collections.map(

@@ -27,8 +27,10 @@ Library _referenceServiceLibrary({
   return Library(
     (library) {
       library.body.addAll([
-        _firestoreProvider(config: config),
-        _referenceServiceProvider(config: config),
+        if (config.useRiverpod) ...[
+          _firestoreProvider(config: config),
+          _referenceServiceProvider(config: config),
+        ],
         _referenceServiceClass(config: config),
       ]);
     },

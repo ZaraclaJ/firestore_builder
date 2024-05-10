@@ -26,7 +26,7 @@ Library _streamServiceLibrary({
   return Library(
     (library) {
       library.body.addAll([
-        _streamServiceProvider(config: config),
+        if (config.useRiverpod) _streamServiceProvider(config: config),
         _streamServiceClass(
           config: config,
         ),

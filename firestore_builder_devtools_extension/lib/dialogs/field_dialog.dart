@@ -147,6 +147,7 @@ final _fieldTypeProvider = Provider.autoDispose<FieldType>(
       level: 0,
       customClassName: customClassName.pascalCase,
       customClassPath: customClassPath,
+      config: ref.watch(configProvider),
     );
   },
   dependencies: [

@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const _defaultConfig = YamlConfig(
   projectName: '',
   outputPath: 'lib/firestore',
-  clear: true,
+  clearOutputFolder: true,
+  useRiverpod: false,
   collections: [],
 );
 

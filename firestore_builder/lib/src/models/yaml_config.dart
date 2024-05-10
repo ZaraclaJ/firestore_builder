@@ -9,7 +9,8 @@ import 'package:yaml/yaml.dart';
 class YamlConfig {
   const YamlConfig({
     required this.outputPath,
-    required this.clear,
+    required this.clearOutputFolder,
+    required this.useRiverpod,
     required this.collections,
     required this.projectName,
   });
@@ -38,10 +39,17 @@ The configuration file does not contain an $outputKey section: $firestoreBuilder
 ''');
     }
 
-    final clear = firestoreBuilderConfig[clearKey];
+    final clear = firestoreBuilderConfig[clearOutputFolderKey];
     if (clear is! bool?) {
       throw Exception('''
-The configuration file does not contain a correct $clearKey section: $firestoreBuilderConfig
+The configuration file does not contain a correct $clearOutputFolderKey section: $firestoreBuilderConfig
+''');
+    }
+
+    final useRiverpod = firestoreBuilderConfig[useRiverpodKey];
+    if (useRiverpod is! bool?) {
+      throw Exception('''
+The configuration file does not contain a correct $useRiverpodKey section: $firestoreBuilderConfig
 ''');
     }
 
@@ -49,7 +57,8 @@ The configuration file does not contain a correct $clearKey section: $firestoreB
       projectName: projectName,
       outputPath: outputPath,
       collections: const [],
-      clear: clear ?? false,
+      clearOutputFolder: clear ?? true,
+      useRiverpod: useRiverpod ?? false,
     );
 
     final collections = firestoreBuilderConfig.collections(
@@ -72,10 +81,16 @@ The configuration file does not contain a correct $clearKey section: $firestoreB
   /// ex: lib/firestore
   final String outputPath;
 
-  /// Whether to clear the output directory before generating the files
+  /// If true, the output folder will be cleared before generating the files
+  ///
+  /// Default is true
+  final bool clearOutputFolder;
+
+  /// If true, riverpod singleton providers and states providers
+  /// will be generated for services
   ///
   /// Default is false
-  final bool clear;
+  final bool useRiverpod;
 
   /// The firebase collections and subCollections to generate
   final List<Collection> collections;
@@ -84,13 +99,15 @@ The configuration file does not contain a correct $clearKey section: $firestoreB
 extension YamlConfigExtensions on YamlConfig {
   YamlConfig copyWith({
     String? outputPath,
-    bool? clear,
+    bool? clearOutputFolder,
+    bool? useRiverpod,
     List<Collection>? collections,
     String? projectName,
   }) {
     return YamlConfig(
       outputPath: outputPath ?? this.outputPath,
-      clear: clear ?? this.clear,
+      clearOutputFolder: clearOutputFolder ?? this.clearOutputFolder,
+      useRiverpod: useRiverpod ?? this.useRiverpod,
       collections: collections ?? this.collections,
       projectName: projectName ?? this.projectName,
     );
@@ -103,7 +120,8 @@ extension YamlConfigExtensions on YamlConfig {
       firestoreBuilderKey: {
         projectNameKey: projectName,
         outputKey: outputPath,
-        if (clear) clearKey: clear,
+        if (!clearOutputFolder) clearOutputFolderKey: clearOutputFolder,
+        if (useRiverpod) useRiverpodKey: useRiverpod,
         if (collections.isNotEmpty) collectionsKey: collections,
       },
     };

@@ -55,6 +55,7 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
     required int level,
     required String customClassName,
     required String customClassPath,
+    required YamlConfig config,
   }) {
     final typeNullable = this[level] ?? defaultFieldTypeNullable;
     final type = typeNullable.fieldType;
@@ -63,24 +64,31 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
     return switch (type) {
       FieldTypeEnum.string => FieldTypeString(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.int => FieldTypeInt(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.double => FieldTypeDouble(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.bool => FieldTypeBool(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.timestamp => FieldTypeTimestamp(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.dateTime => FieldTypeDateTime(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.documentReference => FieldTypeDocumentReference(
           isNullable: nullable,
+          configLight: config,
         ),
       FieldTypeEnum.list => FieldTypeList(
           isNullable: nullable,
@@ -88,7 +96,9 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
             level: level + 1,
             customClassName: customClassName,
             customClassPath: customClassPath,
+            config: config,
           ),
+          configLight: config,
         ),
       FieldTypeEnum.map => FieldTypeMap(
           isNullable: nullable,
@@ -96,12 +106,15 @@ extension FieldTypeEnumMapExtensions on Map<int, FieldTypeNullable> {
             level: level + 1,
             customClassName: customClassName,
             customClassPath: customClassPath,
+            config: config,
           ),
+          configLight: config,
         ),
       FieldTypeEnum.customClass => FieldTypeCustomClass(
           isNullable: nullable,
           className: customClassName,
           path: customClassPath,
+          configLight: config,
         ),
     };
   }

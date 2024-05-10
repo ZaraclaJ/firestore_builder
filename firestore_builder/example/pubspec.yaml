@@ -35,7 +35,8 @@ flutter:
 firestore_builder:
   project_name: example
   output: lib/firestore
-  clear: false
+  use_riverpod: true
+  clear_output_folder: true
   collections:
     - collection:
         collection_name: teams
