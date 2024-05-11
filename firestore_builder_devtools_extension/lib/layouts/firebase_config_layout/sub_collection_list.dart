@@ -1,5 +1,5 @@
 import 'package:firestore_builder/firestore_builder.dart';
-import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_buttton.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_button.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';
@@ -54,7 +54,7 @@ class _CollectionItem extends ConsumerWidget {
                 const AppGap.regular(),
                 AppListTileTitleText(
                   '(${collection.modelName})',
-                  color: context.colors.onBackground,
+                  color: context.colors.onSurface,
                 ),
               ],
             ],

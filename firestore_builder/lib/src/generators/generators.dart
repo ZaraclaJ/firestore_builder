@@ -8,14 +8,12 @@ import 'package:firestore_builder/src/generators/generate_reference_service.dart
 import 'package:firestore_builder/src/generators/generate_states.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/generators/generate_updated_value.dart';
-import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:yaml/yaml.dart';
 
 Future<void> generate({
-  required String? configFilePath,
+  required String configFilePath,
 }) async {
-  configFilePath ??= pubspecPath;
   final file = File(configFilePath);
   final exist = file.existsSync();
   if (!exist) {

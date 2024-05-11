@@ -1,5 +1,3 @@
-const String pubspecPath = 'pubspec.yaml';
-
 const String firestoreInstanceName = '_firestore';
 
 const String collectionKeyName = 'collectionKey';

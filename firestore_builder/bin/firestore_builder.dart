@@ -1,4 +1,5 @@
 import 'package:firestore_builder/src/generators/generators.dart';
+import 'package:firestore_builder/src/helpers/public_constants.dart';
 
 void main(List<String> args) {
   switch (args) {
@@ -8,7 +9,7 @@ void main(List<String> args) {
       );
     case []:
       generate(
-        configFilePath: null,
+        configFilePath: defaultConfigFilPath,
       );
 
     default:

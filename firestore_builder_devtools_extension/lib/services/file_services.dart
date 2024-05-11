@@ -11,7 +11,7 @@ final fileServiceProvider = Provider<FileService>(
 class FileService {
   const FileService();
 
-  Future<YamlConfig?> readFileAsString(String path) async {
+  Future<YamlConfig?> getCurrentYamlConfig() async {
     final rootFolder = await _getRootFolder();
     final dtcConnection = dtdManager.connection.value;
     if (dtcConnection == null || rootFolder == null) {
@@ -20,7 +20,7 @@ class FileService {
 
     final contents = await dtcConnection.listDirectoryContents(rootFolder);
     final configFile = contents.uris?.firstWhere(
-      (element) => basename(element.path) == path,
+      (element) => basename(element.path) == defaultConfigFilPath,
     );
     if (configFile == null) {
       return null;

@@ -2,7 +2,7 @@ import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/buttons/tile_button.dart';
 import 'package:firestore_builder_devtools_extension/dialogs/collection_dialog.dart';
 import 'package:firestore_builder_devtools_extension/dialogs/field_dialog.dart';
-import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_buttton.dart';
+import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/collection_options_button.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/field_list.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/sub_collection_list.dart';
 import 'package:firestore_builder_devtools_extension/states/getters.dart';

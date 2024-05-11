@@ -49,7 +49,7 @@ class _ConfigBuilderState extends ConsumerState<_ConfigBuilder> {
 
   Future<void> _fetchConfig() async {
     final fileService = ref.read(fileServiceProvider);
-    final config = await fileService.readFileAsString('pubspec.yaml');
+    final config = await fileService.getCurrentYamlConfig();
     if (config == null) {
       return;
     }
