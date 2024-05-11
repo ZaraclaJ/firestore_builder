@@ -1,7 +1,7 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
-import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/home_layout.dart';
 import 'package:firestore_builder_devtools_extension/services/file_services.dart';
+import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/theme/responsive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,14 +19,10 @@ class Extension extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ResponsiveTheme(
+    return const ResponsiveTheme(
       child: DevToolsExtension(
         child: _ConfigBuilder(
-          builder: (data) {
-            return HomeLayout(
-              initialConfig: data,
-            );
-          },
+          child: HomeLayout(),
         ),
       ),
     );
@@ -34,16 +30,16 @@ class Extension extends ConsumerWidget {
 }
 
 class _ConfigBuilder extends ConsumerStatefulWidget {
-  const _ConfigBuilder({required this.builder});
+  const _ConfigBuilder({required this.child});
 
-  final Widget Function(YamlConfig? content) builder;
+  final Widget child;
 
   @override
   ConsumerState<_ConfigBuilder> createState() => _ConfigBuilderState();
 }
 
 class _ConfigBuilderState extends ConsumerState<_ConfigBuilder> {
-  AsyncValue<YamlConfig?> _config = const AsyncValue.loading();
+  bool _isConfigLoaded = false;
 
   @override
   void initState() {
@@ -53,27 +49,25 @@ class _ConfigBuilderState extends ConsumerState<_ConfigBuilder> {
 
   Future<void> _fetchConfig() async {
     final fileService = ref.read(fileServiceProvider);
-    await Future<void>.delayed(const Duration(seconds: 2));
-    final result = await fileService.readFileAsString('pubspec.yaml');
+    final config = await fileService.readFileAsString('pubspec.yaml');
+    if (config == null) {
+      return;
+    }
+    ref.read(configProvider.notifier).state = config;
+
     setState(() {
-      _config = AsyncValue.data(result);
+      _isConfigLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _config.when(
-      data: (content) {
-        return widget.builder(content);
-      },
-      loading: () {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      error: (error, stackTrace) {
-        return Text('Error: $error');
-      },
-    );
+    if (!_isConfigLoaded) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    return widget.child;
   }
 }

@@ -3,7 +3,13 @@ import 'package:firestore_builder_devtools_extension/extensions/yaml_config_exte
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final configProvider = StateProvider<YamlConfig>(
-  (ref) => throw UnimplementedError(),
+  (ref) => const YamlConfig(
+    projectName: '',
+    outputPath: 'lib/firestore',
+    clearOutputFolder: true,
+    useRiverpod: false,
+    collections: [],
+  ),
 );
 
 final codeProvider = Provider<String>(

@@ -22,9 +22,7 @@ class App extends StatelessWidget {
     return const ResponsiveTheme(
       child: MaterialApp(
         home: Scaffold(
-          body: HomeLayout(
-            initialConfig: null,
-          ),
+          body: HomeLayout(),
         ),
       ),
     );
