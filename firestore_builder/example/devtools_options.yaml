@@ -1,1 +1,2 @@
 extensions:
+  - firestore_builder: true
