@@ -3,13 +3,13 @@ import 'package:firestore_builder/src/easy_gen/basic_annotations.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
-import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
-Future<void> generateFreezedConverters({
+List<GeneratedFile> generateFreezedConverters({
   required YamlConfig config,
-}) async {
+}) {
   final collections = config.allCollections;
   final hasDateTimeField = collections.any((c) => c.fields.any((f) => f.hasDateTime));
   final hasTimestampField = collections.any((c) => c.fields.any((f) => f.hasTimestamp));
@@ -20,7 +20,7 @@ Future<void> generateFreezedConverters({
     hasTimestampField,
     hasDocumentReferenceField,
   ].every((e) => !e)) {
-    return;
+    return [];
   }
 
   final library = Library(
@@ -33,10 +33,12 @@ Future<void> generateFreezedConverters({
     },
   );
 
-  await generateLibrary(
-    library: library,
-    filePath: config.convertersPath,
-  );
+  return [
+    GeneratedFile(
+      library: library,
+      filePath: config.convertersPath,
+    ),
+  ];
 }
 
 Class get _dateTimeConverter {

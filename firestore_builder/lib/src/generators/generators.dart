@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:firestore_builder/src/generators/clear_files.dart';
 import 'package:firestore_builder/src/generators/generate_freezed_converters.dart';
+import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_models.dart';
 import 'package:firestore_builder/src/generators/generate_query_service.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/generators/generate_states.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/generators/generate_updated_value.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:yaml/yaml.dart';
 
@@ -37,15 +39,27 @@ You can also indicate the path of your configuration file:
     await clearFiles(path: config.outputPath);
   }
 
-  await Future.wait([
-    generateFreezedConverters(config: config),
-    generateModels(config: config),
-    generateReferenceService(config: config),
-    generateStreamService(config: config),
-    generateStates(config: config),
-    generateQueryService(config: config),
-    generateUpdatedValue(config: config),
-  ]);
+  final files = getGeneratedFiles(config: config);
+
+  final futures = files.map(
+    (file) => file.generate(),
+  );
+
+  await Future.wait(futures);
+}
+
+List<GeneratedFile> getGeneratedFiles({
+  required YamlConfig config,
+}) {
+  return [
+    ...generateFreezedConverters(config: config),
+    ...generateModels(config: config),
+    ...generateReferenceService(config: config),
+    ...generateStreamService(config: config),
+    ...generateStates(config: config),
+    ...generateQueryService(config: config),
+    ...generateUpdatedValue(config: config),
+  ];
 }
 
 Future<YamlConfig> _parseConfigFileToGetYamlConfig({

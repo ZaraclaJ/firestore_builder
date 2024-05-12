@@ -13,14 +13,12 @@ class FileService {
   const FileService();
 
   Future<void> saveYamlConfig(YamlConfig yamlConfig) async {
-    final dtcConnection = dtdManager.connection.value;
     final configFileUri = await _getConfigFileUri();
-
-    if (dtcConnection == null || configFileUri == null) {
+    if (configFileUri == null) {
       return;
     }
 
-    await dtcConnection.writeFileAsString(configFileUri, yamlConfig.toCode());
+    await _writeFile(uri: configFileUri, content: yamlConfig.toCode());
   }
 
   Future<YamlConfig?> getCurrentYamlConfig() async {
@@ -85,6 +83,28 @@ class FileService {
     }
   }
 
+  Future<void> writeGeneratedFiles({required List<GeneratedFile> files}) async {
+    final rootFolder = await _getRootFolder();
+    final dtcConnection = dtdManager.connection.value;
+    if (dtcConnection == null || rootFolder == null) {
+      return;
+    }
+
+    final futures = files.map(
+      (file) async {
+        final uri = await _getRootFileUri(fileName: file.filePath);
+        if (uri == null) {
+          return;
+        }
+
+        final fileContent = file.content;
+        return _writeFile(uri: uri, content: fileContent);
+      },
+    );
+
+    await Future.wait(futures);
+  }
+
   Future<Uri?> _getConfigFileUri() async {
     return _getRootFileUri(fileName: defaultConfigFileName);
   }
@@ -108,5 +128,17 @@ class FileService {
 
     final projectRoots = await dtcConnection.getProjectRoots();
     return projectRoots.uris?.firstOrNull;
+  }
+
+  Future<void> _writeFile({
+    required Uri uri,
+    required String content,
+  }) async {
+    final dtcConnection = dtdManager.connection.value;
+    if (dtcConnection == null) {
+      return;
+    }
+
+    await dtcConnection.writeFileAsString(uri, content);
   }
 }

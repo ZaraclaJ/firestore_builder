@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         home: Scaffold(
           body: HomeLayout(
-            onSave: () {},
+            onSaveConfig: () {},
           ),
         ),
       ),

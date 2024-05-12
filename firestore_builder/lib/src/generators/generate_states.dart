@@ -2,28 +2,28 @@ import 'package:code_builder/code_builder.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_stream_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
-Future<void> generateStates({
+List<GeneratedFile> generateStates({
   required YamlConfig config,
-}) async {
+}) {
   if (!config.useRiverpod) {
-    return;
+    return [];
   }
 
   final collections = config.allCollections;
 
-  final futures = collections.map(
-    (c) => generateLibrary(
-      library: c.stateLibrary,
-      filePath: c.stateFilePath,
-    ),
-  );
-
-  await Future.wait(futures);
+  return collections
+      .map(
+        (c) => GeneratedFile(
+          library: c.stateLibrary,
+          filePath: c.stateFilePath,
+        ),
+      )
+      .toList();
 }
 
 extension on Collection {

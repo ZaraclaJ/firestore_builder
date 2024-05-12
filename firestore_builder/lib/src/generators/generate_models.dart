@@ -7,25 +7,25 @@ import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/code_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/helpers/constants.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
-Future<void> generateModels({
+List<GeneratedFile> generateModels({
   required YamlConfig config,
-}) async {
+}) {
   final collections = config.allCollections;
 
-  final futures = collections.map(
-    (c) => generateLibrary(
-      library: c.modelLibrary,
-      filePath: c.modelFilePath,
-    ),
-  );
-
-  await Future.wait(futures);
+  return collections
+      .map(
+        (c) => GeneratedFile(
+          library: c.modelLibrary,
+          filePath: c.modelFilePath,
+        ),
+      )
+      .toList();
 }
 
 extension ModelCollectionExtensions on Collection {

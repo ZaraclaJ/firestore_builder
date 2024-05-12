@@ -36,7 +36,7 @@ class _Layout extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _ConfigInitializer(
       child: HomeLayout(
-        onSave: () async {
+        onSaveConfig: () async {
           final confirm = await SaveDialog.show(context);
           if (confirm ?? false) {
             final fileService = ref.read(fileServiceProvider);

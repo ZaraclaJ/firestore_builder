@@ -6,22 +6,24 @@ import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/code_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 import 'package:recase/recase.dart';
 
-Future<void> generateQueryService({
+List<GeneratedFile> generateQueryService({
   required YamlConfig config,
-}) async {
-  await generateLibrary(
-    library: _queryServiceLibrary(
-      config: config,
+}) {
+  return [
+    GeneratedFile(
+      library: _queryServiceLibrary(
+        config: config,
+      ),
+      filePath: config.queryServiceClass.path,
     ),
-    filePath: config.queryServiceClass.path,
-  );
+  ];
 }
 
 Library _queryServiceLibrary({

@@ -4,20 +4,22 @@ import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/expression_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/generators/generate_library.dart';
 import 'package:firestore_builder/src/generators/generate_reference_service.dart';
 import 'package:firestore_builder/src/models/collection.dart';
+import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
 
-Future<void> generateStreamService({
+List<GeneratedFile> generateStreamService({
   required YamlConfig config,
-}) async {
-  await generateLibrary(
-    library: _streamServiceLibrary(
-      config: config,
+}) {
+  return [
+    GeneratedFile(
+      library: _streamServiceLibrary(
+        config: config,
+      ),
+      filePath: config.streamServiceClass.path,
     ),
-    filePath: config.streamServiceClass.path,
-  );
+  ];
 }
 
 Library _streamServiceLibrary({
