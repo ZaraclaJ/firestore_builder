@@ -1,4 +1,5 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
+import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/dialogs/save_dialog.dart';
 import 'package:firestore_builder_devtools_extension/home_layout.dart';
 import 'package:firestore_builder_devtools_extension/services/file_services.dart';
@@ -65,19 +66,38 @@ class _ConfigBuilderState extends ConsumerState<_ConfigInitializer> {
   @override
   void initState() {
     super.initState();
-    _fetchConfig();
+    _initConfig();
   }
 
-  Future<void> _fetchConfig() async {
-    final fileService = ref.read(fileServiceProvider);
-    final config = await fileService.getCurrentYamlConfig();
-    if (config != null) {
-      ref.read(configProvider.notifier).state = config;
+  Future<void> _initConfig() async {
+    final success = await _fetchConfig();
+    if (!success) {
+      await _fetchProjectName();
     }
 
     setState(() {
       _isConfigLoaded = true;
     });
+  }
+
+  Future<bool> _fetchConfig() async {
+    final fileService = ref.read(fileServiceProvider);
+    final config = await fileService.getCurrentYamlConfig();
+    if (config != null) {
+      ref.read(configProvider.notifier).state = config;
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _fetchProjectName() async {
+    final fileService = ref.read(fileServiceProvider);
+    final projectName = await fileService.getProjectName();
+    if (projectName != null) {
+      ref.read(configProvider.notifier).update(
+            (config) => config.copyWith(projectName: projectName),
+          );
+    }
   }
 
   @override

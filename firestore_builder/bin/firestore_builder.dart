@@ -9,7 +9,7 @@ void main(List<String> args) {
       );
     case []:
       generate(
-        configFilePath: defaultConfigFilPath,
+        configFilePath: defaultConfigFileName,
       );
 
     default:

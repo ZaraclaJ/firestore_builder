@@ -14,18 +14,18 @@ class FileService {
 
   Future<void> saveYamlConfig(YamlConfig yamlConfig) async {
     final dtcConnection = dtdManager.connection.value;
-    final configFile = await _getConfigUri();
+    final configFileUri = await _getConfigFileUri();
 
-    if (dtcConnection == null || configFile == null) {
+    if (dtcConnection == null || configFileUri == null) {
       return;
     }
 
-    await dtcConnection.writeFileAsString(configFile, yamlConfig.toCode());
+    await dtcConnection.writeFileAsString(configFileUri, yamlConfig.toCode());
   }
 
   Future<YamlConfig?> getCurrentYamlConfig() async {
-    final configFile = await _getConfigUri();
-    if (configFile == null) {
+    final configFileUri = await _getConfigFileUri();
+    if (configFileUri == null) {
       return null;
     }
 
@@ -35,7 +35,7 @@ class FileService {
     }
 
     try {
-      final fileContent = await dtcConnection.readFileAsString(configFile);
+      final fileContent = await dtcConnection.readFileAsString(configFileUri);
       final content = fileContent.content;
       if (content == null) {
         return null;
@@ -52,15 +52,52 @@ class FileService {
     }
   }
 
-  Future<Uri?> _getConfigUri() async {
+  Future<String?> getProjectName() async {
+    final pubspecFileUri = await _getRootFileUri(fileName: pubspecFileName);
+    if (pubspecFileUri == null) {
+      return null;
+    }
+
+    final dtcConnection = dtdManager.connection.value;
+    if (dtcConnection == null) {
+      return null;
+    }
+
+    try {
+      final fileContent = await dtcConnection.readFileAsString(pubspecFileUri);
+      final content = fileContent.content;
+      if (content == null) {
+        return null;
+      }
+
+      final yamlMap = loadYaml(content);
+      if (yamlMap is! YamlMap) {
+        return null;
+      }
+
+      final projectName = yamlMap['name'];
+      if (projectName is! String) {
+        return null;
+      }
+      return projectName;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Uri?> _getConfigFileUri() async {
+    return _getRootFileUri(fileName: defaultConfigFileName);
+  }
+
+  Future<Uri?> _getRootFileUri({required String fileName}) async {
     final rootFolder = await _getRootFolder();
     final dtcConnection = dtdManager.connection.value;
     if (dtcConnection == null || rootFolder == null) {
       return null;
     }
 
-    final configUri = Uri.file(join(rootFolder.path, defaultConfigFilPath));
-    return configUri;
+    final fileUri = Uri.file(join(rootFolder.path, fileName));
+    return fileUri;
   }
 
   Future<Uri?> _getRootFolder() async {

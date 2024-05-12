@@ -19,7 +19,7 @@ class SaveDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppDialog(
       title: 'Save configuration file',
-      content: const SectionText('This will overwrite the current configuration file: $defaultConfigFilPath'),
+      content: const SectionText('This will overwrite the current configuration file: $defaultConfigFileName'),
       actions: [
         const CancelButton(),
         SaveButton(
