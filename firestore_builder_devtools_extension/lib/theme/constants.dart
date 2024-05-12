@@ -9,7 +9,7 @@ const double codeFraction = 1 / 2;
 const double firebaseConfigMinWidth = minTableWidth;
 const double firebaseConfigMaxWidth = 1350;
 
-const double firebaseConfigMinHeight = 600;
+const double firebaseConfigMinHeight = 400;
 const double firebaseConfigMaxHeight = 1200;
 
 const double codeLayoutMinWidth = 300;

@@ -4,8 +4,9 @@ import 'package:firestore_builder_devtools_extension/layouts/firebase_config_lay
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_gap.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_button.dart';
+import 'package:firestore_builder_devtools_extension/widgets/code_view.dart';
+import 'package:firestore_builder_devtools_extension/widgets/section_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({
@@ -18,7 +19,10 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SectionText('1. Configure your Firestore database structure:'),
+        const AppGap.regular(),
         Expanded(
           child: SplitPane(
             initialFractions: const [1 - codeFraction, codeFraction],
@@ -30,16 +34,24 @@ class HomeLayout extends StatelessWidget {
             ],
           ),
         ),
+        const AppGap.regular(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SectionText('2. Save your configuration file: '),
+            const AppGap.regular(),
             AppButton.primary(
               text: 'Save config file',
               onPressed: onSaveConfig,
             ),
-            const AppGap.big(),
           ],
         ),
+        const AppGap.regular(),
+        const SectionText('3. Run the generation command line in your root project folder:'),
+        const CodeView(code: 'dart run firestore_builder'),
+        const AppGap.regular(),
+        const SectionText('4. Run the build runner command to generate Freezed classes:'),
+        const CodeView(code: 'dart run build_runner build --delete-conflicting-outputs'),
       ],
     );
   }

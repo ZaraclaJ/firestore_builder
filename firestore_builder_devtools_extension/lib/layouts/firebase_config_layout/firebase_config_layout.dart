@@ -3,7 +3,6 @@ import 'package:firestore_builder_devtools_extension/layouts/firebase_config_lay
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/global_config.dart';
 import 'package:firestore_builder_devtools_extension/layouts/firebase_config_layout/path_details.dart';
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
-import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_card.dart';
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:firestore_builder_devtools_extension/widgets/double_scroll_layout.dart';
@@ -35,20 +34,18 @@ class _Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppPadding.regular(
-      child: AppCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GlobalConfig(),
-            AppDivider.horizontal(),
-            PathDetails(),
-            AppDivider.horizontal(),
-            Expanded(
-              child: CollectionsBloc(),
-            ),
-          ],
-        ),
+    return const AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GlobalConfig(),
+          AppDivider.horizontal(),
+          PathDetails(),
+          AppDivider.horizontal(),
+          Expanded(
+            child: CollectionsBloc(),
+          ),
+        ],
       ),
     );
   }

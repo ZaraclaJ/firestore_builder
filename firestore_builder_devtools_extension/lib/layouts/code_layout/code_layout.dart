@@ -5,6 +5,7 @@ import 'package:firestore_builder_devtools_extension/states/config_view_model.da
 import 'package:firestore_builder_devtools_extension/theme/constants.dart';
 import 'package:firestore_builder_devtools_extension/theme/theme_extensions.dart';
 import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.dart';
+import 'package:firestore_builder_devtools_extension/widgets/copy_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,28 +25,48 @@ class CodeLayout extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth.bounded(codeLayoutMinWidth, double.infinity);
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: width,
-            child: const AppPadding.regular(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: _Code(),
+        return Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: width,
+                  child: const AppPadding.regular(
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: _Code(),
+                        ),
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: _ErrorBanner(),
+                        ),
+                      ],
+                    ),
                   ),
-                  Positioned(
-                    right: 0,
-                    left: 0,
-                    bottom: 0,
-                    child: _ErrorBanner(),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            const _CopyButton(),
+          ],
         );
       },
+    );
+  }
+}
+
+class _CopyButton extends ConsumerWidget {
+  const _CopyButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final code = ref.watch(codeProvider);
+    return AppPadding.big(
+      child: CopyButton(text: code),
     );
   }
 }
