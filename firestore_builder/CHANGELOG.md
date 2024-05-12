@@ -1,3 +1,11 @@
+## 0.1.1
+
+Update readme
+
+## 0.1.0
+
+Create the devtools extension to easily generate the configuration file
+
 ## 0.0.1
 
 First version of firestore_builder.
