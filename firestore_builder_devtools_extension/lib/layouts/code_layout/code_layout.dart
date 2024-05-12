@@ -1,4 +1,5 @@
 import 'package:devtools_app_shared/ui.dart';
+import 'package:firestore_builder/firestore_builder.dart';
 import 'package:firestore_builder_devtools_extension/extensions/num_extensions.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
 import 'package:firestore_builder_devtools_extension/states/config_view_model.dart';
@@ -112,9 +113,12 @@ class _Code extends ConsumerWidget {
       ),
       child: const SingleChildScrollView(
         child: AppPadding.regular(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: _CodeWithCodeEditor(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(defaultConfigFileName),
+              AppPadding.small(child: _CodeWithCodeEditor()),
+            ],
           ),
         ),
       ),
