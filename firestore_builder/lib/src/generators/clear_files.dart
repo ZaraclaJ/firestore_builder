@@ -20,6 +20,10 @@ Iterable<File> _filesWithExtensions({
   required List<String> extensions,
 }) {
   final directory = Directory(path);
+  if (!directory.existsSync()) {
+    return [];
+  }
+
   final files = directory.listSync(recursive: true).whereType<File>().where((queryFile) {
     return extensions.any((extension) => queryFile.path.endsWith(extension));
   });
