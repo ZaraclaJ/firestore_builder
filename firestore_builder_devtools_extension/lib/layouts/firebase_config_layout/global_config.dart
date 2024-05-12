@@ -18,9 +18,13 @@ class GlobalConfig extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _ProjectName(),
-          const AppGap.regular(),
-          const _OutputPath(),
+          const Row(
+            children: [
+              Expanded(child: _ProjectName()),
+              AppGap.regular(),
+              Expanded(child: _OutputPath()),
+            ],
+          ),
           const AppGap.regular(),
           Wrap(
             spacing: context.spacings.regular,
@@ -49,7 +53,7 @@ class _ProjectName extends ConsumerWidget {
         ref.read(configViewModelProvider).updateProjectName(value);
       },
       isDense: true,
-      widthFactor: 0.5,
+      widthFactor: 1,
       initialText: projectName,
     );
   }
@@ -68,7 +72,7 @@ class _OutputPath extends ConsumerWidget {
         ref.read(configViewModelProvider).updateOutputPath(value);
       },
       isDense: true,
-      widthFactor: 0.5,
+      widthFactor: 1,
       initialText: outputPath,
     );
   }
