@@ -85,7 +85,7 @@ class _Clear extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final clear = ref.watch(configProvider.select((value) => value.clearOutputFolder));
     return AppSwitch(
-      label: 'Clear',
+      label: 'Clear output folder',
       onChanged: (value) {
         ref.read(configViewModelProvider).updateClearOutputFolder(value);
       },
