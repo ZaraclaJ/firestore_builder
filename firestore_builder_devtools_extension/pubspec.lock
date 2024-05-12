@@ -311,7 +311,7 @@ packages:
       path: "../firestore_builder"
       relative: true
     source: path
-    version: "0.1.2"
+    version: "0.1.3"
   fixnum:
     dependency: transitive
     description:

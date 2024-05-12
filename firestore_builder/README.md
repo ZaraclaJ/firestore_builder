@@ -42,9 +42,10 @@ The simplest way to configure the generation is to use the devtools extension ap
 
 <img src="https://raw.githubusercontent.com/ZaraclaJ/firestore_builder/main/img/enable_firestore_builder.png" width="600" />
 
+- Use the extension app to build the configuration file
+
 <img src="https://raw.githubusercontent.com/ZaraclaJ/firestore_builder/main/img/devtools_tabs.jpg" width="600" />
 
-- Use the extension app to build the configuration file
 - You can save the configuration file directly from the extensions app, this will create the `firestore_builder_config.yaml` at the root of your project
 
 <img src="https://raw.githubusercontent.com/ZaraclaJ/firestore_builder/main/img/save_config.png" width="600" />
