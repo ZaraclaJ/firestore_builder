@@ -19,10 +19,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ResponsiveTheme(
+    return ResponsiveTheme(
       child: MaterialApp(
         home: Scaffold(
-          body: HomeLayout(),
+          body: HomeLayout(
+            onSave: () {},
+          ),
         ),
       ),
     );

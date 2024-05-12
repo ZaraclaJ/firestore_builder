@@ -1,4 +1,5 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
+import 'package:firestore_builder_devtools_extension/dialogs/save_dialog.dart';
 import 'package:firestore_builder_devtools_extension/home_layout.dart';
 import 'package:firestore_builder_devtools_extension/services/file_services.dart';
 import 'package:firestore_builder_devtools_extension/states/config_states.dart';
@@ -21,24 +22,44 @@ class Extension extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const ResponsiveTheme(
       child: DevToolsExtension(
-        child: _ConfigBuilder(
-          child: HomeLayout(),
-        ),
+        child: _Layout(),
       ),
     );
   }
 }
 
-class _ConfigBuilder extends ConsumerStatefulWidget {
-  const _ConfigBuilder({required this.child});
+class _Layout extends ConsumerWidget {
+  const _Layout();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _ConfigInitializer(
+      child: HomeLayout(
+        onSave: () async {
+          final confirm = await SaveDialog.show(context);
+          if (confirm ?? false) {
+            final fileService = ref.read(fileServiceProvider);
+            final config = ref.read(configProvider);
+            await fileService.saveYamlConfig(config);
+          }
+        },
+      ),
+    );
+  }
+}
+
+class _ConfigInitializer extends ConsumerStatefulWidget {
+  const _ConfigInitializer({
+    required this.child,
+  });
 
   final Widget child;
 
   @override
-  ConsumerState<_ConfigBuilder> createState() => _ConfigBuilderState();
+  ConsumerState<_ConfigInitializer> createState() => _ConfigBuilderState();
 }
 
-class _ConfigBuilderState extends ConsumerState<_ConfigBuilder> {
+class _ConfigBuilderState extends ConsumerState<_ConfigInitializer> {
   bool _isConfigLoaded = false;
 
   @override
@@ -50,10 +71,9 @@ class _ConfigBuilderState extends ConsumerState<_ConfigBuilder> {
   Future<void> _fetchConfig() async {
     final fileService = ref.read(fileServiceProvider);
     final config = await fileService.getCurrentYamlConfig();
-    if (config == null) {
-      return;
+    if (config != null) {
+      ref.read(configProvider.notifier).state = config;
     }
-    ref.read(configProvider.notifier).state = config;
 
     setState(() {
       _isConfigLoaded = true;

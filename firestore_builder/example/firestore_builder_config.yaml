@@ -2,7 +2,6 @@ firestore_builder:
   project_name: example
   output: lib/firestore
   use_riverpod: true
-  clear_output_folder: true
   collections:
     - collection:
         collection_name: teams
@@ -19,7 +18,7 @@ firestore_builder:
           - labels:
               type: List<String>
               accept_field_value: true
-          - presences: Map<String, bool>?
+          - presences: "Map<String, bool>?"
           - team_ref: DocumentReference?
           - team_size:
               type: TeamSize
