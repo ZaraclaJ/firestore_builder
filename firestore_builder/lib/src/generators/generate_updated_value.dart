@@ -4,6 +4,7 @@ import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
+import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -97,7 +98,7 @@ Class _customUpdatedValueClass({
     config: config,
     customClass: customClassName,
   );
-  final parameterName = customClassName.camelCase;
+  final parameterName = customClassName.withoutQuestionMark.camelCase;
   final field = Field(
     (f) => f
       ..name = parameterName
