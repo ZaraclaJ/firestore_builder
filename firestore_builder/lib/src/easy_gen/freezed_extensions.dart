@@ -14,6 +14,7 @@ extension FreezedClassExtensions on Class {
         final fields = c.fields.build().asList();
         return c
           ..sealed = constructors.every((c) => c.name != null)
+          ..abstract = true
           ..annotations.add(
             BasicAnnotations.freezed(
               toJson: withJson,
