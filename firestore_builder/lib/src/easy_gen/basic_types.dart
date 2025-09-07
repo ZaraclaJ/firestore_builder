@@ -213,7 +213,7 @@ abstract class CustomTypes {
       Reference(
         [
           UpdatedValueSymbols.updatedValueClass,
-          customClass?.pascalCase,
+          customClass?.withoutQuestionMark.pascalCase,
         ].whereNotNull().join(),
         _updatedValueUrl(config),
       );
