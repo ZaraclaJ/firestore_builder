@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:meta/meta.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 extension LibraryDartFormatterExtensions on Library {
   @UseResult()
@@ -8,7 +9,7 @@ extension LibraryDartFormatterExtensions on Library {
     final emitter = _CustomEmitter();
     final stringCode = accept(emitter).toString();
 
-    final dartFormatter = DartFormatter();
+    final dartFormatter = DartFormatter(languageVersion: Version(3, 7, 0));
     return dartFormatter.format(stringCode);
   }
 }
