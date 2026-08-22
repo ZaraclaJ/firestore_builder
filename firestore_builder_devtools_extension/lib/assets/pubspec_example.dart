@@ -23,7 +23,8 @@ firestore_builder:
           - team_ref: DocumentReference?
           - team_size: 
               type: TeamSize
-              path: models/enums/team_size.dart      
+              path: models/enums/team_size.dart
+              unknown_enum_value: small
       sub_collections:
         - collection:
             collection_name: users

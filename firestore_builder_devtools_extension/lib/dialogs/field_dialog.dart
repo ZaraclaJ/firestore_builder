@@ -134,6 +134,37 @@ final _customClassPathErrorProvider = Provider.autoDispose<CustomClassPathError?
   ],
 );
 
+final _unknownEnumValueProvider = StateProvider.autoDispose<String>(
+  (ref) => throw UnimplementedError(),
+);
+
+/// Error of the optional unknown enum value (null when valid or empty).
+final _unknownEnumValueErrorProvider = Provider.autoDispose<String?>(
+  (ref) {
+    final typeMap = ref.watch(_typeMapProvider);
+    final hasCustomClass = typeMap.values.any((element) => element.fieldType == FieldTypeEnum.customClass);
+    if (!hasCustomClass) {
+      return null;
+    }
+
+    final unknownEnumValue = ref.watch(_unknownEnumValueProvider).trim();
+    if (unknownEnumValue.isEmpty) {
+      return null;
+    }
+
+    final isIdentifier = RegExp(r'^[a-zA-Z_][a-zA-Z0-9_]*$').hasMatch(unknownEnumValue);
+    if (!isIdentifier) {
+      return 'Must be an enum value name (letters, digits, underscores)';
+    }
+
+    return null;
+  },
+  dependencies: [
+    _typeMapProvider,
+    _unknownEnumValueProvider,
+  ],
+);
+
 final _typeMapProvider = StateProvider.autoDispose<Map<int, FieldTypeNullable>>(
   (ref) => throw UnimplementedError(),
 );
@@ -194,12 +225,17 @@ final _canSaveProvider = Provider.autoDispose<bool>(
     final fieldError = ref.watch(_fieldNameErrorProvider);
     final customClassNameError = ref.watch(_customClassNameErrorProvider);
     final customClassPathError = ref.watch(_customClassPathErrorProvider);
-    return fieldError == null && customClassNameError == null && customClassPathError == null;
+    final unknownEnumValueError = ref.watch(_unknownEnumValueErrorProvider);
+    return fieldError == null &&
+        customClassNameError == null &&
+        customClassPathError == null &&
+        unknownEnumValueError == null;
   },
   dependencies: [
     _fieldNameErrorProvider,
     _customClassNameErrorProvider,
     _customClassPathErrorProvider,
+    _unknownEnumValueErrorProvider,
   ],
 );
 
@@ -270,6 +306,9 @@ class FieldDialog extends StatelessWidget {
         ),
         _customClassPathProvider.overrideWith(
           (ref) => field?.type.customClassPath ?? '',
+        ),
+        _unknownEnumValueProvider.overrideWith(
+          (ref) => field?.unknownEnumValue ?? '',
         ),
         _typeMapProvider.overrideWith(
           (ref) => field?.type.getFieldTypeEnumMap(0) ?? {0: defaultFieldTypeNullable},
@@ -559,6 +598,19 @@ class _DropDownMenu extends ConsumerWidget {
               ),
             ],
           ),
+          const AppGap.regular(),
+          AppInput(
+            initialText: ref.watch(_unknownEnumValueProvider),
+            label: 'Unknown enum value',
+            hintText: 'Optional: enum value used when Firestore holds an unknown value',
+            isDense: true,
+            widthFactor: 1,
+            errorText: ref.watch(_unknownEnumValueErrorProvider),
+            withError: true,
+            onChanged: (value) {
+              ref.read(_unknownEnumValueProvider.notifier).state = value;
+            },
+          ),
         ],
       ],
     );
@@ -581,6 +633,7 @@ class _SaveButton extends ConsumerWidget {
                     fieldName: ref.read(_fieldNameProvider).trim(),
                     type: ref.read(_fieldTypeProvider),
                     acceptFieldValue: ref.read(_acceptFieldValueProvider),
+                    unknownEnumValue: ref.read(_unknownEnumValueProvider).trim(),
                   );
               Navigator.of(context).pop();
             }

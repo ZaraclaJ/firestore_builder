@@ -175,12 +175,16 @@ class ConfigViewModel {
     required String fieldName,
     required FieldType type,
     required bool acceptFieldValue,
+    String? unknownEnumValue,
   }) {
+    final hasCustomClass = type.customClassName != null;
+    final hasUnknownEnumValue = unknownEnumValue != null && unknownEnumValue.isNotEmpty;
     final newField = CollectionField(
       name: fieldName,
       type: type,
       acceptFieldValue: acceptFieldValue,
       configLight: ref.read(configLightProvider),
+      unknownEnumValue: hasCustomClass && hasUnknownEnumValue ? unknownEnumValue : null,
     );
 
     _replaceCollection(
