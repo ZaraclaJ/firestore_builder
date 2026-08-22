@@ -5,34 +5,23 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class User with _$User {
+@Freezed(toJson: true, fromJson: true)
+abstract class User with _$User {
   const factory User({
     @JsonKey(name: User.nameFieldKey) required String name,
     @JsonKey(name: User.ageFieldKey) required int age,
     @JsonKey(name: User.currentJobFieldKey) String? currentJob,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(UserId(''))
     UserId userId,
   }) = _User;
 
-  factory User.fromFirestore(
-    DocumentSnapshot<Map<String, Object?>> snapshot,
-  ) {
+  factory User.fromFirestore(DocumentSnapshot<Map<String, Object?>> snapshot) {
     final data = snapshot.data();
     return User.fromJson(data!).copyWith(userId: UserId(snapshot.id));
   }
 
-  factory User.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   const User._();
 
@@ -50,33 +39,18 @@ class User with _$User {
   }
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class UserId with _$UserId {
-  const factory UserId(
-    String value,
-  ) = _UserId;
+@Freezed(toJson: true, fromJson: true)
+abstract class UserId with _$UserId {
+  const factory UserId(String value) = _UserId;
 
-  factory UserId.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$UserIdFromJson(json);
+  factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class UserPath with _$UserPath {
-  const factory UserPath({
-    required UserId userId,
-    required TeamId teamId,
-  }) = _UserPath;
+@Freezed(toJson: true, fromJson: true)
+abstract class UserPath with _$UserPath {
+  const factory UserPath({required UserId userId, required TeamId teamId}) =
+      _UserPath;
 
-  factory UserPath.fromJson(
-    Map<String, dynamic> json,
-  ) =>
+  factory UserPath.fromJson(Map<String, dynamic> json) =>
       _$UserPathFromJson(json);
 }

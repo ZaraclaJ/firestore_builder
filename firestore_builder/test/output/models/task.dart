@@ -4,34 +4,23 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'task.freezed.dart';
 part 'task.g.dart';
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class Task with _$Task {
+@Freezed(toJson: true, fromJson: true)
+abstract class Task with _$Task {
   const factory Task({
     @JsonKey(name: Task.nameFieldKey) required String name,
     @JsonKey(name: Task.doneFieldKey) required bool done,
     @JsonKey(name: Task.descriptionFieldKey) String? description,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(TaskId(''))
     TaskId taskId,
   }) = _Task;
 
-  factory Task.fromFirestore(
-    DocumentSnapshot<Map<String, Object?>> snapshot,
-  ) {
+  factory Task.fromFirestore(DocumentSnapshot<Map<String, Object?>> snapshot) {
     final data = snapshot.data();
     return Task.fromJson(data!).copyWith(taskId: TaskId(snapshot.id));
   }
 
-  factory Task.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$TaskFromJson(json);
+  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 
   const Task._();
 
@@ -49,17 +38,9 @@ class Task with _$Task {
   }
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class TaskId with _$TaskId {
-  const factory TaskId(
-    String value,
-  ) = _TaskId;
+@Freezed(toJson: true, fromJson: true)
+abstract class TaskId with _$TaskId {
+  const factory TaskId(String value) = _TaskId;
 
-  factory TaskId.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$TaskIdFromJson(json);
+  factory TaskId.fromJson(Map<String, dynamic> json) => _$TaskIdFromJson(json);
 }

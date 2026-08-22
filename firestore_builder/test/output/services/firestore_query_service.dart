@@ -6,16 +6,6 @@ import 'package:firestore_builder/test/output/models/team.dart';
 import 'package:firestore_builder/test/output/models/updated_value.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:firestore_builder/test/output/services/firestore_reference_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final firestoreQueryServiceProvider =
-    Provider.autoDispose<FirestoreQueryService>(
-  (ref) {
-    return FirestoreQueryService(
-      firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider),
-    );
-  },
-);
 
 class FirestoreQueryService {
   const FirestoreQueryService({
@@ -29,8 +19,9 @@ class FirestoreQueryService {
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
-  Future<List<Team>> getTeamsCollectionWhere(
-      {required Query<Team> Function(CollectionReference<Team>) where}) async {
+  Future<List<Team>> getTeamsCollectionWhere({
+    required Query<Team> Function(CollectionReference<Team>) where,
+  }) async {
     final collection = _firestoreReferenceService.teamsCollection();
     final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
@@ -47,15 +38,9 @@ class FirestoreQueryService {
     return result.id;
   }
 
-  Future<void> setTeam({
-    required TeamId teamId,
-    required Team team,
-  }) async {
+  Future<void> setTeam({required TeamId teamId, required Team team}) async {
     final teamId = team.teamId;
-    assert(
-      teamId.value.isNotEmpty,
-      'team must have a teamId: $team',
-    );
+    assert(teamId.value.isNotEmpty, 'team must have a teamId: $team');
     await _firestoreReferenceService.teamReference(teamId: teamId).set(team);
   }
 
@@ -109,8 +94,9 @@ class FirestoreQueryService {
     required TeamId teamId,
     required Query<User> Function(CollectionReference<User>) where,
   }) async {
-    final collection =
-        _firestoreReferenceService.usersCollection(teamId: teamId);
+    final collection = _firestoreReferenceService.usersCollection(
+      teamId: teamId,
+    );
     final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
@@ -119,19 +105,14 @@ class FirestoreQueryService {
     required UserId userId,
     required TeamId teamId,
   }) async {
-    final result = await _firestoreReferenceService
-        .userReference(
-          userId: userId,
-          teamId: teamId,
-        )
-        .get();
+    final result =
+        await _firestoreReferenceService
+            .userReference(userId: userId, teamId: teamId)
+            .get();
     return result.data();
   }
 
-  Future<String> addUser({
-    required TeamId teamId,
-    required User user,
-  }) async {
+  Future<String> addUser({required TeamId teamId, required User user}) async {
     final result = await _firestoreReferenceService
         .usersCollection(teamId: teamId)
         .add(user);
@@ -144,18 +125,10 @@ class FirestoreQueryService {
     required User user,
   }) async {
     final userId = user.userId;
-    assert(
-      userId.value.isNotEmpty,
-      'user must have a userId: $user',
-    );
+    assert(userId.value.isNotEmpty, 'user must have a userId: $user');
     await _firestoreReferenceService
-        .userReference(
-          userId: userId,
-          teamId: teamId,
-        )
-        .set(
-          user,
-        );
+        .userReference(userId: userId, teamId: teamId)
+        .set(user);
   }
 
   Future<void> updateUser({
@@ -174,13 +147,8 @@ class FirestoreQueryService {
       return;
     }
     await _firestoreReferenceService
-        .userReference(
-          userId: userId,
-          teamId: teamId,
-        )
-        .update(
-          data,
-        );
+        .userReference(userId: userId, teamId: teamId)
+        .update(data);
   }
 
   Future<void> deleteUser({
@@ -188,10 +156,7 @@ class FirestoreQueryService {
     required TeamId teamId,
   }) async {
     await _firestoreReferenceService
-        .userReference(
-          userId: userId,
-          teamId: teamId,
-        )
+        .userReference(userId: userId, teamId: teamId)
         .delete();
   }
 
@@ -199,12 +164,10 @@ class FirestoreQueryService {
     required UserId userId,
     required TeamId teamId,
   }) async {
-    final result = await _firestoreReferenceService
-        .itemsCollection(
-          userId: userId,
-          teamId: teamId,
-        )
-        .get();
+    final result =
+        await _firestoreReferenceService
+            .itemsCollection(userId: userId, teamId: teamId)
+            .get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
@@ -226,13 +189,10 @@ class FirestoreQueryService {
     required TeamId teamId,
     required UserId userId,
   }) async {
-    final result = await _firestoreReferenceService
-        .itemReference(
-          itemId: itemId,
-          teamId: teamId,
-          userId: userId,
-        )
-        .get();
+    final result =
+        await _firestoreReferenceService
+            .itemReference(itemId: itemId, teamId: teamId, userId: userId)
+            .get();
     return result.data();
   }
 
@@ -242,13 +202,8 @@ class FirestoreQueryService {
     required Item item,
   }) async {
     final result = await _firestoreReferenceService
-        .itemsCollection(
-          userId: userId,
-          teamId: teamId,
-        )
-        .add(
-          item,
-        );
+        .itemsCollection(userId: userId, teamId: teamId)
+        .add(item);
     return result.id;
   }
 
@@ -259,19 +214,10 @@ class FirestoreQueryService {
     required Item item,
   }) async {
     final itemId = item.itemId;
-    assert(
-      itemId.value.isNotEmpty,
-      'item must have a itemId: $item',
-    );
+    assert(itemId.value.isNotEmpty, 'item must have a itemId: $item');
     await _firestoreReferenceService
-        .itemReference(
-          itemId: itemId,
-          teamId: teamId,
-          userId: userId,
-        )
-        .set(
-          item,
-        );
+        .itemReference(itemId: itemId, teamId: teamId, userId: userId)
+        .set(item);
   }
 
   Future<void> updateItem({
@@ -285,14 +231,8 @@ class FirestoreQueryService {
       return;
     }
     await _firestoreReferenceService
-        .itemReference(
-          itemId: itemId,
-          teamId: teamId,
-          userId: userId,
-        )
-        .update(
-          data,
-        );
+        .itemReference(itemId: itemId, teamId: teamId, userId: userId)
+        .update(data);
   }
 
   Future<void> deleteItem({
@@ -301,18 +241,15 @@ class FirestoreQueryService {
     required UserId userId,
   }) async {
     await _firestoreReferenceService
-        .itemReference(
-          itemId: itemId,
-          teamId: teamId,
-          userId: userId,
-        )
+        .itemReference(itemId: itemId, teamId: teamId, userId: userId)
         .delete();
   }
 
   Future<List<Message>> getMessagesCollection({required TeamId teamId}) async {
-    final result = await _firestoreReferenceService
-        .messagesCollection(teamId: teamId)
-        .get();
+    final result =
+        await _firestoreReferenceService
+            .messagesCollection(teamId: teamId)
+            .get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
@@ -320,8 +257,9 @@ class FirestoreQueryService {
     required TeamId teamId,
     required Query<Message> Function(CollectionReference<Message>) where,
   }) async {
-    final collection =
-        _firestoreReferenceService.messagesCollection(teamId: teamId);
+    final collection = _firestoreReferenceService.messagesCollection(
+      teamId: teamId,
+    );
     final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
@@ -330,12 +268,10 @@ class FirestoreQueryService {
     required MessageId messageId,
     required TeamId teamId,
   }) async {
-    final result = await _firestoreReferenceService
-        .messageReference(
-          messageId: messageId,
-          teamId: teamId,
-        )
-        .get();
+    final result =
+        await _firestoreReferenceService
+            .messageReference(messageId: messageId, teamId: teamId)
+            .get();
     return result.data();
   }
 
@@ -343,10 +279,9 @@ class FirestoreQueryService {
     required TeamId teamId,
     required Message message,
   }) async {
-    final result =
-        await _firestoreReferenceService.messagesCollection(teamId: teamId).add(
-              message,
-            );
+    final result = await _firestoreReferenceService
+        .messagesCollection(teamId: teamId)
+        .add(message);
     return result.id;
   }
 
@@ -361,13 +296,8 @@ class FirestoreQueryService {
       'message must have a messageId: $message',
     );
     await _firestoreReferenceService
-        .messageReference(
-          messageId: messageId,
-          teamId: teamId,
-        )
-        .set(
-          message,
-        );
+        .messageReference(messageId: messageId, teamId: teamId)
+        .set(message);
   }
 
   Future<void> updateMessage({
@@ -384,13 +314,8 @@ class FirestoreQueryService {
       return;
     }
     await _firestoreReferenceService
-        .messageReference(
-          messageId: messageId,
-          teamId: teamId,
-        )
-        .update(
-          data,
-        );
+        .messageReference(messageId: messageId, teamId: teamId)
+        .update(data);
   }
 
   Future<void> deleteMessage({
@@ -398,10 +323,7 @@ class FirestoreQueryService {
     required TeamId teamId,
   }) async {
     await _firestoreReferenceService
-        .messageReference(
-          messageId: messageId,
-          teamId: teamId,
-        )
+        .messageReference(messageId: messageId, teamId: teamId)
         .delete();
   }
 
@@ -410,8 +332,9 @@ class FirestoreQueryService {
     return result.docs.map((snapshot) => snapshot.data()).toList();
   }
 
-  Future<List<Task>> getTasksCollectionWhere(
-      {required Query<Task> Function(CollectionReference<Task>) where}) async {
+  Future<List<Task>> getTasksCollectionWhere({
+    required Query<Task> Function(CollectionReference<Task>) where,
+  }) async {
     final collection = _firestoreReferenceService.tasksCollection();
     final result = await where(collection).get();
     return result.docs.map((snapshot) => snapshot.data()).toList();
@@ -428,15 +351,9 @@ class FirestoreQueryService {
     return result.id;
   }
 
-  Future<void> setTask({
-    required TaskId taskId,
-    required Task task,
-  }) async {
+  Future<void> setTask({required TaskId taskId, required Task task}) async {
     final taskId = task.taskId;
-    assert(
-      taskId.value.isNotEmpty,
-      'task must have a taskId: $task',
-    );
+    assert(taskId.value.isNotEmpty, 'task must have a taskId: $task');
     await _firestoreReferenceService.taskReference(taskId: taskId).set(task);
   }
 
