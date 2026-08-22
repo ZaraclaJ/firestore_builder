@@ -12,7 +12,6 @@ import 'package:firestore_builder_devtools_extension/theme/widgets/app_padding.d
 import 'package:firestore_builder_devtools_extension/widgets/app_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final _isCollectionProvider = Provider<bool>(
   (ref) {
@@ -93,7 +92,7 @@ class _CollectionInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final collection = ref.watch(collectionGetter);
     final text = collection == null ? 'Root' : '${collection.name} (${collection.modelName})';
-    final icon = collection == null ? FontAwesomeIcons.database : Icons.article;
+    final icon = collection == null ? Icons.storage : Icons.article;
 
     final colors = context.colors;
     final backgroundColor = colors.secondaryContainer;

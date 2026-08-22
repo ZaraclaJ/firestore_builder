@@ -8,7 +8,6 @@ import 'package:firestore_builder_devtools_extension/widgets/app_list_tile.dart'
 import 'package:firestore_builder_devtools_extension/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CollectionOptionsButton extends StatefulWidget {
   const CollectionOptionsButton({
@@ -113,7 +112,7 @@ class _Overlay extends ConsumerWidget {
             ),
             const AppDivider.horizontal(),
             _Action(
-              icon: FontAwesomeIcons.trash,
+              icon: Icons.delete,
               title: 'Delete Collection',
               color: context.colors.error,
               onTap: () async {
