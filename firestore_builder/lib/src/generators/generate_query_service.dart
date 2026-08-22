@@ -316,7 +316,7 @@ extension on Collection {
       (f) {
         return f.parameter().toUpdatedValueParam(
               config: configLight,
-              customClass: f.customClassReference?.symbolName,
+              customClass: f.updatedValueSuffix,
             );
       },
     );

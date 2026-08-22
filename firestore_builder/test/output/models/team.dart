@@ -26,6 +26,8 @@ abstract class Team with _$Team {
     @DocumentReferenceConverter()
     @JsonKey(name: Team.teamRefFieldKey)
     DocumentReference? teamRef,
+    @JsonKey(name: Team.teamSizesFieldKey, unknownEnumValue: TeamSize.small)
+    List<TeamSize>? teamSizes,
     @JsonKey(includeFromJson: false, includeToJson: false)
     FieldValue? createdAtFieldValue,
     @JsonKey(includeFromJson: false, includeToJson: false)
@@ -65,6 +67,8 @@ abstract class Team with _$Team {
   static const String teamRefFieldKey = 'team_ref';
 
   static const String teamSizeFieldKey = 'team_size';
+
+  static const String teamSizesFieldKey = 'team_sizes';
 
   Map<String, Object?> toFirestore() {
     final json = toJson();

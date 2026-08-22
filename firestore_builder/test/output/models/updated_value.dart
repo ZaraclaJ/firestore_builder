@@ -21,3 +21,16 @@ abstract class UpdatedValueTeamSize with _$UpdatedValueTeamSize {
 
   Object? get value => toJson()['teamSize'];
 }
+
+@Freezed(toJson: true, fromJson: true)
+abstract class UpdatedValueTeamSizeList with _$UpdatedValueTeamSizeList {
+  const factory UpdatedValueTeamSizeList(List<TeamSize>? teamSizeList) =
+      _UpdatedValueTeamSizeList;
+
+  factory UpdatedValueTeamSizeList.fromJson(Map<String, dynamic> json) =>
+      _$UpdatedValueTeamSizeListFromJson(json);
+
+  const UpdatedValueTeamSizeList._();
+
+  Object? get value => toJson()['teamSizeList'];
+}

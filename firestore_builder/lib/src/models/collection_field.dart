@@ -192,6 +192,10 @@ extension CollectionFieldExtensions on CollectionField {
     return null;
   }
 
+  /// Suffix of the `UpdatedValue` class of this field, null without a
+  /// custom class (see [FieldTypeExtensions.updatedValueSuffix]).
+  String? get updatedValueSuffix => type.updatedValueSuffix;
+
   String get fieldName => name.camelCase;
 
   String get keyVarName => '${fieldName}FieldKey';

@@ -228,6 +228,25 @@ extension FieldTypeExtensions on FieldType {
     };
   }
 
+  /// Suffix of the `UpdatedValue` class generated for a field carrying a
+  /// custom class, null otherwise.
+  ///
+  /// `TeamSize` → `TeamSize`, `List<TeamSize>?` → `TeamSizeList`,
+  /// `Map<String, List<TeamSize>>` → `TeamSizeListMap`.
+  String? get updatedValueSuffix {
+    final type = this;
+    return switch (type) {
+      final FieldTypeCustomClass type => type.className,
+      final FieldTypeList type => type.subType.updatedValueSuffix?.let(
+          (suffix) => '${suffix}List',
+        ),
+      final FieldTypeMap type => type.subType.updatedValueSuffix?.let(
+          (suffix) => '${suffix}Map',
+        ),
+      _ => null,
+    };
+  }
+
   /// The custom class carried by this type, looking through List/Map.
   FieldTypeCustomClass? get customClassTypeNullable {
     final type = this;
@@ -264,4 +283,8 @@ extension FieldTypeExtensions on FieldType {
       _ => null,
     };
   }
+}
+
+extension on String {
+  T let<T>(T Function(String value) block) => block(this);
 }

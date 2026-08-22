@@ -1,6 +1,8 @@
 ## 0.1.5
 
-Add the `unknown_enum_value` field option: emits `JsonKey(unknownEnumValue: ...)` so unknown enum values decode to a fallback instead of throwing.
+- Add the `unknown_enum_value` field option: emits `JsonKey(unknownEnumValue: ...)` so unknown enum values decode to a fallback instead of throwing.
+- Fix the generation of `UpdatedValue` classes for `List` and `Map` of custom classes (`List<MyEnum>` produced an invalid class name), and share one class between a custom class field and its nullable variant.
+- Devtools extension: input for `unknown_enum_value` on custom class fields, lint dependencies updated.
 
 ## 0.1.1 -> 0.1.4
 

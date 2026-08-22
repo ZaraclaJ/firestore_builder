@@ -15,11 +15,22 @@ void main() {
 
       final team = File('test/output/models/team.dart').readAsStringSync();
       expect(
-        team,
-        contains('unknownEnumValue: TeamSize.small'),
-        reason:
-            'unknown_enum_value must be emitted as JsonKey.unknownEnumValue',
+        'unknownEnumValue: TeamSize.small'.allMatches(team).length,
+        2,
+        reason: 'unknown_enum_value must be emitted as JsonKey.unknownEnumValue '
+            'on the enum field and on the list of enums field',
       );
+
+      final updatedValue = File(
+        'test/output/models/updated_value.dart',
+      ).readAsStringSync();
+      expect(updatedValue, contains('class UpdatedValueTeamSize '));
+      expect(updatedValue, contains('class UpdatedValueTeamSizeList '));
+
+      final queryService = File(
+        'test/output/services/firestore_query_service.dart',
+      ).readAsStringSync();
+      expect(queryService, contains('UpdatedValueTeamSizeList? teamSizes'));
     },
   );
 }

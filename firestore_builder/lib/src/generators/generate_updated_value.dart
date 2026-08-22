@@ -1,10 +1,8 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:collection/collection.dart';
 import 'package:firestore_builder/src/easy_gen/basic_symbols.dart';
 import 'package:firestore_builder/src/easy_gen/basic_types.dart';
 import 'package:firestore_builder/src/easy_gen/code_builder_extensions.dart';
 import 'package:firestore_builder/src/easy_gen/reference_extensions.dart';
-import 'package:firestore_builder/src/extensions.dart/string_extensions.dart';
 import 'package:firestore_builder/src/models/collection_field.dart';
 import 'package:firestore_builder/src/models/generated_file.dart';
 import 'package:firestore_builder/src/models/yaml_config.dart';
@@ -27,18 +25,28 @@ Library _updatedValueLibrary({
   required YamlConfig config,
 }) {
   final updatedValueClass = _updatedValueClass(config: config);
-  final customClassList = config.allFields
-      .map(
-        (element) => element.customClassReference,
-      )
-      .whereNotNull()
-      .toSet()
-      .map(
-        (ref) => _customUpdatedValueClass(
-          customClassReference: ref,
-          config: config,
-        ),
-      );
+  // One class per custom class type, keyed by its suffix so that `TeamSize`
+  // and `TeamSize?` share a class (the nullable reference wins, it carries
+  // both cases).
+  final referenceBySuffix = <String, TypeReference>{};
+  for (final field in config.allFields) {
+    final suffix = field.updatedValueSuffix;
+    final reference = field.customClassReference;
+    if (suffix == null || reference == null) {
+      continue;
+    }
+    final existing = referenceBySuffix[suffix];
+    if (existing == null || (reference.isNullable ?? false)) {
+      referenceBySuffix[suffix] = reference;
+    }
+  }
+  final customClassList = referenceBySuffix.entries.map(
+    (entry) => _customUpdatedValueClass(
+      suffix: entry.key,
+      customClassReference: entry.value,
+      config: config,
+    ),
+  );
   return Library(
     (library) {
       library.body.addAll([
@@ -91,14 +99,14 @@ Class _updatedValueClass({
 
 Class _customUpdatedValueClass({
   required YamlConfig config,
+  required String suffix,
   required TypeReference customClassReference,
 }) {
-  final customClassName = customClassReference.symbolName;
   final updatedValueRef = CustomTypes.updatedValue(
     config: config,
-    customClass: customClassName,
+    customClass: suffix,
   );
-  final parameterName = customClassName.withoutQuestionMark.camelCase;
+  final parameterName = suffix.camelCase;
   final field = Field(
     (f) => f
       ..name = parameterName
