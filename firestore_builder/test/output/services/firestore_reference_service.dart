@@ -4,6 +4,15 @@ import 'package:firestore_builder/test/output/models/message.dart';
 import 'package:firestore_builder/test/output/models/task.dart';
 import 'package:firestore_builder/test/output/models/team.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final firestoreProvider = Provider.autoDispose<FirebaseFirestore>((ref) {
+  return FirebaseFirestore.instance;
+});
+final firestoreReferenceServiceProvider =
+    Provider.autoDispose<FirestoreReferenceService>((ref) {
+      return FirestoreReferenceService(firestore: ref.watch(firestoreProvider));
+    });
 
 class FirestoreReferenceService {
   const FirestoreReferenceService({required FirebaseFirestore firestore})

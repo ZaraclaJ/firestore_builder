@@ -1,6 +1,7 @@
 firestore_builder:
   project_name: firestore_builder
   output: test/output
+  use_riverpod: true
   clear: True
   collections:
     - collection:

@@ -6,6 +6,14 @@ import 'package:firestore_builder/test/output/models/team.dart';
 import 'package:firestore_builder/test/output/models/updated_value.dart';
 import 'package:firestore_builder/test/output/models/user.dart';
 import 'package:firestore_builder/test/output/services/firestore_reference_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final firestoreQueryServiceProvider =
+    Provider.autoDispose<FirestoreQueryService>((ref) {
+      return FirestoreQueryService(
+        firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider),
+      );
+    });
 
 class FirestoreQueryService {
   const FirestoreQueryService({
