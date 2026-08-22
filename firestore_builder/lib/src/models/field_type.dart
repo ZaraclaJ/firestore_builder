@@ -228,6 +228,15 @@ extension FieldTypeExtensions on FieldType {
     };
   }
 
+  /// The custom class carried by this type, looking through List/Map.
+  FieldTypeCustomClass? get customClassTypeNullable {
+    final type = this;
+    return switch (type) {
+      final FieldTypeCustomClass type => type,
+      _ => subTypeNullable?.customClassTypeNullable,
+    };
+  }
+
   String? get customClassPath {
     return switch (this) {
       final FieldTypeCustomClass type => type.path,
@@ -235,12 +244,18 @@ extension FieldTypeExtensions on FieldType {
     };
   }
 
-  bool get hasDateTime => this is FieldTypeDateTime || (subTypeNullable != null && subTypeNullable!.hasDateTime);
-  bool get hasTimestamp => this is FieldTypeTimestamp || (subTypeNullable != null && subTypeNullable!.hasTimestamp);
+  bool get hasDateTime =>
+      this is FieldTypeDateTime ||
+      (subTypeNullable != null && subTypeNullable!.hasDateTime);
+  bool get hasTimestamp =>
+      this is FieldTypeTimestamp ||
+      (subTypeNullable != null && subTypeNullable!.hasTimestamp);
   bool get hasDocumentReference =>
-      this is FieldTypeDocumentReference || (subTypeNullable != null && subTypeNullable!.hasDocumentReference);
+      this is FieldTypeDocumentReference ||
+      (subTypeNullable != null && subTypeNullable!.hasDocumentReference);
   bool get hasCustomClass =>
-      this is FieldTypeCustomClass || (subTypeNullable != null && subTypeNullable!.hasCustomClass);
+      this is FieldTypeCustomClass ||
+      (subTypeNullable != null && subTypeNullable!.hasCustomClass);
 
   FieldType? get subTypeNullable {
     return switch (this) {

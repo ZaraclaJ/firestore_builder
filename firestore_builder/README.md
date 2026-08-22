@@ -65,6 +65,13 @@ firestore_builder:
         fields:
           - name: String
           - age: int
+          - role:
+              type: UserRole
+              path: lib/models/user_role.dart
+              # Optional. Value used when Firestore holds an unknown enum
+              # value (for example written by a newer app version).
+              # Must be an existing value of the enum.
+              unknown_enum_value: member
 ```
 
 ## Add external dependencies

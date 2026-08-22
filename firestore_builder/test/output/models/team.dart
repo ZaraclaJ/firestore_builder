@@ -6,11 +6,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'team.freezed.dart';
 part 'team.g.dart';
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class Team with _$Team {
+@Freezed(toJson: true, fromJson: true)
+abstract class Team with _$Team {
   const factory Team({
     @JsonKey(name: Team.nameFieldKey) required String name,
     @JsonKey(name: Team.userCountFieldKey) required int userCount,
@@ -18,7 +15,8 @@ class Team with _$Team {
     @JsonKey(name: Team.createdAtFieldKey)
     required DateTime createdAt,
     @JsonKey(name: Team.labelsFieldKey) required List<String> labels,
-    @JsonKey(name: Team.teamSizeFieldKey) required TeamSize teamSize,
+    @JsonKey(name: Team.teamSizeFieldKey, unknownEnumValue: TeamSize.small)
+    required TeamSize teamSize,
     @JsonKey(name: Team.descriptionFieldKey) String? description,
     @TimestampConverter()
     @JsonKey(name: Team.datesFieldKey)
@@ -28,35 +26,21 @@ class Team with _$Team {
     @DocumentReferenceConverter()
     @JsonKey(name: Team.teamRefFieldKey)
     DocumentReference? teamRef,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     FieldValue? createdAtFieldValue,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     FieldValue? labelsFieldValue,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(TeamId(''))
     TeamId teamId,
   }) = _Team;
 
-  factory Team.fromFirestore(
-    DocumentSnapshot<Map<String, Object?>> snapshot,
-  ) {
+  factory Team.fromFirestore(DocumentSnapshot<Map<String, Object?>> snapshot) {
     final data = snapshot.data();
     return Team.fromJson(data!).copyWith(teamId: TeamId(snapshot.id));
   }
 
-  factory Team.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$TeamFromJson(json);
+  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
   const Team._();
 
@@ -94,17 +78,9 @@ class Team with _$Team {
   }
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class TeamId with _$TeamId {
-  const factory TeamId(
-    String value,
-  ) = _TeamId;
+@Freezed(toJson: true, fromJson: true)
+abstract class TeamId with _$TeamId {
+  const factory TeamId(String value) = _TeamId;
 
-  factory TeamId.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$TeamIdFromJson(json);
+  factory TeamId.fromJson(Map<String, dynamic> json) => _$TeamIdFromJson(json);
 }

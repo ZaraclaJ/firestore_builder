@@ -1,3 +1,7 @@
+## 0.1.5
+
+Add the `unknown_enum_value` field option: emits `JsonKey(unknownEnumValue: ...)` so unknown enum values decode to a fallback instead of throwing.
+
 ## 0.1.1 -> 0.1.4
 
 Update readme

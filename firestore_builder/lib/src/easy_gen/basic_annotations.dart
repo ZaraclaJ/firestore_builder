@@ -14,14 +14,17 @@ abstract class BasicAnnotations {
     Expression? name,
     bool? includeFromJson,
     bool? includeToJson,
+    Expression? unknownEnumValue,
   }) =>
       const Reference(
         'JsonKey',
         BasicPackages.freezedAnnotation,
       ).call([], {
         if (name != null) 'name': name,
-        if (includeFromJson != null) 'includeFromJson': literalBool(includeFromJson),
+        if (includeFromJson != null)
+          'includeFromJson': literalBool(includeFromJson),
         if (includeToJson != null) 'includeToJson': literalBool(includeToJson),
+        if (unknownEnumValue != null) 'unknownEnumValue': unknownEnumValue,
       });
 
   /// @Freezed
@@ -40,7 +43,8 @@ abstract class BasicAnnotations {
 
   /// @Default(value)
   static Expression defaultFreezed(Expression value) {
-    return const Reference('Default', BasicPackages.freezedAnnotation).call([value]);
+    return const Reference('Default', BasicPackages.freezedAnnotation)
+        .call([value]);
   }
 
   /// @DateTimeConverter()

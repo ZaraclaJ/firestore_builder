@@ -14,6 +14,7 @@ class CollectionField {
     required this.type,
     required this.acceptFieldValue,
     required this.configLight,
+    this.unknownEnumValue,
   });
 
   factory CollectionField.fromYaml({
@@ -34,11 +35,13 @@ Invalid field definition, there should be only one key and one value: $yamlMap''
     final String type;
     final bool? acceptFieldValue;
     final String? path;
+    final String? unknownEnumValue;
 
     if (first is String) {
       type = first;
       acceptFieldValue = false;
       path = null;
+      unknownEnumValue = null;
     } else if (first is YamlMap) {
       final yamlType = first[typeKey];
       if (yamlType is! String) {
@@ -69,6 +72,16 @@ Invalid field definition, invalid $pathKey key: $first''',
       }
 
       path = yamlPath;
+
+      final yamlUnknownEnumValue = first[unknownEnumValueKey];
+      if (yamlUnknownEnumValue is! String?) {
+        throw Exception(
+          '''
+Invalid field definition, invalid $unknownEnumValueKey key: $first''',
+        );
+      }
+
+      unknownEnumValue = yamlUnknownEnumValue;
     } else {
       throw Exception(
         '''
@@ -82,11 +95,26 @@ Invalid field definition, invalid field: $yamlMap''',
       config: configLight,
     );
 
+    if (unknownEnumValue != null && fieldType.customClassTypeNullable == null) {
+      throw Exception(
+        '''
+Invalid field definition, $unknownEnumValueKey requires an enum type declared with $pathKey: $yamlMap''',
+      );
+    }
+
+    if (unknownEnumValue != null && fieldType is FieldTypeMap) {
+      throw Exception(
+        '''
+Invalid field definition, $unknownEnumValueKey is not supported on Map values: $yamlMap''',
+      );
+    }
+
     return CollectionField(
       name: name,
       type: fieldType,
       acceptFieldValue: acceptFieldValue ?? false,
       configLight: configLight,
+      unknownEnumValue: unknownEnumValue,
     );
   }
 
@@ -108,14 +136,22 @@ Invalid field definition, invalid field: $yamlMap''',
 
   /// The configuration of the project
   final YamlConfig configLight;
+
+  /// Enum value used when Firestore holds a value this enum does not know
+  ///
+  /// Emitted as `@JsonKey(unknownEnumValue: MyEnum.value)`. Only valid on
+  /// fields whose type is a custom class (an enum) declared with `path`.
+  final String? unknownEnumValue;
 }
 
 extension CollectionFieldExtensions on CollectionField {
   Map<String, dynamic> toYaml() {
     final typeName = type.typeReference.symbolName;
-    final acceptFieldValue = this.acceptFieldValue ? this.acceptFieldValue : null;
+    final acceptFieldValue =
+        this.acceptFieldValue ? this.acceptFieldValue : null;
     final path = type.customClassPath;
-    if (acceptFieldValue == null && path == null) {
+    final unknownEnumValue = this.unknownEnumValue;
+    if (acceptFieldValue == null && path == null && unknownEnumValue == null) {
       return {
         name: typeName,
       };
@@ -126,8 +162,19 @@ extension CollectionFieldExtensions on CollectionField {
         typeKey: typeName,
         if (acceptFieldValue != null) acceptFieldValueKey: acceptFieldValue,
         if (path != null) pathKey: path,
+        if (unknownEnumValue != null) unknownEnumValueKey: unknownEnumValue,
       },
     };
+  }
+
+  Expression? get _unknownEnumValueReference {
+    final unknownEnumValue = this.unknownEnumValue;
+    final enumType = type.customClassTypeNullable;
+    if (unknownEnumValue == null || enumType == null) {
+      return null;
+    }
+    return Reference(enumType.className, enumType.packageUrl)
+        .property(unknownEnumValue);
   }
 
   TypeReference get _typeReference {
@@ -173,11 +220,15 @@ extension CollectionFieldExtensions on CollectionField {
           ..type = _typeReference
           ..name = fieldName
           ..annotations.addAll([
-            if (hasDateTime) BasicAnnotations.dateTimeConverter(config: configLight),
-            if (hasTimestamp) BasicAnnotations.timestampConverter(config: configLight),
-            if (hasDocumentReference) BasicAnnotations.documentReferenceConverter(config: configLight),
+            if (hasDateTime)
+              BasicAnnotations.dateTimeConverter(config: configLight),
+            if (hasTimestamp)
+              BasicAnnotations.timestampConverter(config: configLight),
+            if (hasDocumentReference)
+              BasicAnnotations.documentReferenceConverter(config: configLight),
             BasicAnnotations.jsonKey(
               name: Reference(className).property(keyVarName),
+              unknownEnumValue: _unknownEnumValueReference,
             ),
           ]);
       },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firestore_builder/src/generators/generators.dart';
 import 'package:test/test.dart';
 
@@ -9,6 +11,14 @@ void main() {
     () async {
       await generate(
         configFilePath: _configFilePath,
+      );
+
+      final team = File('test/output/models/team.dart').readAsStringSync();
+      expect(
+        team,
+        contains('unknownEnumValue: TeamSize.small'),
+        reason:
+            'unknown_enum_value must be emitted as JsonKey.unknownEnumValue',
       );
     },
   );
