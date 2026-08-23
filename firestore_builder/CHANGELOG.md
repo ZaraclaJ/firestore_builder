@@ -1,3 +1,10 @@
+## 0.1.6
+
+- Documentation rewritten: why and how to use the package, full configuration reference, walkthrough of every generated file, workflow and limitations.
+- Example app trimmed to a single documented page that compiles the generated code; `tool/check_example.sh` runs it before publishing.
+- Fix `set<Model>`: the document is now written at the id given in parameter instead of the model's own id.
+- Fix the usage message of the command line.
+
 ## 0.1.5
 
 - Add the `unknown_enum_value` field option: emits `JsonKey(unknownEnumValue: ...)` so unknown enum values decode to a fallback instead of throwing.
