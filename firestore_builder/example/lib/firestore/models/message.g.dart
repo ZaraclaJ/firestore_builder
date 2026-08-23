@@ -6,49 +6,44 @@ part of 'message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
-    _$MessageImpl(
-      content: json['content'] as String,
-      date: _$JsonConverterFromJson<Timestamp, Timestamp>(
-          json['date'], const TimestampConverter().fromJson),
-    );
+_Message _$MessageFromJson(Map<String, dynamic> json) => _Message(
+  content: json['content'] as String,
+  date: _$JsonConverterFromJson<Timestamp, Timestamp>(
+    json['date'],
+    const TimestampConverter().fromJson,
+  ),
+);
 
-Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
-    <String, dynamic>{
-      'content': instance.content,
-      'date': _$JsonConverterToJson<Timestamp, Timestamp>(
-          instance.date, const TimestampConverter().toJson),
-    };
+Map<String, dynamic> _$MessageToJson(_Message instance) => <String, dynamic>{
+  'content': instance.content,
+  'date': _$JsonConverterToJson<Timestamp, Timestamp>(
+    instance.date,
+    const TimestampConverter().toJson,
+  ),
+};
 
 Value? _$JsonConverterFromJson<Json, Value>(
   Object? json,
   Value? Function(Json json) fromJson,
-) =>
-    json == null ? null : fromJson(json as Json);
+) => json == null ? null : fromJson(json as Json);
 
 Json? _$JsonConverterToJson<Json, Value>(
   Value? value,
   Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);
+) => value == null ? null : toJson(value);
 
-_$MessageIdImpl _$$MessageIdImplFromJson(Map<String, dynamic> json) =>
-    _$MessageIdImpl(
-      json['value'] as String,
-    );
+_MessageId _$MessageIdFromJson(Map<String, dynamic> json) =>
+    _MessageId(json['value'] as String);
 
-Map<String, dynamic> _$$MessageIdImplToJson(_$MessageIdImpl instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-    };
+Map<String, dynamic> _$MessageIdToJson(_MessageId instance) =>
+    <String, dynamic>{'value': instance.value};
 
-_$MessagePathImpl _$$MessagePathImplFromJson(Map<String, dynamic> json) =>
-    _$MessagePathImpl(
-      messageId: MessageId.fromJson(json['messageId'] as Map<String, dynamic>),
-      teamId: TeamId.fromJson(json['teamId'] as Map<String, dynamic>),
-    );
+_MessagePath _$MessagePathFromJson(Map<String, dynamic> json) => _MessagePath(
+  messageId: MessageId.fromJson(json['messageId'] as Map<String, dynamic>),
+  teamId: TeamId.fromJson(json['teamId'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$$MessagePathImplToJson(_$MessagePathImpl instance) =>
+Map<String, dynamic> _$MessagePathToJson(_MessagePath instance) =>
     <String, dynamic>{
       'messageId': instance.messageId,
       'teamId': instance.teamId,

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,535 +9,858 @@ part of 'message.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-Message _$MessageFromJson(Map<String, dynamic> json) {
-  return _Message.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Message {
-  @JsonKey(name: Message.contentFieldKey)
-  String get content => throw _privateConstructorUsedError;
-  @TimestampConverter()
-  @JsonKey(name: Message.dateFieldKey)
-  Timestamp? get date => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  MessageId get messageId => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $MessageCopyWith<Message> get copyWith => throw _privateConstructorUsedError;
+@JsonKey(name: Message.contentFieldKey) String get content;@TimestampConverter()@JsonKey(name: Message.dateFieldKey) Timestamp? get date;@JsonKey(includeFromJson: false, includeToJson: false) MessageId get messageId;
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MessageCopyWith<Message> get copyWith => _$MessageCopyWithImpl<Message>(this as Message, _$identity);
+
+  /// Serializes this Message to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.content, content) || other.content == content)&&(identical(other.date, date) || other.date == date)&&(identical(other.messageId, messageId) || other.messageId == messageId));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,content,date,messageId);
+
+@override
+String toString() {
+  return 'Message(content: $content, date: $date, messageId: $messageId)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MessageCopyWith<$Res> {
-  factory $MessageCopyWith(Message value, $Res Function(Message) then) =
-      _$MessageCopyWithImpl<$Res, Message>;
-  @useResult
-  $Res call(
-      {@JsonKey(name: Message.contentFieldKey) String content,
-      @TimestampConverter()
-      @JsonKey(name: Message.dateFieldKey)
-      Timestamp? date,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      MessageId messageId});
+abstract mixin class $MessageCopyWith<$Res>  {
+  factory $MessageCopyWith(Message value, $Res Function(Message) _then) = _$MessageCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: Message.contentFieldKey) String content,@TimestampConverter()@JsonKey(name: Message.dateFieldKey) Timestamp? date,@JsonKey(includeFromJson: false, includeToJson: false) MessageId messageId
+});
 
-  $MessageIdCopyWith<$Res> get messageId;
+
+$MessageIdCopyWith<$Res> get messageId;
+
 }
-
 /// @nodoc
-class _$MessageCopyWithImpl<$Res, $Val extends Message>
+class _$MessageCopyWithImpl<$Res>
     implements $MessageCopyWith<$Res> {
-  _$MessageCopyWithImpl(this._value, this._then);
+  _$MessageCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Message _self;
+  final $Res Function(Message) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? content = null,
-    Object? date = freezed,
-    Object? messageId = null,
-  }) {
-    return _then(_value.copyWith(
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: freezed == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp?,
-      messageId: null == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as MessageId,
-    ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MessageIdCopyWith<$Res> get messageId {
-    return $MessageIdCopyWith<$Res>(_value.messageId, (value) {
-      return _then(_value.copyWith(messageId: value) as $Val);
-    });
-  }
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? content = null,Object? date = freezed,Object? messageId = null,}) {
+  return _then(_self.copyWith(
+content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as Timestamp?,messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
+as MessageId,
+  ));
+}
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageIdCopyWith<$Res> get messageId {
+  
+  return $MessageIdCopyWith<$Res>(_self.messageId, (value) {
+    return _then(_self.copyWith(messageId: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
-  factory _$$MessageImplCopyWith(
-          _$MessageImpl value, $Res Function(_$MessageImpl) then) =
-      __$$MessageImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@JsonKey(name: Message.contentFieldKey) String content,
-      @TimestampConverter()
-      @JsonKey(name: Message.dateFieldKey)
-      Timestamp? date,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      MessageId messageId});
 
-  @override
-  $MessageIdCopyWith<$Res> get messageId;
+/// Adds pattern-matching-related methods to [Message].
+extension MessagePatterns on Message {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Message value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Message value)  $default,){
+final _that = this;
+switch (_that) {
+case _Message():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Message value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: Message.contentFieldKey)  String content, @TimestampConverter()@JsonKey(name: Message.dateFieldKey)  Timestamp? date, @JsonKey(includeFromJson: false, includeToJson: false)  MessageId messageId)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that.content,_that.date,_that.messageId);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: Message.contentFieldKey)  String content, @TimestampConverter()@JsonKey(name: Message.dateFieldKey)  Timestamp? date, @JsonKey(includeFromJson: false, includeToJson: false)  MessageId messageId)  $default,) {final _that = this;
+switch (_that) {
+case _Message():
+return $default(_that.content,_that.date,_that.messageId);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: Message.contentFieldKey)  String content, @TimestampConverter()@JsonKey(name: Message.dateFieldKey)  Timestamp? date, @JsonKey(includeFromJson: false, includeToJson: false)  MessageId messageId)?  $default,) {final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that.content,_that.date,_that.messageId);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-class __$$MessageImplCopyWithImpl<$Res>
-    extends _$MessageCopyWithImpl<$Res, _$MessageImpl>
-    implements _$$MessageImplCopyWith<$Res> {
-  __$$MessageImplCopyWithImpl(
-      _$MessageImpl _value, $Res Function(_$MessageImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? content = null,
-    Object? date = freezed,
-    Object? messageId = null,
-  }) {
-    return _then(_$MessageImpl(
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: freezed == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as Timestamp?,
-      messageId: null == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as MessageId,
-    ));
-  }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$MessageImpl extends _Message {
-  const _$MessageImpl(
-      {@JsonKey(name: Message.contentFieldKey) required this.content,
-      @TimestampConverter() @JsonKey(name: Message.dateFieldKey) this.date,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      this.messageId = const MessageId('')})
-      : super._();
 
-  factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MessageImplFromJson(json);
+class _Message extends Message {
+  const _Message({@JsonKey(name: Message.contentFieldKey) required this.content, @TimestampConverter()@JsonKey(name: Message.dateFieldKey) this.date, @JsonKey(includeFromJson: false, includeToJson: false) this.messageId = const MessageId('')}): super._();
+  factory _Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
 
-  @override
-  @JsonKey(name: Message.contentFieldKey)
-  final String content;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: Message.dateFieldKey)
-  final Timestamp? date;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final MessageId messageId;
+@override@JsonKey(name: Message.contentFieldKey) final  String content;
+@override@TimestampConverter()@JsonKey(name: Message.dateFieldKey) final  Timestamp? date;
+@override@JsonKey(includeFromJson: false, includeToJson: false) final  MessageId messageId;
 
-  @override
-  String toString() {
-    return 'Message(content: $content, date: $date, messageId: $messageId)';
-  }
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MessageCopyWith<_Message> get copyWith => __$MessageCopyWithImpl<_Message>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MessageImpl &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.date, date) || other.date == date) &&
-            (identical(other.messageId, messageId) ||
-                other.messageId == messageId));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, content, date, messageId);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
-      __$$MessageImplCopyWithImpl<_$MessageImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MessageImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$MessageToJson(this, );
 }
 
-abstract class _Message extends Message {
-  const factory _Message(
-      {@JsonKey(name: Message.contentFieldKey) required final String content,
-      @TimestampConverter()
-      @JsonKey(name: Message.dateFieldKey)
-      final Timestamp? date,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final MessageId messageId}) = _$MessageImpl;
-  const _Message._() : super._();
-
-  factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
-
-  @override
-  @JsonKey(name: Message.contentFieldKey)
-  String get content;
-  @override
-  @TimestampConverter()
-  @JsonKey(name: Message.dateFieldKey)
-  Timestamp? get date;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  MessageId get messageId;
-  @override
-  @JsonKey(ignore: true)
-  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.content, content) || other.content == content)&&(identical(other.date, date) || other.date == date)&&(identical(other.messageId, messageId) || other.messageId == messageId));
 }
 
-MessageId _$MessageIdFromJson(Map<String, dynamic> json) {
-  return _MessageId.fromJson(json);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,content,date,messageId);
+
+@override
+String toString() {
+  return 'Message(content: $content, date: $date, messageId: $messageId)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
+  factory _$MessageCopyWith(_Message value, $Res Function(_Message) _then) = __$MessageCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: Message.contentFieldKey) String content,@TimestampConverter()@JsonKey(name: Message.dateFieldKey) Timestamp? date,@JsonKey(includeFromJson: false, includeToJson: false) MessageId messageId
+});
+
+
+@override $MessageIdCopyWith<$Res> get messageId;
+
+}
+/// @nodoc
+class __$MessageCopyWithImpl<$Res>
+    implements _$MessageCopyWith<$Res> {
+  __$MessageCopyWithImpl(this._self, this._then);
+
+  final _Message _self;
+  final $Res Function(_Message) _then;
+
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? content = null,Object? date = freezed,Object? messageId = null,}) {
+  return _then(_Message(
+content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as Timestamp?,messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
+as MessageId,
+  ));
+}
+
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageIdCopyWith<$Res> get messageId {
+  
+  return $MessageIdCopyWith<$Res>(_self.messageId, (value) {
+    return _then(_self.copyWith(messageId: value));
+  });
+}
+}
+
 
 /// @nodoc
 mixin _$MessageId {
-  String get value => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $MessageIdCopyWith<MessageId> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get value;
+/// Create a copy of MessageId
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MessageIdCopyWith<MessageId> get copyWith => _$MessageIdCopyWithImpl<MessageId>(this as MessageId, _$identity);
+
+  /// Serializes this MessageId to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageId&&(identical(other.value, value) || other.value == value));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'MessageId(value: $value)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MessageIdCopyWith<$Res> {
-  factory $MessageIdCopyWith(MessageId value, $Res Function(MessageId) then) =
-      _$MessageIdCopyWithImpl<$Res, MessageId>;
-  @useResult
-  $Res call({String value});
-}
+abstract mixin class $MessageIdCopyWith<$Res>  {
+  factory $MessageIdCopyWith(MessageId value, $Res Function(MessageId) _then) = _$MessageIdCopyWithImpl;
+@useResult
+$Res call({
+ String value
+});
 
+
+
+
+}
 /// @nodoc
-class _$MessageIdCopyWithImpl<$Res, $Val extends MessageId>
+class _$MessageIdCopyWithImpl<$Res>
     implements $MessageIdCopyWith<$Res> {
-  _$MessageIdCopyWithImpl(this._value, this._then);
+  _$MessageIdCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final MessageId _self;
+  final $Res Function(MessageId) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? value = null,
-  }) {
-    return _then(_value.copyWith(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of MessageId
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? value = null,}) {
+  return _then(_self.copyWith(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$MessageIdImplCopyWith<$Res>
-    implements $MessageIdCopyWith<$Res> {
-  factory _$$MessageIdImplCopyWith(
-          _$MessageIdImpl value, $Res Function(_$MessageIdImpl) then) =
-      __$$MessageIdImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String value});
 }
 
-/// @nodoc
-class __$$MessageIdImplCopyWithImpl<$Res>
-    extends _$MessageIdCopyWithImpl<$Res, _$MessageIdImpl>
-    implements _$$MessageIdImplCopyWith<$Res> {
-  __$$MessageIdImplCopyWithImpl(
-      _$MessageIdImpl _value, $Res Function(_$MessageIdImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? value = null,
-  }) {
-    return _then(_$MessageIdImpl(
-      null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
+/// Adds pattern-matching-related methods to [MessageId].
+extension MessageIdPatterns on MessageId {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _MessageId value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _MessageId() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _MessageId value)  $default,){
+final _that = this;
+switch (_that) {
+case _MessageId():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _MessageId value)?  $default,){
+final _that = this;
+switch (_that) {
+case _MessageId() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String value)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _MessageId() when $default != null:
+return $default(_that.value);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String value)  $default,) {final _that = this;
+switch (_that) {
+case _MessageId():
+return $default(_that.value);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String value)?  $default,) {final _that = this;
+switch (_that) {
+case _MessageId() when $default != null:
+return $default(_that.value);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$MessageIdImpl implements _MessageId {
-  const _$MessageIdImpl(this.value);
 
-  factory _$MessageIdImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MessageIdImplFromJson(json);
+class _MessageId implements MessageId {
+  const _MessageId(this.value);
+  factory _MessageId.fromJson(Map<String, dynamic> json) => _$MessageIdFromJson(json);
 
-  @override
-  final String value;
+@override final  String value;
 
-  @override
-  String toString() {
-    return 'MessageId(value: $value)';
-  }
+/// Create a copy of MessageId
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MessageIdCopyWith<_MessageId> get copyWith => __$MessageIdCopyWithImpl<_MessageId>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MessageIdImpl &&
-            (identical(other.value, value) || other.value == value));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, value);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MessageIdImplCopyWith<_$MessageIdImpl> get copyWith =>
-      __$$MessageIdImplCopyWithImpl<_$MessageIdImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MessageIdImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$MessageIdToJson(this, );
 }
 
-abstract class _MessageId implements MessageId {
-  const factory _MessageId(final String value) = _$MessageIdImpl;
-
-  factory _MessageId.fromJson(Map<String, dynamic> json) =
-      _$MessageIdImpl.fromJson;
-
-  @override
-  String get value;
-  @override
-  @JsonKey(ignore: true)
-  _$$MessageIdImplCopyWith<_$MessageIdImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessageId&&(identical(other.value, value) || other.value == value));
 }
 
-MessagePath _$MessagePathFromJson(Map<String, dynamic> json) {
-  return _MessagePath.fromJson(json);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'MessageId(value: $value)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MessageIdCopyWith<$Res> implements $MessageIdCopyWith<$Res> {
+  factory _$MessageIdCopyWith(_MessageId value, $Res Function(_MessageId) _then) = __$MessageIdCopyWithImpl;
+@override @useResult
+$Res call({
+ String value
+});
+
+
+
+
+}
+/// @nodoc
+class __$MessageIdCopyWithImpl<$Res>
+    implements _$MessageIdCopyWith<$Res> {
+  __$MessageIdCopyWithImpl(this._self, this._then);
+
+  final _MessageId _self;
+  final $Res Function(_MessageId) _then;
+
+/// Create a copy of MessageId
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? value = null,}) {
+  return _then(_MessageId(
+null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
 
 /// @nodoc
 mixin _$MessagePath {
-  MessageId get messageId => throw _privateConstructorUsedError;
-  TeamId get teamId => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $MessagePathCopyWith<MessagePath> get copyWith =>
-      throw _privateConstructorUsedError;
+ MessageId get messageId; TeamId get teamId;
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MessagePathCopyWith<MessagePath> get copyWith => _$MessagePathCopyWithImpl<MessagePath>(this as MessagePath, _$identity);
+
+  /// Serializes this MessagePath to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessagePath&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.teamId, teamId) || other.teamId == teamId));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,messageId,teamId);
+
+@override
+String toString() {
+  return 'MessagePath(messageId: $messageId, teamId: $teamId)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MessagePathCopyWith<$Res> {
-  factory $MessagePathCopyWith(
-          MessagePath value, $Res Function(MessagePath) then) =
-      _$MessagePathCopyWithImpl<$Res, MessagePath>;
-  @useResult
-  $Res call({MessageId messageId, TeamId teamId});
+abstract mixin class $MessagePathCopyWith<$Res>  {
+  factory $MessagePathCopyWith(MessagePath value, $Res Function(MessagePath) _then) = _$MessagePathCopyWithImpl;
+@useResult
+$Res call({
+ MessageId messageId, TeamId teamId
+});
 
-  $MessageIdCopyWith<$Res> get messageId;
-  $TeamIdCopyWith<$Res> get teamId;
+
+$MessageIdCopyWith<$Res> get messageId;$TeamIdCopyWith<$Res> get teamId;
+
 }
-
 /// @nodoc
-class _$MessagePathCopyWithImpl<$Res, $Val extends MessagePath>
+class _$MessagePathCopyWithImpl<$Res>
     implements $MessagePathCopyWith<$Res> {
-  _$MessagePathCopyWithImpl(this._value, this._then);
+  _$MessagePathCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final MessagePath _self;
+  final $Res Function(MessagePath) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? messageId = null,
-    Object? teamId = null,
-  }) {
-    return _then(_value.copyWith(
-      messageId: null == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as MessageId,
-      teamId: null == teamId
-          ? _value.teamId
-          : teamId // ignore: cast_nullable_to_non_nullable
-              as TeamId,
-    ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MessageIdCopyWith<$Res> get messageId {
-    return $MessageIdCopyWith<$Res>(_value.messageId, (value) {
-      return _then(_value.copyWith(messageId: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $TeamIdCopyWith<$Res> get teamId {
-    return $TeamIdCopyWith<$Res>(_value.teamId, (value) {
-      return _then(_value.copyWith(teamId: value) as $Val);
-    });
-  }
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? messageId = null,Object? teamId = null,}) {
+  return _then(_self.copyWith(
+messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
+as MessageId,teamId: null == teamId ? _self.teamId : teamId // ignore: cast_nullable_to_non_nullable
+as TeamId,
+  ));
+}
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageIdCopyWith<$Res> get messageId {
+  
+  return $MessageIdCopyWith<$Res>(_self.messageId, (value) {
+    return _then(_self.copyWith(messageId: value));
+  });
+}/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TeamIdCopyWith<$Res> get teamId {
+  
+  return $TeamIdCopyWith<$Res>(_self.teamId, (value) {
+    return _then(_self.copyWith(teamId: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$MessagePathImplCopyWith<$Res>
-    implements $MessagePathCopyWith<$Res> {
-  factory _$$MessagePathImplCopyWith(
-          _$MessagePathImpl value, $Res Function(_$MessagePathImpl) then) =
-      __$$MessagePathImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({MessageId messageId, TeamId teamId});
 
-  @override
-  $MessageIdCopyWith<$Res> get messageId;
-  @override
-  $TeamIdCopyWith<$Res> get teamId;
+/// Adds pattern-matching-related methods to [MessagePath].
+extension MessagePathPatterns on MessagePath {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _MessagePath value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _MessagePath() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _MessagePath value)  $default,){
+final _that = this;
+switch (_that) {
+case _MessagePath():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _MessagePath value)?  $default,){
+final _that = this;
+switch (_that) {
+case _MessagePath() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MessageId messageId,  TeamId teamId)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _MessagePath() when $default != null:
+return $default(_that.messageId,_that.teamId);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MessageId messageId,  TeamId teamId)  $default,) {final _that = this;
+switch (_that) {
+case _MessagePath():
+return $default(_that.messageId,_that.teamId);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MessageId messageId,  TeamId teamId)?  $default,) {final _that = this;
+switch (_that) {
+case _MessagePath() when $default != null:
+return $default(_that.messageId,_that.teamId);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-class __$$MessagePathImplCopyWithImpl<$Res>
-    extends _$MessagePathCopyWithImpl<$Res, _$MessagePathImpl>
-    implements _$$MessagePathImplCopyWith<$Res> {
-  __$$MessagePathImplCopyWithImpl(
-      _$MessagePathImpl _value, $Res Function(_$MessagePathImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? messageId = null,
-    Object? teamId = null,
-  }) {
-    return _then(_$MessagePathImpl(
-      messageId: null == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as MessageId,
-      teamId: null == teamId
-          ? _value.teamId
-          : teamId // ignore: cast_nullable_to_non_nullable
-              as TeamId,
-    ));
-  }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$MessagePathImpl implements _MessagePath {
-  const _$MessagePathImpl({required this.messageId, required this.teamId});
 
-  factory _$MessagePathImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MessagePathImplFromJson(json);
+class _MessagePath implements MessagePath {
+  const _MessagePath({required this.messageId, required this.teamId});
+  factory _MessagePath.fromJson(Map<String, dynamic> json) => _$MessagePathFromJson(json);
 
-  @override
-  final MessageId messageId;
-  @override
-  final TeamId teamId;
+@override final  MessageId messageId;
+@override final  TeamId teamId;
 
-  @override
-  String toString() {
-    return 'MessagePath(messageId: $messageId, teamId: $teamId)';
-  }
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MessagePathCopyWith<_MessagePath> get copyWith => __$MessagePathCopyWithImpl<_MessagePath>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MessagePathImpl &&
-            (identical(other.messageId, messageId) ||
-                other.messageId == messageId) &&
-            (identical(other.teamId, teamId) || other.teamId == teamId));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, messageId, teamId);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MessagePathImplCopyWith<_$MessagePathImpl> get copyWith =>
-      __$$MessagePathImplCopyWithImpl<_$MessagePathImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MessagePathImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$MessagePathToJson(this, );
 }
 
-abstract class _MessagePath implements MessagePath {
-  const factory _MessagePath(
-      {required final MessageId messageId,
-      required final TeamId teamId}) = _$MessagePathImpl;
-
-  factory _MessagePath.fromJson(Map<String, dynamic> json) =
-      _$MessagePathImpl.fromJson;
-
-  @override
-  MessageId get messageId;
-  @override
-  TeamId get teamId;
-  @override
-  @JsonKey(ignore: true)
-  _$$MessagePathImplCopyWith<_$MessagePathImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessagePath&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.teamId, teamId) || other.teamId == teamId));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,messageId,teamId);
+
+@override
+String toString() {
+  return 'MessagePath(messageId: $messageId, teamId: $teamId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MessagePathCopyWith<$Res> implements $MessagePathCopyWith<$Res> {
+  factory _$MessagePathCopyWith(_MessagePath value, $Res Function(_MessagePath) _then) = __$MessagePathCopyWithImpl;
+@override @useResult
+$Res call({
+ MessageId messageId, TeamId teamId
+});
+
+
+@override $MessageIdCopyWith<$Res> get messageId;@override $TeamIdCopyWith<$Res> get teamId;
+
+}
+/// @nodoc
+class __$MessagePathCopyWithImpl<$Res>
+    implements _$MessagePathCopyWith<$Res> {
+  __$MessagePathCopyWithImpl(this._self, this._then);
+
+  final _MessagePath _self;
+  final $Res Function(_MessagePath) _then;
+
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? messageId = null,Object? teamId = null,}) {
+  return _then(_MessagePath(
+messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
+as MessageId,teamId: null == teamId ? _self.teamId : teamId // ignore: cast_nullable_to_non_nullable
+as TeamId,
+  ));
+}
+
+/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageIdCopyWith<$Res> get messageId {
+  
+  return $MessageIdCopyWith<$Res>(_self.messageId, (value) {
+    return _then(_self.copyWith(messageId: value));
+  });
+}/// Create a copy of MessagePath
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TeamIdCopyWith<$Res> get teamId {
+  
+  return $TeamIdCopyWith<$Res>(_self.teamId, (value) {
+    return _then(_self.copyWith(teamId: value));
+  });
+}
+}
+
+// dart format on

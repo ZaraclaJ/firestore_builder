@@ -6,18 +6,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'message.freezed.dart';
 part 'message.g.dart';
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class Message with _$Message {
+@Freezed(toJson: true, fromJson: true)
+abstract class Message with _$Message {
   const factory Message({
     @JsonKey(name: Message.contentFieldKey) required String content,
     @TimestampConverter() @JsonKey(name: Message.dateFieldKey) Timestamp? date,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(MessageId(''))
     MessageId messageId,
   }) = _Message;
@@ -29,9 +23,7 @@ class Message with _$Message {
     return Message.fromJson(data!).copyWith(messageId: MessageId(snapshot.id));
   }
 
-  factory Message.fromJson(
-    Map<String, dynamic> json,
-  ) =>
+  factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
 
   const Message._();
@@ -48,33 +40,21 @@ class Message with _$Message {
   }
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class MessageId with _$MessageId {
-  const factory MessageId(
-    String value,
-  ) = _MessageId;
+@Freezed(toJson: true, fromJson: true)
+abstract class MessageId with _$MessageId {
+  const factory MessageId(String value) = _MessageId;
 
-  factory MessageId.fromJson(
-    Map<String, dynamic> json,
-  ) =>
+  factory MessageId.fromJson(Map<String, dynamic> json) =>
       _$MessageIdFromJson(json);
 }
 
-@Freezed(
-  toJson: true,
-  fromJson: true,
-)
-class MessagePath with _$MessagePath {
+@Freezed(toJson: true, fromJson: true)
+abstract class MessagePath with _$MessagePath {
   const factory MessagePath({
     required MessageId messageId,
     required TeamId teamId,
   }) = _MessagePath;
 
-  factory MessagePath.fromJson(
-    Map<String, dynamic> json,
-  ) =>
+  factory MessagePath.fromJson(Map<String, dynamic> json) =>
       _$MessagePathFromJson(json);
 }

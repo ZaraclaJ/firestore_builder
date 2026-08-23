@@ -6,17 +6,13 @@ part of 'updated_value.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UpdatedValueTeamSizeImpl _$$UpdatedValueTeamSizeImplFromJson(
-        Map<String, dynamic> json) =>
-    _$UpdatedValueTeamSizeImpl(
-      $enumDecode(_$TeamSizeEnumMap, json['teamSize']),
-    );
+_UpdatedValueTeamSize _$UpdatedValueTeamSizeFromJson(
+  Map<String, dynamic> json,
+) => _UpdatedValueTeamSize($enumDecode(_$TeamSizeEnumMap, json['teamSize']));
 
-Map<String, dynamic> _$$UpdatedValueTeamSizeImplToJson(
-        _$UpdatedValueTeamSizeImpl instance) =>
-    <String, dynamic>{
-      'teamSize': _$TeamSizeEnumMap[instance.teamSize]!,
-    };
+Map<String, dynamic> _$UpdatedValueTeamSizeToJson(
+  _UpdatedValueTeamSize instance,
+) => <String, dynamic>{'teamSize': _$TeamSizeEnumMap[instance.teamSize]!};
 
 const _$TeamSizeEnumMap = {
   TeamSize.solo: 'solo',
