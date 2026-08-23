@@ -17,8 +17,8 @@ void main(List<String> args) {
 Unknown command: $args.
 
 Possible usages are :
-`dart run firebase_builder`
-`dart run firebase_builder path/to/your/config.yaml`
+`dart run firestore_builder`
+`dart run firestore_builder path/to/your/config.yaml`
 ''');
   }
 }

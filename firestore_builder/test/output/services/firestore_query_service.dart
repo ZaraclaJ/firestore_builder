@@ -47,8 +47,6 @@ class FirestoreQueryService {
   }
 
   Future<void> setTeam({required TeamId teamId, required Team team}) async {
-    final teamId = team.teamId;
-    assert(teamId.value.isNotEmpty, 'team must have a teamId: $team');
     await _firestoreReferenceService.teamReference(teamId: teamId).set(team);
   }
 
@@ -134,8 +132,6 @@ class FirestoreQueryService {
     required TeamId teamId,
     required User user,
   }) async {
-    final userId = user.userId;
-    assert(userId.value.isNotEmpty, 'user must have a userId: $user');
     await _firestoreReferenceService
         .userReference(userId: userId, teamId: teamId)
         .set(user);
@@ -223,8 +219,6 @@ class FirestoreQueryService {
     required UserId userId,
     required Item item,
   }) async {
-    final itemId = item.itemId;
-    assert(itemId.value.isNotEmpty, 'item must have a itemId: $item');
     await _firestoreReferenceService
         .itemReference(itemId: itemId, teamId: teamId, userId: userId)
         .set(item);
@@ -300,11 +294,6 @@ class FirestoreQueryService {
     required TeamId teamId,
     required Message message,
   }) async {
-    final messageId = message.messageId;
-    assert(
-      messageId.value.isNotEmpty,
-      'message must have a messageId: $message',
-    );
     await _firestoreReferenceService
         .messageReference(messageId: messageId, teamId: teamId)
         .set(message);
@@ -362,8 +351,6 @@ class FirestoreQueryService {
   }
 
   Future<void> setTask({required TaskId taskId, required Task task}) async {
-    final taskId = task.taskId;
-    assert(taskId.value.isNotEmpty, 'task must have a taskId: $task');
     await _firestoreReferenceService.taskReference(taskId: taskId).set(task);
   }
 

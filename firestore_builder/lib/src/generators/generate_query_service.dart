@@ -269,7 +269,6 @@ extension on Collection {
   Method get setDocumentMethod {
     final modelRef = modelReference;
     final modelVarName = modelRef.symbol!.camelCase;
-    final idVarName = modelIdReference.symbol!.camelCase;
 
     return Method(
       (m) {
@@ -288,13 +287,6 @@ extension on Collection {
             ],
           )
           ..body = Block.of([
-            declareFinal(idVarName).assign(Reference(modelVarName).property(modelIdFieldName)).statement,
-            const Reference('assert').call(
-              [
-                Reference(idVarName).property(modelIdValueFieldName).isNotEmpty,
-                literalString('$modelVarName must have a $idVarName: \$$modelVarName'),
-              ],
-            ).statement,
             _referenceServiceInstanceReference.awaited.method(
               _documentReferenceMethodName,
               namedArguments: {
