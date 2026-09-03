@@ -703,7 +703,7 @@ final firestoreProvider = Provider.autoDispose<FirebaseFirestore>((ref) {
 final firestoreReferenceServiceProvider =
     Provider.autoDispose<FirestoreReferenceService>((ref) {
       return FirestoreReferenceService(firestore: ref.watch(firestoreProvider));
-    });
+    }, dependencies: [firestoreProvider]);
 final firestoreQueryServiceProvider = Provider.autoDispose<FirestoreQueryService>(...);
 final firestoreStreamServiceProvider = Provider.autoDispose<FirestoreStreamService>(...);
 ```
@@ -718,6 +718,11 @@ ProviderScope(
 );
 ```
 
+Every generated provider lists in `dependencies` the providers its body reads. That is what
+makes the override above reach them from a `ProviderScope` nested under the root one: without
+the declaration, a nested scope keeps serving the root instance and the override silently does
+nothing.
+
 Without Riverpod, pass the instance to `FirestoreReferenceService(firestore: ...)` yourself.
 
 Each collection gets a `states/<model>_states.dart` file with four providers. Here is
@@ -730,21 +735,21 @@ final teamStreamProvider = StreamProvider.autoDispose.family<Team?, TeamId>((
 ) {
   final service = ref.watch(firestoreStreamServiceProvider);
   return service.teamStream(teamId: teamId);
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final teamProvider = Provider.autoDispose.family<Team?, TeamId>((ref, teamId) {
   final stream = ref.watch(teamStreamProvider(teamId));
   return stream.value;
-});
+}, dependencies: [teamStreamProvider]);
 final teamCollectionStreamProvider = StreamProvider.autoDispose<List<Team>>((
   ref,
 ) {
   final service = ref.watch(firestoreStreamServiceProvider);
   return service.teamsCollectionStream();
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final teamCollectionProvider = Provider.autoDispose<List<Team>?>((ref) {
   final stream = ref.watch(teamCollectionStreamProvider);
   return stream.value;
-});
+}, dependencies: [teamCollectionStreamProvider]);
 ```
 
 - `<model>StreamProvider` and `<model>CollectionStreamProvider` expose the `AsyncValue`

@@ -13,7 +13,7 @@ final firestoreQueryServiceProvider =
       return FirestoreQueryService(
         firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider),
       );
-    });
+    }, dependencies: [firestoreReferenceServiceProvider]);
 
 class FirestoreQueryService {
   const FirestoreQueryService({

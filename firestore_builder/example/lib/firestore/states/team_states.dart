@@ -8,18 +8,18 @@ final teamStreamProvider = StreamProvider.autoDispose.family<Team?, TeamId>((
 ) {
   final service = ref.watch(firestoreStreamServiceProvider);
   return service.teamStream(teamId: teamId);
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final teamProvider = Provider.autoDispose.family<Team?, TeamId>((ref, teamId) {
   final stream = ref.watch(teamStreamProvider(teamId));
   return stream.value;
-});
+}, dependencies: [teamStreamProvider]);
 final teamCollectionStreamProvider = StreamProvider.autoDispose<List<Team>>((
   ref,
 ) {
   final service = ref.watch(firestoreStreamServiceProvider);
   return service.teamsCollectionStream();
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final teamCollectionProvider = Provider.autoDispose<List<Team>?>((ref) {
   final stream = ref.watch(teamCollectionStreamProvider);
   return stream.value;
-});
+}, dependencies: [teamCollectionStreamProvider]);

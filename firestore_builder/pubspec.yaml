@@ -1,6 +1,6 @@
 name: firestore_builder
 description: "The easiest way to integrate Firestore into a Flutter application"
-version: 0.1.6
+version: 0.1.7
 repository: https://github.com/ZaraclaJ/firestore_builder
 issue_tracker: https://github.com/ZaraclaJ/firestore_builder/issues
 

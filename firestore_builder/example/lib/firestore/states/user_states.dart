@@ -9,22 +9,23 @@ final userStreamProvider = StreamProvider.autoDispose.family<User?, UserPath>((
 ) {
   final service = ref.watch(firestoreStreamServiceProvider);
   return service.userStream(userId: userPath.userId, teamId: userPath.teamId);
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final userProvider = Provider.autoDispose.family<User?, UserPath>((
   ref,
   userPath,
 ) {
   final stream = ref.watch(userStreamProvider(userPath));
   return stream.value;
-});
+}, dependencies: [userStreamProvider]);
 final userCollectionStreamProvider = StreamProvider.autoDispose
     .family<List<User>, TeamId>((ref, teamId) {
       final service = ref.watch(firestoreStreamServiceProvider);
       return service.usersCollectionStream(teamId: teamId);
-    });
+    }, dependencies: [firestoreStreamServiceProvider]);
 final userCollectionProvider = Provider.autoDispose.family<List<User>?, TeamId>(
   (ref, teamId) {
     final stream = ref.watch(userCollectionStreamProvider(teamId));
     return stream.value;
   },
+  dependencies: [userCollectionStreamProvider],
 );

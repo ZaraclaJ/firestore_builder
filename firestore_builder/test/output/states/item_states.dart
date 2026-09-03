@@ -13,14 +13,14 @@ final itemStreamProvider = StreamProvider.autoDispose.family<Item?, ItemPath>((
     teamId: itemPath.teamId,
     userId: itemPath.userId,
   );
-});
+}, dependencies: [firestoreStreamServiceProvider]);
 final itemProvider = Provider.autoDispose.family<Item?, ItemPath>((
   ref,
   itemPath,
 ) {
   final stream = ref.watch(itemStreamProvider(itemPath));
   return stream.value;
-});
+}, dependencies: [itemStreamProvider]);
 final itemCollectionStreamProvider = StreamProvider.autoDispose
     .family<List<Item>, UserPath>((ref, userPath) {
       final service = ref.watch(firestoreStreamServiceProvider);
@@ -28,9 +28,9 @@ final itemCollectionStreamProvider = StreamProvider.autoDispose
         userId: userPath.userId,
         teamId: userPath.teamId,
       );
-    });
+    }, dependencies: [firestoreStreamServiceProvider]);
 final itemCollectionProvider = Provider.autoDispose
     .family<List<Item>?, UserPath>((ref, userPath) {
       final stream = ref.watch(itemCollectionStreamProvider(userPath));
       return stream.value;
-    });
+    }, dependencies: [itemCollectionStreamProvider]);

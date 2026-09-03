@@ -12,7 +12,7 @@ final firestoreProvider = Provider.autoDispose<FirebaseFirestore>((ref) {
 final firestoreReferenceServiceProvider =
     Provider.autoDispose<FirestoreReferenceService>((ref) {
       return FirestoreReferenceService(firestore: ref.watch(firestoreProvider));
-    });
+    }, dependencies: [firestoreProvider]);
 
 class FirestoreReferenceService {
   const FirestoreReferenceService({required FirebaseFirestore firestore})

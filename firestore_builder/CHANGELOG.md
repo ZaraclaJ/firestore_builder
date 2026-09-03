@@ -1,3 +1,7 @@
+## 0.1.7
+
+- Every generated provider now declares its `dependencies`, so overriding `firestoreProvider` or any generated service in a nested `ProviderScope` reaches the services and the collection states instead of silently keeping the root instance.
+
 ## 0.1.6
 
 - Documentation rewritten: why and how to use the package, full configuration reference, walkthrough of every generated file, workflow and limitations.

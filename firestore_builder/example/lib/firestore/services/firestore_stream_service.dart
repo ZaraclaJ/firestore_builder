@@ -14,7 +14,7 @@ final firestoreStreamServiceProvider =
       return FirestoreStreamService(
         firestoreReferenceService: ref.watch(firestoreReferenceServiceProvider),
       );
-    });
+    }, dependencies: [firestoreReferenceServiceProvider]);
 
 class FirestoreStreamService {
   const FirestoreStreamService({

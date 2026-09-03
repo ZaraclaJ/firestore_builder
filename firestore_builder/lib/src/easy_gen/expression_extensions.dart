@@ -55,6 +55,7 @@ extension RiverpodExpressionExtensions on Expression {
     required List<String> parameters,
     required Code body,
     required Reference state,
+    required List<Reference> dependencies,
   }) {
     return method(
       RiverpodSymbols.autoDispose,
@@ -65,21 +66,26 @@ extension RiverpodExpressionExtensions on Expression {
           body: body,
         ),
       ],
+      namedArguments: dependencies._argument,
       typeArguments: [state],
     );
   }
 
+  /// [dependencies] declares the scoped providers the body reads, so an
+  /// override placed in a nested [ProviderScope] reaches this provider.
   Expression autoDisposeFamilyMethod({
     required List<String> parameters,
     required Code body,
     required Reference state,
     Reference? arg,
+    List<Reference> dependencies = const [],
   }) {
     if (arg == null) {
       return _autoDisposeMethod(
         body: body,
         parameters: parameters,
         state: state,
+        dependencies: dependencies,
       );
     }
 
@@ -92,6 +98,7 @@ extension RiverpodExpressionExtensions on Expression {
           body: body,
         ),
       ],
+      namedArguments: dependencies._argument,
       typeArguments: [
         state,
         arg,
@@ -101,6 +108,16 @@ extension RiverpodExpressionExtensions on Expression {
 
   Expression watch(Expression provider) {
     return method(RiverpodSymbols.watchMethod, positionalArguments: [provider]);
+  }
+}
+
+extension on List<Reference> {
+  Map<String, Expression> get _argument {
+    if (isEmpty) {
+      return const {};
+    }
+
+    return {RiverpodSymbols.dependencies: literalList(this)};
   }
 }
 

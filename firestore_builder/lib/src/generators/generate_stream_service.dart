@@ -58,6 +58,7 @@ Field _streamServiceProvider({
                 })
                 .returned
                 .statement,
+            dependencies: [config.referenceServiceClass.providerReference.withoutUrl],
           )
           .code,
   );

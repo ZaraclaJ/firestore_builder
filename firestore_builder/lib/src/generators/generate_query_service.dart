@@ -60,6 +60,7 @@ Field _queryServiceProvider({
                 })
                 .returned
                 .statement,
+            dependencies: [config.referenceServiceClass.providerReference],
           )
           .code,
   );

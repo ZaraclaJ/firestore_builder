@@ -77,6 +77,7 @@ Field _referenceServiceProvider({
                 })
                 .returned
                 .statement,
+            dependencies: [config.firestoreProviderReference.withoutUrl],
           )
           .code,
   );

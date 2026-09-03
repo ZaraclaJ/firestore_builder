@@ -158,6 +158,9 @@ abstract class RiverpodSymbols {
   /// 'family'
   static const String family = 'family';
 
+  /// 'dependencies'
+  static const String dependencies = 'dependencies';
+
   /// 'watch'
   static const String watchMethod = 'watch';
 }

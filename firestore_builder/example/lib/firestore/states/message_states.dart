@@ -10,21 +10,21 @@ final messageStreamProvider = StreamProvider.autoDispose
         messageId: messagePath.messageId,
         teamId: messagePath.teamId,
       );
-    });
+    }, dependencies: [firestoreStreamServiceProvider]);
 final messageProvider = Provider.autoDispose.family<Message?, MessagePath>((
   ref,
   messagePath,
 ) {
   final stream = ref.watch(messageStreamProvider(messagePath));
   return stream.value;
-});
+}, dependencies: [messageStreamProvider]);
 final messageCollectionStreamProvider = StreamProvider.autoDispose
     .family<List<Message>, TeamId>((ref, teamId) {
       final service = ref.watch(firestoreStreamServiceProvider);
       return service.messagesCollectionStream(teamId: teamId);
-    });
+    }, dependencies: [firestoreStreamServiceProvider]);
 final messageCollectionProvider = Provider.autoDispose
     .family<List<Message>?, TeamId>((ref, teamId) {
       final stream = ref.watch(messageCollectionStreamProvider(teamId));
       return stream.value;
-    });
+    }, dependencies: [messageCollectionStreamProvider]);

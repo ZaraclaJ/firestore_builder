@@ -79,6 +79,7 @@ extension on Collection {
                       .returned
                       .statement,
                 ]),
+                dependencies: [configLight.streamServiceClass.providerReference],
               )
               .code;
       },
@@ -111,6 +112,7 @@ extension on Collection {
                       .statement,
                   const Reference(streamVarName).property('value').returned.statement,
                 ]),
+                dependencies: [Reference(_modelStreamProviderField.name)],
               )
               .code;
       },
@@ -160,6 +162,7 @@ extension on Collection {
                       .returned
                       .statement,
                 ]),
+                dependencies: [configLight.streamServiceClass.providerReference],
               )
               .code;
       },
@@ -198,6 +201,7 @@ extension on Collection {
                       .statement,
                   const Reference(streamVarName).property('value').returned.statement,
                 ]),
+                dependencies: [Reference(_collectionStreamProviderField.name)],
               )
               .code;
       },
